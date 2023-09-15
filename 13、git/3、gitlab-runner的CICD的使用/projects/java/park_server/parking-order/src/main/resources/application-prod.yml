@@ -1,0 +1,96 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:ry-vue}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: ${DB_USERNAME:root}
+        password: ${DB_PASSWORD:root}
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  # redis 配置
+  redis:
+    # 地址
+    host: ${REDIS_HOST:localhost}
+    # 端口，默认为6379
+    port: ${REDIS_PORT:6379}
+    # 数据库索引
+    database: 0
+    # 密码
+    password: ${REDIS_PASSWORD:""}
+  rabbitmq:
+    host: ${RMQ_HOST:10.10.210.20}
+    port: ${RMQ_PORT:30801}
+    username: ${RMQ_USERNAME:acnftest}
+    password: ${RMQ_PASSWORD:acnf@admin}
+    virtualHost: /
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefgHIJKLmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+  refreshExpireTime: 10080
+
+# Swagger配置，生产环境关闭
+swagger:
+  # 是否开启swagger
+  enabled: false
+
+grpc:
+  server:
+    in-process-name: parking-order-server
+    # 修改服务端默认入参最大大小，默认值为4M ，这里修改为20M   20*1024*1024
+    max-inbound-message-size: 20971520
+    # grpc 端口号
+    port: 9088
+  client:
+    parking-charge-grpc-server:
+      address: 'static://${CHARGE_SERVER:charge}:9095'
+      negotiation-type: plaintext
+    parking-pay-grpc-server:
+      address: 'static://${PAYMENT_SERVER:payment}:9100'
+      negotiation-type: plaintext
+
+nuonuo:
+  #----------沙箱参数 start--------
+  appKey: SD63236305
+  appSecret: SDDED2523BED4643
+  accessToken: fa35aa5f2feb821e9c02c00vlilygsvs
+  #销方税号
+  salerTaxNum: 339902999999789106
+  #销方电话
+  salerTel: 12345678912
+  #销方地址
+  salerAddress: 测试销方地址
+  #税率。百分比
+  taxRate: 6
+  #收款人
+  payee: 测试收款人甲
+  #复核人
+  checker: 测试复核人甲
+  #开票员
+  clerk: 测试开票员甲
+  #开票类型：1:蓝票;2:红票
+  invoiceType: 1
+  callbackUrl: https://ryt.czctown.com/bill/callback/
+  openUrl: https://sandbox.nuonuocs.cn/open/v1/services
+  #----------沙箱参数 end--------
+  #----------正式参数 start--------
+#  openUrl: https://sdk.nuonuo.com/open/v1/services
+  #----------正式参数 end--------
+#邮件发送参数
+mail:
+  smtpHost: smtp.qq.com
+  fromMail: 752252081@qq.com
+  password: yuuvdtwqxgvibbbh

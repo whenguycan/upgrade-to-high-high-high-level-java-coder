@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BParkChargeRuleMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BParkChargeRule" id="BParkChargeRuleResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="ruleName"    column="rule_name"    />
+        <result property="durationCreateWay"    column="duration_create_way"    />
+        <result property="durationNum"    column="duration_num"    />
+        <result property="ceilingPriceFlag"    column="ceiling_price_flag"    />
+        <result property="ceilingPriceMinute"    column="ceiling_price_minute"    />
+        <result property="ceilingPrice"    column="ceiling_price"    />
+        <result property="chargeContainFreeTime"    column="charge_contain_free_time"    />
+        <result property="freeMinuteNumber"    column="free_minute_number"    />
+        <result property="timeDivisionWay"    column="time_division_way"    />
+        <result property="firstDurationChargeWay"    column="first_duration_charge_way"    />
+        <result property="timeRoundWay"    column="time_round_way"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBParkChargeRuleVo">
+        select id, park_no, rule_name, duration_create_way, duration_num, ceiling_price_flag, ceiling_price_minute, ceiling_price, charge_contain_free_time, free_minute_number, time_division_way, first_duration_charge_way, time_round_way, create_by, create_time, update_by, update_time from b_park_charge_rule
+    </sql>
+
+    <select id="selectBParkChargeRuleList" parameterType="com.ruoyi.project.parking.domain.BParkChargeRule" resultMap="BParkChargeRuleResult">
+        <include refid="selectBParkChargeRuleVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="ruleName != null  and ruleName != ''"> and rule_name like concat('%', #{ruleName}, '%')</if>
+            <if test="durationCreateWay != null  and durationCreateWay != ''"> and duration_create_way = #{durationCreateWay}</if>
+            <if test="durationNum != null "> and duration_num = #{durationNum}</if>
+            <if test="ceilingPriceFlag != null  and ceilingPriceFlag != ''"> and ceiling_price_flag = #{ceilingPriceFlag}</if>
+            <if test="ceilingPriceMinute != null "> and ceiling_price_minute = #{ceilingPriceMinute}</if>
+            <if test="ceilingPrice != null "> and ceiling_price = #{ceilingPrice}</if>
+            <if test="chargeContainFreeTime != null  and chargeContainFreeTime != ''"> and charge_contain_free_time = #{chargeContainFreeTime}</if>
+            <if test="freeMinuteNumber != null  and freeMinuteNumber != ''"> and free_minute_number = #{freeMinuteNumber}</if>
+            <if test="timeDivisionWay != null  and timeDivisionWay != ''"> and time_division_way = #{timeDivisionWay}</if>
+            <if test="firstDurationChargeWay != null  and firstDurationChargeWay != ''"> and first_duration_charge_way = #{firstDurationChargeWay}</if>
+            <if test="timeRoundWay != null  and timeRoundWay != ''"> and time_round_way = #{timeRoundWay}</if>
+        </where>
+    </select>
+    
+    <select id="selectBParkChargeRuleById" parameterType="Integer" resultMap="BParkChargeRuleResult">
+        <include refid="selectBParkChargeRuleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBParkChargeRule" parameterType="com.ruoyi.project.parking.domain.BParkChargeRule" useGeneratedKeys="true" keyProperty="id">
+        insert into b_park_charge_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="ruleName != null">rule_name,</if>
+            <if test="durationCreateWay != null">duration_create_way,</if>
+            <if test="durationNum != null">duration_num,</if>
+            <if test="ceilingPriceFlag != null">ceiling_price_flag,</if>
+            <if test="ceilingPriceMinute != null">ceiling_price_minute,</if>
+            <if test="ceilingPrice != null">ceiling_price,</if>
+            <if test="chargeContainFreeTime != null">charge_contain_free_time,</if>
+            <if test="freeMinuteNumber != null">free_minute_number,</if>
+            <if test="timeDivisionWay != null">time_division_way,</if>
+            <if test="firstDurationChargeWay != null">first_duration_charge_way,</if>
+            <if test="timeRoundWay != null">time_round_way,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="ruleName != null">#{ruleName},</if>
+            <if test="durationCreateWay != null">#{durationCreateWay},</if>
+            <if test="durationNum != null">#{durationNum},</if>
+            <if test="ceilingPriceFlag != null">#{ceilingPriceFlag},</if>
+            <if test="ceilingPriceMinute != null">#{ceilingPriceMinute},</if>
+            <if test="ceilingPrice != null">#{ceilingPrice},</if>
+            <if test="chargeContainFreeTime != null">#{chargeContainFreeTime},</if>
+            <if test="freeMinuteNumber != null">#{freeMinuteNumber},</if>
+            <if test="timeDivisionWay != null">#{timeDivisionWay},</if>
+            <if test="firstDurationChargeWay != null">#{firstDurationChargeWay},</if>
+            <if test="timeRoundWay != null">#{timeRoundWay},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBParkChargeRule" parameterType="com.ruoyi.project.parking.domain.BParkChargeRule">
+        update b_park_charge_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="ruleName != null">rule_name = #{ruleName},</if>
+            <if test="durationCreateWay != null">duration_create_way = #{durationCreateWay},</if>
+            <if test="durationNum != null">duration_num = #{durationNum},</if>
+            <if test="ceilingPriceFlag != ''">ceiling_price_flag = #{ceilingPriceFlag},</if>
+            <if test="ceilingPriceMinute != ''">ceiling_price_minute = #{ceilingPriceMinute},</if>
+            <if test="ceilingPrice != ''">ceiling_price = #{ceilingPrice},</if>
+            <if test="chargeContainFreeTime != null">charge_contain_free_time = #{chargeContainFreeTime},</if>
+            <if test="freeMinuteNumber != null">free_minute_number = #{freeMinuteNumber},</if>
+            <if test="timeDivisionWay != null">time_division_way = #{timeDivisionWay},</if>
+            <if test="firstDurationChargeWay != null">first_duration_charge_way = #{firstDurationChargeWay},</if>
+            <if test="timeRoundWay != null">time_round_way = #{timeRoundWay},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBParkChargeRuleById" parameterType="Integer">
+        delete from b_park_charge_rule where id = #{id}
+    </delete>
+
+    <delete id="deleteBParkChargeRuleByIds" parameterType="String">
+        delete from b_park_charge_rule where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

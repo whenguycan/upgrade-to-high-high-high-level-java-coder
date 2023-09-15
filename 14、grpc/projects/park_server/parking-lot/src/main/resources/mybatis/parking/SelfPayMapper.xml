@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.SelfPayMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.project.parking.domain.SelfPay">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="regularCarCategoryId" column="regular_car_category_id" jdbcType="INTEGER"/>
+            <result property="carNumber" column="car_number" jdbcType="VARCHAR"/>
+            <result property="ownerName" column="owner_name" jdbcType="VARCHAR"/>
+            <result property="ownerPhone" column="owner_phone" jdbcType="VARCHAR"/>
+            <result property="ownerType" column="owner_type" jdbcType="VARCHAR"/>
+            <result property="renewDays" column="renew_days" jdbcType="INTEGER"/>
+            <result property="applyBy" column="apply_by" jdbcType="VARCHAR"/>
+            <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,regular_car_category_id,
+        car_number,owner_name,owner_phone,
+        owner_type,renew_days,apply_by,
+        apply_time,status,create_by,
+        create_time,update_by,update_time
+    </sql>
+</mapper>

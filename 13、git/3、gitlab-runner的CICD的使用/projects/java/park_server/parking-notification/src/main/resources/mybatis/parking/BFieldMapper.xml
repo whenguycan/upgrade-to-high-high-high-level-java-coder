@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingnotification.mapper.BFieldMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingnotification.domain.BField">
+            <id property="id" column="id" jdbcType="OTHER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="fieldName" column="field_name" jdbcType="VARCHAR"/>
+            <result property="fieldStatus" column="field_status" jdbcType="VARCHAR"/>
+            <result property="spaceCount" column="space_count" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,field_name,
+        field_status,space_count,remark,
+        create_by,create_time,update_by,
+        update_time
+    </sql>
+</mapper>

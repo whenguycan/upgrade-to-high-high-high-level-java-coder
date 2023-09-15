@@ -1,0 +1,15 @@
+server:
+  port: 8098
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.16.4.144:8808
+        file-extension: yaml
+      discovery:
+        server-addr: 172.16.4.144:8808
+        group: DEFAULT_GROUP
+      username: nacos
+      password: nacos
+  application:
+    name: User

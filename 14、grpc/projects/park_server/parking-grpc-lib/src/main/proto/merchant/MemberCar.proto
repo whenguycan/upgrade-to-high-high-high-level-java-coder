@@ -1,0 +1,242 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.merchant;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.merchant";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "MemberCar";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+// 会员车辆管理API列表
+service MemberCarService {
+  // RPC方法定义
+  // 查询会员详情
+  rpc selectUserById(SelectUserByIdRequest) returns (SelectUserByIdResponse) {};
+
+  // 根据条件分页查询会员列表
+  rpc selectUserList(SelectUserListRequest) returns (SelectUserListResponse) {};
+
+  // 通过会员ID查询我的车辆
+  rpc selectCarList(SelectCarListRequest) returns (SelectCarListResponse) {};
+
+  // 绑定车辆
+  rpc insertBMyCar(InsertBMyCarRequest) returns (InsertBMyCarResponse) {};
+
+  // 解绑车辆
+  rpc deleteBMyCarByIds(DeleteBMyCarByIdsRequest) returns (DeleteBMyCarByIdsResponse) {};
+
+  // 设为默认
+  rpc setDefault(SetDefaultRequest) returns (SetDefaultResponse) {};
+
+  // 根据车牌号查询用户信息
+  rpc getMemberByCar(GetMemberByCarRequest) returns (GetMemberByCarResponse) {};
+}
+
+//在消息定义中，每个字段都有唯一的一个标识符。
+//这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。
+
+// 查询会员详情请求参数定义
+message SelectUserByIdRequest {
+  // 用户ID
+  int32 id = 1;
+}
+
+// 查询会员详情返回参数定义
+message SelectUserByIdResponse {
+  // 用户ID
+  int64 userId = 1;
+  // 昵称
+  string nickName = 2;
+  // 手机号
+  string phonenumber = 3;
+  // 绑定车辆数
+  string boundNum = 4;
+  // 注册时间
+  string createTime = 5;
+  // 最近登录时间
+  string loginDate = 6;
+  // 备注
+  string remark = 7;
+  // 会员类型
+  string memberType = 8;
+}
+
+// 查询会员列表请求参数定义
+message SelectUserListRequest {
+  // 手机号
+  string phonenumber = 1;
+  // 会员类型
+  string memberType = 2;
+  // 页码
+  int32 pageNum = 3;
+  // 页大小
+  int32 pageSize = 4;
+}
+
+// 查询会员列表返回参数定义
+message SelectUserListResponse {
+  // 列表数据
+  repeated MemberUserVOProto rows = 1;
+}
+
+message MemberUserVOProto {
+  // 用户ID
+  int64 userId = 1;
+  // 昵称
+  string nickName = 2;
+  // 手机号
+  string phonenumber = 3;
+  // 绑定车辆数
+  string boundNum = 4;
+  // 注册时间
+  string createTime = 5;
+  // 最近登录时间
+  string loginDate = 6;
+  // 备注
+  string remark = 7;
+  // 会员类型
+  string memberType = 8;
+}
+
+// 通过会员ID查询我的车辆请求参数定义
+message SelectCarListRequest {
+  // 用户ID
+  string userId = 1;
+}
+
+// 通过会员ID查询我的车辆返回参数定义
+message SelectCarListResponse {
+  // 我的车辆
+  repeated BMyCarProto bMyCars = 8;
+}
+
+message BMyCarProto {
+  // 逻辑ID
+  int32 id = 1;
+  // 车牌号
+  string carNo = 2;
+  // 绑定时间
+  string validTime = 3;
+  // 是否默认
+  string defaultFlag = 4;
+  // 创建者
+  string createBy = 5;
+  // 创建时间
+  string createTime = 6;
+  // 更新者
+  string updateBy = 7;
+  // 更新时间
+  string updateTime = 8;
+}
+
+// 绑定车辆请求参数定义
+message InsertBMyCarRequest {
+  // 逻辑ID
+  int32 id = 1;
+  // 车牌号
+  string carNo = 2;
+  // 绑定时间
+  string validTime = 3;
+  // 是否默认
+  string defaultFlag = 4;
+  // 创建者
+  string createBy = 5;
+  // 创建时间
+  string createTime = 6;
+  // 更新者
+  string updateBy = 7;
+  // 更新时间
+  string updateTime = 8;
+  // 用户ID
+  string userId = 9;
+}
+
+// 绑定车辆返回参数定义
+message InsertBMyCarResponse {
+  // 状态码
+  int32 code = 1;
+  // 返回内容
+  string msg = 2;
+  // 数据对象
+  int32 data = 3;
+}
+
+// 解绑车辆请求参数定义
+message DeleteBMyCarByIdsRequest {
+  // 车辆ID
+  repeated int32 ids = 1;
+}
+
+// 解绑车辆返回参数定义
+message DeleteBMyCarByIdsResponse {
+  // 结果
+  int32 result = 1;
+}
+
+// 设为默认请求参数定义
+message SetDefaultRequest {
+  // 逻辑ID
+  int32 id = 1;
+  // 绑定人
+  string userId = 2;
+  // 操作人
+  string updateBy = 3;
+}
+
+// 设为默认返回参数定义
+message SetDefaultResponse {
+  // 结果
+  int32 result = 1;
+}
+
+// 根据车牌号查询用户信息请求参数定义
+message GetMemberByCarRequest {
+  // 车牌号
+  string carNo = 1;
+}
+
+// 根据车牌号查询用户信息返回参数定义
+message GetMemberByCarResponse {
+  // 用户ID
+  int64 userId = 1;
+  // 部门ID
+  int64 deptId = 2;
+  // 用户账号
+  string userName = 3;
+  // 用户全称
+  string nickName = 4;
+  // 用户邮箱
+  string email = 5;
+  // 手机号码
+  string phonenumber = 6;
+  // 用户性别
+  string sex = 7;
+  // 用户头像
+  string avatar = 8;
+  // 密码
+  string password = 9;
+  // 帐号状态
+  string status = 10;
+  // 删除标志
+  string delFlag = 11;
+  // 最后登录IP
+  string loginIp = 12;
+  // 最后登录时间
+  string loginDate = 13;
+  // 会员类型
+  string memberType = 14;
+  // 微信登录令牌
+  string openId = 15;
+  // 充值账户余额
+  double accountValue = 16;
+  // 赠送账户余额
+  double giveValue = 17;
+  // 账户总额
+  double accountTotal = 18;
+}

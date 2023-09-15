@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingpayment.mapper.ParkingPaymentGrpcRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingpayment.domain.ParkingPaymentGrpcRecord">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="outTradeNo" column="out_trade_no" jdbcType="VARCHAR"/>
+            <result property="tradeNo" column="trade_no" jdbcType="VARCHAR"/>
+            <result property="totalAmount" column="total_amount" jdbcType="DECIMAL"/>
+            <result property="refundAmount" column="refund_amount" jdbcType="DECIMAL"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="method" column="method" jdbcType="VARCHAR"/>
+            <result property="requestMessage" column="request_message" jdbcType="VARCHAR"/>
+            <result property="responseMessage" column="response_message" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,out_trade_no,trade_no,
+        total_amount,refund_amount,type,
+        method,request_message,response_message,
+        status,create_time,update_time
+    </sql>
+</mapper>

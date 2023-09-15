@@ -1,0 +1,136 @@
+.addBtn {
+  background: #49c8ea;
+  border-radius: 6px;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0);
+  padding: 7px 6px;
+  margin: 0 0 8px 8px;
+
+  &:hover {
+    background: #90daed;
+  }
+}
+
+.searchBtn {
+  background: #1b88be;
+  border-radius: 6px;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0);
+  padding: 7px 6px;
+  margin: 0 0 8px 8px;
+
+  &:hover {
+    background: #649bb6;
+  }
+}
+
+.exportBtn {
+  background: #57aac2;
+  border-radius: 6px;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0);
+  margin: 0 0 8px 8px;
+  padding: 7px 6px;
+
+  &:hover {
+    background: rgb(84, 129, 152);
+  }
+}
+
+.codeBtn {
+  width: 122px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  padding: 0;
+  background: rgba(73, 200, 234, 0.06);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 172, 218, 0.36);
+  color: #00ACDA;
+  cursor: pointer;
+
+  &:hover {
+    color: #1b88be;
+  }
+}
+
+.codeGBtn {
+  width: 122px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  padding: 0;
+  border-radius: 6px;
+  background: #57AAC2;
+  border: 1px solid rgba(0, 172, 218, 0.36);
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.disableBtn {
+  background: #c2c2c2;
+  border: 1px solid #c2c2c2;
+}
+
+
+.statusI {
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+}
+
+.statusIcon {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #52c41a;
+  border-radius: 3px;
+  border: 0px solid rgba(0, 0, 0, 0.88);
+  margin-right: 6px;
+}
+
+.statusRedIcon {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #FF1838;
+  border-radius: 3px;
+  border: 0px solid rgba(0, 0, 0, 0.88);
+  margin-right: 6px;
+}
+
+.statusBlueIcon {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #00A1CD;
+  border-radius: 3px;
+  border: 0px solid rgba(0, 0, 0, 0.88);
+  margin-right: 6px;
+}
+
+.statusGreyIcon {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #9f9f9f;
+  border-radius: 3px;
+  border: 0px solid rgba(0, 0, 0, 0.88);
+  margin-right: 6px;
+}
+
+.delete {
+  color: red;
+}
+
+.enbale {
+  color: #00c237;
+}
+
+.disabled {
+  color: #da7800;
+}

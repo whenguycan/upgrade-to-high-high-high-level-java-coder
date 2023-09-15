@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BSettingRegularCarCategoryPriceMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.project.parking.domain.BSettingRegularCarCategoryPrice">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="regularCarCategoryId" column="regular_car_category_id" jdbcType="INTEGER"/>
+            <result property="month" column="month" jdbcType="INTEGER"/>
+            <result property="price" column="price" jdbcType="DECIMAL"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,regular_car_category_id,
+        month,price,create_by,
+        create_time,update_by,update_time
+    </sql>
+</mapper>

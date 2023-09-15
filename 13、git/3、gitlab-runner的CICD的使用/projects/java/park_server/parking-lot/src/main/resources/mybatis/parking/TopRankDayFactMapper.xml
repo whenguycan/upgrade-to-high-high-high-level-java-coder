@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.TopRankDayFactMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.TopRankDayFact" id="TopRankDayFactResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="day"    column="day"    />
+        <result property="count"    column="count"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTopRankDayFactVo">
+        select id, park_no, day, count, create_by, create_time, update_by, update_time from top_rank_day_fact
+    </sql>
+
+    <select id="selectTopRankDayFactList" parameterType="com.ruoyi.project.parking.domain.TopRankDayFact" resultMap="TopRankDayFactResult">
+        <include refid="selectTopRankDayFactVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="count != null "> and count = #{count}</if>
+        </where>
+    </select>
+    
+    <select id="selectTopRankDayFactById" parameterType="Integer" resultMap="TopRankDayFactResult">
+        <include refid="selectTopRankDayFactVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTopRankDayFact" parameterType="com.ruoyi.project.parking.domain.TopRankDayFact" useGeneratedKeys="true" keyProperty="id">
+        insert into top_rank_day_fact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="day != null">day,</if>
+            <if test="count != null">count,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="day != null">#{day},</if>
+            <if test="count != null">#{count},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTopRankDayFact" parameterType="com.ruoyi.project.parking.domain.TopRankDayFact">
+        update top_rank_day_fact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTopRankDayFactById" parameterType="Integer">
+        delete from top_rank_day_fact where id = #{id}
+    </delete>
+
+    <delete id="deleteTopRankDayFactByIds" parameterType="String">
+        delete from top_rank_day_fact where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="analyseTopRankDayFact" resultType="com.ruoyi.project.parking.domain.TopRankDayFact">
+        select count(id) as count
+        from t_park_live_records
+        where park_no in
+        <foreach collection="parkNos" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and ((car_status = '1' and exit_time is null) or (car_status = '2' and date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d'))) and del_flag = 0
+    </select>
+
+    <select id="selectTopRankDayFact" parameterType="com.ruoyi.project.parking.domain.TopRankDayFact" resultMap="TopRankDayFactResult">
+        <include refid="selectTopRankDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+        </where>
+    </select>
+
+    <select id="getTopRank" resultType="com.ruoyi.project.parking.domain.vo.TopRankVO">
+        select
+            trdf.park_no,
+            sd.dept_name as park_name,
+        <if test="year != null and year != ''">coalesce(sum(coalesce(trdf.count, 0)), 0) as count</if>
+        <if test="year == null or year == ''">trdf.count</if>
+        from top_rank_day_fact trdf
+        left join sys_dept sd on sd.park_no = trdf.park_no
+        <where>
+            <if test="year != null  and year != ''"> and year(date_format(trdf.day, '%Y-%m-%d')) = #{year}</if>
+            <if test="month != null  and month != ''"> and month(date_format(trdf.day, '%Y-%m-%d')) = #{month}</if>
+            <if test="week != null  and week != ''"> and week(date_format(trdf.day, '%Y-%m-%d')) = #{week}</if>
+            <if test="day != null  and day != ''"> and trdf.day = #{day}</if>
+        </where>
+        <if test="year != null and year != ''">group by trdf.park_no, sd.dept_name, trdf.count</if>
+        order by trdf.count desc
+    </select>
+
+    <select id="getSpaceInfo" parameterType="com.ruoyi.project.parking.domain.vo.TopRankVO" resultType="com.ruoyi.project.parking.domain.vo.TopRankVO">
+        select "" as park_no,
+               #{parkName} as park_name,
+               #{count} as count,
+               (select coalesce(sum(coalesce(space_count, 0)), 0) from b_field
+                where park_no in (
+                    select park_no from sys_dept where dept_id in (
+                        WITH RECURSIVE cte AS (
+                            SELECT dept_id, parent_id
+                            FROM sys_dept
+                            WHERE park_no = #{parkNo} and status = '0' and del_flag = '0'
+                            UNION ALL
+                            SELECT t.dept_id, t.parent_id
+                            FROM sys_dept t
+                                     INNER JOIN cte ON t.parent_id = cte.dept_id
+                            WHERE t.status = '0' and t.del_flag = '0'
+                        )
+                        SELECT dept_id FROM cte)
+                )
+                and field_status = '1') as totalSpaceCount,
+                ((select coalesce(sum(coalesce(space_count, 0)), 0) from b_field
+                where park_no in (
+                     select park_no from sys_dept where dept_id in (
+                         WITH RECURSIVE cte AS (
+                             SELECT dept_id, parent_id
+                             FROM sys_dept
+                             WHERE park_no = #{parkNo} and status = '0' and del_flag = '0'
+                             UNION ALL
+                             SELECT t.dept_id, t.parent_id
+                             FROM sys_dept t
+                                      INNER JOIN cte ON t.parent_id = cte.dept_id
+                             WHERE t.status = '0' and t.del_flag = '0'
+                         )
+                         SELECT dept_id FROM cte)
+                )
+                and field_status = '1') -
+                (select count(id) from t_park_live_records
+                 where park_no in (
+                     select park_no from sys_dept where dept_id in (
+                         WITH RECURSIVE cte AS (
+                             SELECT dept_id, parent_id
+                             FROM sys_dept
+                             WHERE park_no = #{parkNo} and status = '0' and del_flag = '0'
+                             UNION ALL
+                             SELECT t.dept_id, t.parent_id
+                             FROM sys_dept t
+                                      INNER JOIN cte ON t.parent_id = cte.dept_id
+                             WHERE t.status = '0' and t.del_flag = '0'
+                         )
+                         SELECT dept_id FROM cte)
+                 )
+            and car_status = '1' and exit_time is null and del_flag = 0)) as remainSpaceCount
+    </select>
+</mapper>

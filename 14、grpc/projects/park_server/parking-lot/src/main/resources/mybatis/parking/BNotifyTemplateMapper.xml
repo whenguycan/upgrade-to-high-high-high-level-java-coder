@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BNotifyTemplateMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.project.parking.domain.BNotifyTemplate">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="sendTime" column="send_time" jdbcType="VARCHAR"/>
+            <result property="templateId" column="template_id" jdbcType="VARCHAR"/>
+            <result property="firstData" column="first_data" jdbcType="VARCHAR"/>
+            <result property="remarkData" column="remark_data" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,send_time,
+        template_id,first_data,remark_data,
+        status,create_by,create_time,
+        update_by,update_time
+    </sql>
+</mapper>

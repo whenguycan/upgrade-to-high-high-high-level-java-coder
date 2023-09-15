@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.ParkUsageDayFactMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.ParkUsageDayFact" id="ParkUsageDayFactResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="day"    column="day"    />
+        <result property="entryCount"    column="entry_count"    />
+        <result property="exitCount"    column="exit_count"    />
+        <result property="leaveCount"    column="leave_count"    />
+        <result property="useRatio"    column="use_ratio"    />
+        <result property="abnormalRate"    column="abnormal_rate"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectParkUsageDayFactVo">
+        select id, park_no, day, entry_count, exit_count, leave_count, use_ratio, abnormal_rate, create_by, create_time, update_by, update_time from park_usage_day_fact
+    </sql>
+
+    <select id="selectParkUsageDayFactList" parameterType="com.ruoyi.project.parking.domain.ParkUsageDayFact" resultMap="ParkUsageDayFactResult">
+        <include refid="selectParkUsageDayFactVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="entryCount != null "> and entry_count = #{entryCount}</if>
+            <if test="exitCount != null "> and exit_count = #{exitCount}</if>
+            <if test="leaveCount != null "> and leave_count = #{leaveCount}</if>
+            <if test="useRatio != null "> and use_ratio = #{useRatio}</if>
+            <if test="abnormalRate != null "> and abnormal_rate = #{abnormalRate}</if>
+        </where>
+    </select>
+    
+    <select id="selectParkUsageDayFactById" parameterType="Integer" resultMap="ParkUsageDayFactResult">
+        <include refid="selectParkUsageDayFactVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertParkUsageDayFact" parameterType="com.ruoyi.project.parking.domain.ParkUsageDayFact" useGeneratedKeys="true" keyProperty="id">
+        insert into park_usage_day_fact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="day != null">day,</if>
+            <if test="entryCount != null">entry_count,</if>
+            <if test="exitCount != null">exit_count,</if>
+            <if test="leaveCount != null">leave_count,</if>
+            <if test="useRatio != null">use_ratio,</if>
+            <if test="abnormalRate != null">abnormal_rate,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="day != null">#{day},</if>
+            <if test="entryCount != null">#{entryCount},</if>
+            <if test="exitCount != null">#{exitCount},</if>
+            <if test="leaveCount != null">#{leaveCount},</if>
+            <if test="useRatio != null">#{useRatio},</if>
+            <if test="abnormalRate != null">#{abnormalRate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateParkUsageDayFact" parameterType="com.ruoyi.project.parking.domain.ParkUsageDayFact">
+        update park_usage_day_fact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="entryCount != null">entry_count = #{entryCount},</if>
+            <if test="exitCount != null">exit_count = #{exitCount},</if>
+            <if test="leaveCount != null">leave_count = #{leaveCount},</if>
+            <if test="useRatio != null">use_ratio = #{useRatio},</if>
+            <if test="abnormalRate != null">abnormal_rate = #{abnormalRate},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteParkUsageDayFactById" parameterType="Integer">
+        delete from park_usage_day_fact where id = #{id}
+    </delete>
+
+    <delete id="deleteParkUsageDayFactByIds" parameterType="String">
+        delete from park_usage_day_fact where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="analyseParkUsageDayFact" resultType="com.ruoyi.project.parking.domain.ParkUsageDayFact">
+        SELECT
+            (SELECT count(id) FROM t_entry_records
+            where date_format(entry_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>) as entry_count,
+            (SELECT count(id) FROM t_exit_records
+            where date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>) as exit_count,
+            (SELECT count(id) FROM t_park_live_records
+            where date_format(entry_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>) as leave_count,
+            FORMAT(coalesce((SELECT count(id) FROM t_park_live_records
+            where (date_format(entry_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d') or date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d'))
+            and (
+            (
+            date_format(entry_time, '%Y-%m-%d %H:%i:%s') &lt;= date_format(concat(#{day}, ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+            and date_format(exit_time, '%Y-%m-%d %H:%i:%s') &gt; date_format(concat(#{day}, ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+            ) or (
+            date_format(entry_time, '%Y-%m-%d %H:%i:%s') &gt;= date_format(concat(#{day}, ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
+            and date_format(entry_time, '%Y-%m-%d %H:%i:%s') &lt; date_format(concat(#{day}, ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
+            )
+            )
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>) * 100 /
+            (select coalesce(sum(coalesce(space_count, 0)), 0) from b_field
+            where park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+            and field_status = '1'), 0), 2) as use_ratio,
+            0 as abnormal_rate
+    </select>
+
+    <select id="selectParkUsageDayFact" parameterType="com.ruoyi.project.parking.domain.ParkUsageDayFact" resultMap="ParkUsageDayFactResult">
+        <include refid="selectParkUsageDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0b5a55"],{"1a7f":function(t,e,n){"use strict";n.r(e),n.d(e,"getDerateList",(function(){return a}));var r=n("b775");function a(t){return Object(r["a"])({url:"parking/exemptorder/list",method:"get",params:t})}}}]);

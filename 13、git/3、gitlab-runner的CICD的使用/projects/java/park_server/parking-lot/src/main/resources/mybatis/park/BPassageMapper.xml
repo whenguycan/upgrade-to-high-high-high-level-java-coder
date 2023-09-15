@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.project.parking.mapper.BPassageMapper">
+
+    <resultMap type="com.ruoyi.project.parking.domain.vo.BPassageVo" id="BPassageMap">
+        <result property="id" column="id" />
+        <result property="parkNo" column="park_no" />
+        <result property="passageNo" column="passage_no" />
+        <result property="passageName" column="passage_name" />
+        <result property="fromFieldId" column="from_field_id" />
+        <result property="toFieldId" column="to_field_id" />
+        <result property="openType" column="open_type" />
+        <result property="passageFlag" column="passage_flag" />
+        <result property="passageStatus" column="passage_status" />
+        <result property="bandRegularCodes" column="band_regular_codes" />
+        <result property="remark" column="remark" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="fromFieldName" column="from_field_name" />
+        <result property="toFieldName" column="to_field_name" />
+        <result property="bandRegularCodes" column="band_regular_codes" />
+    </resultMap>
+    <sql id="qryBPassageListSql">
+        select id,
+               park_no,
+               passage_no,
+               passage_name,
+               from_field_id,
+               to_field_id,
+               open_type,
+               passage_flag,
+               passage_status,
+               remark,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               band_regular_codes,
+               (select field_name from b_field b where b.id=a.from_field_id) as from_field_name,
+               (select field_name from b_field b where b.id=a.to_field_id) as to_field_name
+        from b_passage  a
+
+    </sql>
+
+    <!--分页查询指定行数据-->
+    <select id="qryList" resultMap="BPassageMap">
+        <include refid="qryBPassageListSql"></include>
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="parkNo != null and parkNo != ''">
+                and park_no = #{parkNo}
+            </if>
+            <if test="passageNo != null and passageNo != ''">
+                and passage_no = #{passageNo}
+            </if>
+            <if test="passageName != null and passageName != ''">
+                and passage_name = #{passageName}
+            </if>
+            <if test="fromFieldId != null and fromFieldId != ''">
+                and from_field_id = #{fromFieldId}
+            </if>
+            <if test="toFieldId != null and toFieldId != ''">
+                and to_field_id = #{toFieldId}
+            </if>
+            <if test="openType != null and openType != ''">
+                and open_type = #{openType}
+            </if>
+            <if test="passageFlag != null and passageFlag != ''">
+                and passage_flag = #{passageFlag}
+            </if>
+            <if test="passageStatus != null and passageStatus != ''">
+                and passage_status = #{passageStatus}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

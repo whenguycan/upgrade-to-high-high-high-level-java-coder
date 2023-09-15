@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingpayment.mapper.WechatpayNotificationMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingpayment.domain.WechatpayNotification">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="outTradeNo" column="out_trade_no" jdbcType="VARCHAR"/>
+            <result property="transactionId" column="transaction_id" jdbcType="VARCHAR"/>
+            <result property="outRefundNo" column="out_refund_no" jdbcType="VARCHAR"/>
+            <result property="refundId" column="refund_id" jdbcType="VARCHAR"/>
+            <result property="successTime" column="success_time" jdbcType="TIMESTAMP"/>
+            <result property="notifyId" column="notify_id" jdbcType="VARCHAR"/>
+            <result property="appId" column="app_id" jdbcType="VARCHAR"/>
+            <result property="mchId" column="mch_id" jdbcType="VARCHAR"/>
+            <result property="tradeType" column="trade_type" jdbcType="VARCHAR"/>
+            <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+            <result property="refundStatus" column="refund_status" jdbcType="VARCHAR"/>
+            <result property="tradeState" column="trade_state" jdbcType="VARCHAR"/>
+            <result property="tradeStateDesc" column="trade_state_desc" jdbcType="VARCHAR"/>
+            <result property="userReceivedAccount" column="user_received_account" jdbcType="VARCHAR"/>
+            <result property="bankType" column="bank_type" jdbcType="VARCHAR"/>
+            <result property="attach" column="attach" jdbcType="VARCHAR"/>
+            <result property="total" column="total" jdbcType="DECIMAL"/>
+            <result property="refund" column="refund" jdbcType="DECIMAL"/>
+            <result property="payerTotal" column="payer_total" jdbcType="DECIMAL"/>
+            <result property="payerRefund" column="payer_refund" jdbcType="DECIMAL"/>
+            <result property="currency" column="currency" jdbcType="VARCHAR"/>
+            <result property="payerCurrency" column="payer_currency" jdbcType="VARCHAR"/>
+            <result property="promotionDetail" column="promotion_detail" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,out_trade_no,transaction_id,
+        out_refund_no,refund_id,success_time,
+        notify_id,app_id,mch_id,
+        trade_type,open_id,refund_status,
+        trade_state,trade_state_desc,user_received_account,
+        bank_type,attach,total,
+        refund,payer_total,payer_refund,
+        currency,payer_currency,promotion_detail,
+        create_time,update_time
+    </sql>
+</mapper>

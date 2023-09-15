@@ -1,0 +1,169 @@
+package rules.parking
+
+import com.czdx.parkingcharge.domain.pr.ParkingRecord
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+/**
+* 免费时长 18 分钟
+* 首时段 120分钟，5元每120分钟 【计时方式】
+* 第二时段 1320分钟，2元每30分钟 【计时方式】
+* 每1440分钟，限额25元
+* 每24小时强制分割
+*
+*/
+
+// 超出最高限价时间
+//rule "p2022-测试规则-00-maxcharge"
+//    activation-group "charge-rule"
+//    salience 200
+//    when
+//        $pRecord:ParkingRecord($duration: parkingDuration >= 1440)
+//    then
+//        BigDecimal fee = ParkingFeeUtil.divideCP2ChargeFee($pRecord, 1440, BigDecimal.valueOf(25));
+//        $pRecord.setParkingFee(fee);
+//end
+
+// 24小时强制分割
+//rule "p2022-测试规则-01-divide"
+//    activation-group "charge-rule"
+//    salience 120
+//    when
+//        $pRecord:ParkingRecord($duration: parkingDuration > 1440)
+//    then
+//        // 按24小时分割，计算费用
+//        // 分割后，需要根据两者分割情况做可用/不可用处理
+//        BigDecimal fee = ParkingFeeUtil.divide24Hours2ChargeFee($pRecord, "1", "1");
+//        $pRecord.setParkingFee(fee);
+//end
+
+// 0点强制分割
+//rule "p2022-测试规则-02-divide"
+//    activation-group "charge-rule"
+//    salience 120
+//    when
+//        $pRecord:ParkingRecord(hasInterDay)
+//    then
+//        // 按24小时分割，计算费用
+//        // 分割后，需要根据两者分割情况做可用/不可用处理
+//        BigDecimal fee = ParkingFeeUtil.divideZero2ChargeFee($pRecord, "1", "1");
+//        $pRecord.setParkingFee(fee);
+//end
+
+// 期间强制分割
+rule "p2022-测试规则-03-divide"
+    activation-group "charge-rule"
+    salience 120
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 1440)
+    then
+        // 按期间时长分割，计算费用
+        // 分割后，需要根据两者分割情况做可用/不可用处理
+        BigDecimal fee = ParkingFeeUtil.divideDuration2ChargeFee($pRecord, 1440, "1", "2", null);
+        $pRecord.setParkingFee(fee);
+end
+
+// 多个时段，隐藏的分割，不会考虑免费时长次数、首时段计费方式
+rule "p2022-测试规则-04-divide"
+    activation-group "charge-rule"
+    salience 110
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 1440, useFirstPeriod)
+    then
+        // 该分割，不允许使用免费时长、首时段
+        BigDecimal fee = ParkingFeeUtil.divideDuration2ChargeFee($pRecord, 1440, "1", "1", null);
+        $pRecord.setParkingFee(fee);
+end
+
+// 多个时段，隐藏的分割，条件为超过期间长度（该长度受首时段影响，需要减去首时段），会重新分割
+rule "p2022-测试规则-05-divide"
+    activation-group "charge-rule"
+    salience 110
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 1320, !useFirstPeriod)
+    then
+        // 该分割，不允许使用免费时长、首时段
+        BigDecimal fee = ParkingFeeUtil.divideDuration2ChargeFee($pRecord, 1320, "1", "1", null);
+        $pRecord.setParkingFee(fee);
+end
+
+
+// 免费时间段 18 分钟
+rule "p2022-测试规则-01"
+    activation-group "charge-rule"
+    salience 100
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration <= 18, useFreeTime)
+    then
+        System.out.println("触发规则：免费时间段 18 分钟");
+        $pRecord.setParkingFee(BigDecimal.ZERO);
+ end
+
+// 计费规则 - 只有一个时段，5元每120分钟，区分是否使用免费时段
+//rule "p2022-测试规则-02-only-one-period"
+//   agenda-group "charge-rule"
+//   salience 90
+//   when
+//       $pRecord:ParkingRecord($duration: parkingDuration > 0)
+//   then
+//       System.out.println("触发规则：唯一时段 5元每120分钟");
+//       long remainingMins = $duration;
+//       BigDecimal fee = ParkingFeeUtil.chargeParkingFee(remainingMins, 120, BigDecimal.valueOf(5), "1");
+//       $pRecord.setParkingFee(fee.add($pRecord.getParkingFee()));
+//end
+
+// 计费规则 - 多个时段，首时段，时长120分钟，5元每120分钟，区分能否使用首时段
+rule "p2022-测试规则-02-more-period-fisrt"
+   activation-group "charge-rule"
+   salience 80
+   when
+       $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 120, useFirstPeriod)
+   then
+       System.out.println("触发规则：多个时段，首时段 5元每120分钟");
+       long remainingMins = $duration;
+       BigDecimal fee = ParkingFeeUtil.chargeParkingFee(remainingMins, 120, BigDecimal.valueOf(5), "1", BigDecimal.valueOf(25));
+       $pRecord.setParkingFee(fee);
+end
+
+// 计费规则 - 多个时段，第二时段，时长120分钟，3元每60分钟，区分能否使用首时段
+rule "p2022-测试规则-03-more-period-other"
+   activation-group "charge-rule"
+   salience 70
+   when
+       $pRecord:ParkingRecord($duration: parkingDuration > 120, parkingDuration <= 1440, useFirstPeriod)
+       or $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 1440, !useFirstPeriod)
+   then
+       System.out.println("触发规则：多个时段，第二时段，时长1320分钟，2元每30分钟，区分能否使用首时段");
+       long remainingMins = $duration;
+       BigDecimal fee = ParkingFeeUtil.chargeParkingFee(remainingMins, 30, BigDecimal.valueOf(2), "1", BigDecimal.valueOf(25));
+       $pRecord.setParkingFee(fee);
+end
+
+// 计费规则 - 多个时段，第三时段，时长120分钟，2元每60分钟，区分能否使用首时段
+//rule "p2022-测试规则-04-more-period-other"
+//   agenda-group "charge-rule"
+//   salience 60
+//   when
+//       $pRecord:ParkingRecord($duration: parkingDuration > 240, parkingDuration <= 360, useFirstPeriod)
+//       or $pRecord:ParkingRecord($duration: parkingDuration > 120, parkingDuration <= 240, !useFirstPeriod)
+//   then
+//       System.out.println("触发规则：多个时段，第三时段，时长120分钟，2元每60分钟，区分能否使用首时段");
+//       long remainingMins = $duration;
+//       BigDecimal fee = ParkingFeeUtil.chargeParkingFee(remainingMins, 60, BigDecimal.valueOf(2), "1");
+//       $pRecord.setParkingFee(fee.add($pRecord.getParkingFee()));
+//end
+
+// 计费规则 - 多个时段，第四时段，时长不限制（右界为期间总时长），1元每60分钟，区分能否使用首时段
+//rule "p2022-测试规则-05-more-period-other"
+//   agenda-group "charge-rule"
+//   salience 50
+//   when
+//       $pRecord:ParkingRecord($duration: parkingDuration > 360, parkingDuration <= 1440, useFirstPeriod)
+//       or $pRecord:ParkingRecord($duration: parkingDuration > 240, parkingDuration <= 1440, !useFirstPeriod)
+//   then
+//       System.out.println("触发规则：多个时段，第四时段，时长不限制，1元每60分钟，区分能否使用首时段");
+//       long remainingMins = $duration;
+//       BigDecimal fee = ParkingFeeUtil.chargeParkingFee(remainingMins, 60, BigDecimal.valueOf(1), "1");
+//       $pRecord.setParkingFee(fee.add($pRecord.getParkingFee()));
+//end
+

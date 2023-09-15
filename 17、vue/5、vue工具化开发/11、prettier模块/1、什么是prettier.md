@@ -1,0 +1,5 @@
+## 什么是prettier
+
+eslint是javascript的语法检测工具，但是eslint不检测代码规范。而prettier是检测javascript的代码规范的，并按照配置好的规范对代码进行格式化的工具。所以prettier配合eslint才是最牛逼的。
+
+注意：一定是在安装好eslint的前提下才能使用prettier

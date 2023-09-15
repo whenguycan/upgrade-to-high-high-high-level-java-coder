@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.TimeShareUsageDayFactMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.TimeShareUsageDayFact" id="TimeShareUsageDayFactResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="day"    column="day"    />
+        <result property="timeInterval"    column="time_interval"    />
+        <result property="useRatio"    column="use_ratio"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTimeShareUsageDayFactVo">
+        select id, park_no, day, time_interval, use_ratio, create_by, create_time, update_by, update_time from time_share_usage_day_fact
+    </sql>
+
+    <select id="selectTimeShareUsageDayFactList" parameterType="com.ruoyi.project.parking.domain.TimeShareUsageDayFact" resultMap="TimeShareUsageDayFactResult">
+        <include refid="selectTimeShareUsageDayFactVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="timeInterval != null  and timeInterval != ''"> and time_interval = #{timeInterval}</if>
+            <if test="useRatio != null "> and use_ratio = #{useRatio}</if>
+        </where>
+    </select>
+    
+    <select id="selectTimeShareUsageDayFactById" parameterType="Integer" resultMap="TimeShareUsageDayFactResult">
+        <include refid="selectTimeShareUsageDayFactVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTimeShareUsageDayFact" parameterType="com.ruoyi.project.parking.domain.TimeShareUsageDayFact">
+        insert into time_share_usage_day_fact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="parkNo != null">park_no,</if>
+            <if test="day != null">day,</if>
+            <if test="timeInterval != null">time_interval,</if>
+            <if test="useRatio != null">use_ratio,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="day != null">#{day},</if>
+            <if test="timeInterval != null">#{timeInterval},</if>
+            <if test="useRatio != null">#{useRatio},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTimeShareUsageDayFact" parameterType="com.ruoyi.project.parking.domain.TimeShareUsageDayFact">
+        update time_share_usage_day_fact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="timeInterval != null">time_interval = #{timeInterval},</if>
+            <if test="useRatio != null">use_ratio = #{useRatio},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTimeShareUsageDayFactById" parameterType="Integer">
+        delete from time_share_usage_day_fact where id = #{id}
+    </delete>
+
+    <delete id="deleteTimeShareUsageDayFactByIds" parameterType="String">
+        delete from time_share_usage_day_fact where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="analyseTimeShareUsageDayFact" resultType="com.ruoyi.project.parking.domain.TimeShareUsageDayFact">
+        SELECT
+            t.time_interval,
+            FORMAT(coalesce((SELECT count(id) FROM t_park_live_records
+            where (date_format(entry_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d') or date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d'))
+            and (
+                (
+                    date_format(entry_time, '%Y-%m-%d %H:%i:%s') &lt;= date_format(concat(#{day}, ' ', left(t.time_interval, 5), ':00'), '%Y-%m-%d %H:%i:%s')
+                    and date_format(exit_time, '%Y-%m-%d %H:%i:%s') &gt; date_format(concat(#{day}, ' ', left(t.time_interval, 5), ':00'), '%Y-%m-%d %H:%i:%s')
+                ) or (
+                    date_format(entry_time, '%Y-%m-%d %H:%i:%s') &gt;= date_format(concat(#{day}, ' ', left(t.time_interval, 5), ':00'), '%Y-%m-%d %H:%i:%s')
+                    and date_format(entry_time, '%Y-%m-%d %H:%i:%s')
+                        &lt; date_format(concat(#{day}, ' ', ( case when right(t.time_interval, 5) = '24:00' then '23:59:59' else concat(right(t.time_interval, 5), ':00') end )), '%Y-%m-%d %H:%i:%s')
+                )
+            )
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>) * 100 /
+            (select coalesce(sum(coalesce(space_count, 0)), 0) from b_field
+            where park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+            and field_status = '1'), 0), 2) as use_ratio
+        FROM
+            (select '00:00~01:00' as time_interval from dual union
+            select '01:00~02:00' as time_interval from dual union
+            select '02:00~03:00' as time_interval from dual union
+            select '03:00~04:00' as time_interval from dual union
+            select '04:00~05:00' as time_interval from dual union
+            select '05:00~06:00' as time_interval from dual union
+            select '06:00~07:00' as time_interval from dual union
+            select '07:00~08:00' as time_interval from dual union
+            select '08:00~09:00' as time_interval from dual union
+            select '09:00~10:00' as time_interval from dual union
+            select '10:00~11:00' as time_interval from dual union
+            select '11:00~12:00' as time_interval from dual union
+            select '12:00~13:00' as time_interval from dual union
+            select '13:00~14:00' as time_interval from dual union
+            select '14:00~15:00' as time_interval from dual union
+            select '15:00~16:00' as time_interval from dual union
+            select '16:00~17:00' as time_interval from dual union
+            select '17:00~18:00' as time_interval from dual union
+            select '18:00~19:00' as time_interval from dual union
+            select '19:00~20:00' as time_interval from dual union
+            select '20:00~21:00' as time_interval from dual union
+            select '21:00~22:00' as time_interval from dual union
+            select '22:00~23:00' as time_interval from dual union
+            select '23:00~24:00' as time_interval from dual) t
+        GROUP BY t.time_interval
+    </select>
+
+    <select id="selectTimeShareUsageDayFact" parameterType="com.ruoyi.project.parking.domain.TimeShareUsageDayFact" resultMap="TimeShareUsageDayFactResult">
+        <include refid="selectTimeShareUsageDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="timeInterval != null  and timeInterval != ''"> and time_interval = #{timeInterval}</if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="getTimeShareUsageDayFact" parameterType="com.ruoyi.project.parking.domain.TimeShareUsageDayFact"
+            resultType="com.ruoyi.project.parking.domain.vo.TimeShareUsageFactVO">
+        select
+            tsudf.time_interval as name,
+            tsudf.use_ratio as value
+        from time_share_usage_day_fact tsudf
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and tsudf.park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and tsudf.day = #{day}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,60 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://10.10.210.19:3306/fast-parking-order?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  # redis 配置
+  redis:
+    # 地址
+    host: 10.10.210.19
+    # 端口，默认为6379
+    port: 30002
+    # 数据库索引
+    database: 0
+    # 密码
+    password:
+#mqtt属性配置
+mqtt:
+  hostUrl: tcp://180.103.119.176:1883
+  username: admin
+  password: admin123
+  clientid: mqtt_send_client
+  cleanSession: true
+  reconnect: false
+  #连接超时
+  timeout: 5000
+  #设置会话心跳时间
+  keepalive: 100
+  isOpen: true
+  qos: 1
+
+# grpc 配置
+grpc:
+  client:
+    # 服务端地址
+    parking-device-server:
+      address: 'static://127.0.0.1:9085'
+    parking-order-server:
+      address: 'static://127.0.0.1:9088'
+    parking-charge-server:
+      address: 'static://127.0.0.1:9095'
+    parking-payment-server:
+      address: 'static://127.0.0.1:9100'
+    parking-notification-server:
+      address: 'static://127.0.0.1:9105'
+    parking-member-merchant-server:
+      address: 'static://127.0.0.1:9110'
+    parking-lot-server:
+      address: 'static://127.0.0.1:9115'

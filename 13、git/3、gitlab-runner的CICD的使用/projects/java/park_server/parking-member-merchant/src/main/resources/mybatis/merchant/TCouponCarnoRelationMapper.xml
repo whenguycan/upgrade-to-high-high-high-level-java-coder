@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.TCouponCarnoRelationMapper">
+
+    <resultMap type="TCouponCarnoRelation" id="TCouponCarnoRelationResult">
+        <result property="id" column="id"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="couponDetailId" column="coupon_detail_id"/>
+        <result property="validStartTime" column="valid_start_time"/>
+        <result property="validEndTime" column="valid_end_time"/>
+    </resultMap>
+    <resultMap id="AssignedCouponResult" type="AssignedCoupon">
+        <result property="id" column="id"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="validStartTime" column="valid_start_time"/>
+        <result property="validEndTime" column="valid_end_time"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="couponMold" column="coupon_mold"/>
+        <result property="couponValue" column="coupon_value"/>
+        <result property="couponCode" column="coupon_code"/>
+        <result property="couponStatus" column="coupon_status"/>
+        <result property="allocatedTime" column="allocated_time"/>
+    </resultMap>
+
+    <sql id="selectTCouponCarnoRelationVo">
+        select id, car_number, coupon_detail_id, valid_start_time, valid_end_time
+        from t_coupon_carno_relation
+    </sql>
+    <sql id="qryAssignedCouponSql">
+        select b.id,
+               a.car_number,
+               a.valid_start_time,
+               a.valid_end_time,
+               c.coupon_type,
+               c.coupon_mold,
+               c.coupon_value,
+               c.park_no,
+               b.coupon_code,
+               b.coupon_status,
+               b.allocated_time
+        from t_coupon_carno_relation a
+                 left join t_coupon_detail b on a.coupon_detail_id = b.id
+                 join t_coupon_type c on c.id = b.coupon_id
+
+    </sql>
+    <select id="selectAssignedCouponList" resultMap="AssignedCouponResult">
+        <include refid="qryAssignedCouponSql"></include>
+        <where>
+            a.valid_end_time > NOW() and b.coupon_status='1'
+            <if test="carNumber != null  and carNumber != ''">and a.car_number = #{carNumber}</if>
+            <if test="parkNo != null  and parkNo != ''">and c.park_no = #{parkNo}</if>
+            <if test="id != null  and id != ''">and b.id = #{couponDetailId}</if>
+        </where>
+    </select>
+    <select id="selectTCouponCarnoRelationList" parameterType="TCouponCarnoRelation"
+            resultMap="TCouponCarnoRelationResult">
+        <include refid="selectTCouponCarnoRelationVo"/>
+        <where>
+            <if test="carNumber != null  and carNumber != ''">and car_number = #{carNumber}</if>
+            <if test="couponDetailId != null  and couponDetailId != ''">and coupon_detail_id = #{couponDetailId}</if>
+            <if test="validStartTime != null ">and valid_start_time = #{validStartTime}</if>
+            <if test="validEndTime != null ">and valid_end_time = #{validEndTime}</if>
+        </where>
+    </select>
+
+    <select id="selectTCouponCarnoRelationById" parameterType="Long" resultMap="TCouponCarnoRelationResult">
+        <include refid="selectTCouponCarnoRelationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTCouponCarnoRelation" parameterType="TCouponCarnoRelation">
+        insert into t_coupon_carno_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="carNumber != null and carNumber != ''">car_number,</if>
+            <if test="couponDetailId != null">coupon_detail_id,</if>
+            <if test="validStartTime != null">valid_start_time,</if>
+            <if test="validEndTime != null">valid_end_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="carNumber != null and carNumber != ''">#{carNumber},</if>
+            <if test="couponDetailId != null">#{couponDetailId},</if>
+            <if test="validStartTime != null">#{validStartTime},</if>
+            <if test="validEndTime != null">#{validEndTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTCouponCarnoRelation" parameterType="TCouponCarnoRelation">
+        update t_coupon_carno_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carNumber != null and carNumber != ''">car_number = #{carNumber},</if>
+            <if test="couponDetailId != null">coupon_detail_id = #{couponDetailId},</if>
+            <if test="validStartTime != null">valid_start_time = #{validStartTime},</if>
+            <if test="validEndTime != null">valid_end_time = #{validEndTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTCouponCarnoRelationById" parameterType="Long">
+        delete
+        from t_coupon_carno_relation
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTCouponCarnoRelationByIds" parameterType="String">
+        delete from t_coupon_carno_relation where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

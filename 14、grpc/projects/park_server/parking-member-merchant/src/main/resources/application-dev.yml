@@ -1,0 +1,81 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://10.10.210.19:3306/fast-parking-member-merchant?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  #MQ
+  rabbitmq:
+    host: 10.10.210.20
+    port: 30801
+    username: acnftest
+    password: acnf@admin
+    virtualHost: /
+  # redis 配置
+  redis:
+    # 地址
+    host: 10.10.210.19
+    # 端口，默认为6379
+    port: 30002
+    # 数据库索引
+    database: 0
+    # 密码
+    password:
+
+# grpc 配置
+grpc:
+  client:
+    # 服务端地址
+    parking-device-server:
+      address: 'static://127.0.0.1:9085'
+    parking-order-server:
+      address: 'static://127.0.0.1:9088'
+    parking-charge-server:
+      address: 'static://127.0.0.1:9095'
+    parking-payment-server:
+      address: 'static://127.0.0.1:9100'
+    parking-notification-server:
+      address: 'static://127.0.0.1:9105'
+    parking-member-merchant-server:
+      address: 'static://127.0.0.1:9110'
+    parking-lot-server:
+      address: 'static://127.0.0.1:9115'
+# 滑动/点选验证码配置
+aj:
+  enabled: true
+  captcha:
+    # 缓存local/redis，内存缓存只适合单节点部署的应用，否则验证码生产与验证在节点之间信息不同步，导致失败
+    cache-type: redis
+    # 滑动验证，底图路径，不配置将使用默认图片
+    # jigsaw: classpath:images/jigsaw
+    # 验证码类型default两种都实例化
+    type: default
+    # 水印
+    # water-mark: 常州电信
+    # 校验滑动拼图允许误差偏移量(默认5像素)
+    slip-offset: 5
+    # aes加密坐标开启或者禁用(true|false)
+    aes-status: true
+    # 滑动干扰项(0/1/2)
+    interference-options: 0
+    #点选字体样式 默认Font.BOLD
+    font-style: 1
+    #点选字体字体大小
+    font-size: 25
+
+wx:
+  appId: wxf4c3f854ce48364b
+  appSecret: b59fd5a0d313bb88e672de958228abf1
+  token: 123456
+  checkToken: false

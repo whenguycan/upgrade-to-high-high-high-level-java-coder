@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.TCouponDetailMapper">
+
+    <resultMap type="TCouponDetailVo" id="TCouponDetailResult">
+        <result property="id" column="id"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="couponCode" column="coupon_code"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="couponStatus" column="coupon_status"/>
+        <result property="couponName" column="coupon_name"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="couponValue" column="coupon_value"/>
+        <result property="couponMold" column="coupon_mold"/>
+        <result property="couponPrice" column="coupon_price"/>
+        <result property="allocatedTime" column="allocated_time"/>
+        <result property="usedTime" column="used_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="validStartTime" column="valid_start_time"/>
+        <result property="validEndTime" column="valid_end_time"/>
+    </resultMap>
+
+    <resultMap type="MemberCouponVO" id="MemberCouponVOResult">
+        <result property="parkNo" column="park_no"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="couponMold" column="coupon_mold"/>
+        <result property="couponValue" column="coupon_value"/>
+        <result property="couponName" column="coupon_name"/>
+        <result property="couponCode" column="coupon_code"/>
+        <result property="couponStatus" column="coupon_status"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="validStartTime" column="valid_start_time"/>
+        <result property="validEndTime" column="valid_end_time"/>
+        <result property="usedTime" column="used_time"/>
+        <result property="orderNo" column="order_no"/>
+    </resultMap>
+
+    <resultMap type="CouponReportResultVo" id="CouponReportResult">
+        <result property="num" column="num"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="couponStatus" column="coupon_status"/>
+    </resultMap>
+
+    <sql id="selectTCouponDetailVo">
+        select a.id,
+               a.coupon_id,
+               coupon_code,
+               coupon_status,
+               allocated_time,
+               coupon_price,
+               used_time,
+               a.create_by,
+               a.create_time,
+               a.update_by,
+               a.update_time,
+               valid_end_time,
+               valid_start_time,
+               b.coupon_name,
+               b.coupon_type,
+               b.coupon_value,
+               b.coupon_mold,
+               car_number
+        from t_coupon_detail a
+    </sql>
+    <select id="selectAppPlatformCouponDetailList" parameterType="TCouponDetailVo" resultMap="TCouponDetailResult">
+        <include refid="selectTCouponDetailVo"></include>
+        join t_coupon_type b on a.coupon_id=b.id
+        <where>
+            <if test="userId != null ">and b.user_id = #{userId}</if>
+            <if test="couponId != null ">and a.coupon_id = #{couponId}</if>
+            <if test="couponCode != null  and couponCode != ''">and a.coupon_code = #{couponCode}</if>
+            <if test="couponStatus != null  and couponStatus != ''">and a.coupon_status = #{couponStatus}</if>
+            <if test="allocatedTime != null ">and a.allocated_time = #{allocatedTime}</if>
+            <if test="usedTime != null ">and a.used_time = #{usedTime}</if>
+            <if test="parkNo != null ">and b.park_no = #{parkNo}</if>
+
+        </where>
+        order by a.create_Time desc
+        <if test="couponNum != null ">limit #{couponNum}</if>
+
+    </select>
+
+
+    <select id="selectTCouponDetailList" parameterType="TCouponDetailVo" resultMap="TCouponDetailResult">
+        select detail.id, detail.coupon_id, detail.coupon_code, detail.coupon_status, detail.allocated_time,
+        detail.used_time,detail.valid_start_time,detail.valid_end_time,type.coupon_name,type.coupon_type,coupon_value,detail.car_number,
+        detail.create_by, detail.create_time, detail.update_by, detail.update_time from t_coupon_detail detail
+        left join t_coupon_type type on type.id=detail.coupon_id
+        <where>
+            <if test="userId != null ">and type.user_id = #{userId}</if>
+            <if test="parkNo != null ">and type.park_no = #{parkNo}</if>
+            <if test="couponId != null ">and detail.coupon_id = #{couponId}</if>
+            <if test="couponCode != null  and couponCode != ''">and detail.coupon_code = #{couponCode}</if>
+            <if test="couponStatus != null  and couponStatus != ''">and detail.coupon_status = #{couponStatus}</if>
+            <if test="allocatedTime != null ">and detail.allocated_time = #{allocatedTime}</if>
+            <if test="usedTime != null ">and detail.used_time = #{usedTime}</if>
+        </where>
+    </select>
+
+    <select id="selectTCouponDetailById" parameterType="Long" resultMap="TCouponDetailResult">
+        <include refid="selectTCouponDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTCouponDetail" parameterType="TCouponDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into t_coupon_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponId != null">coupon_id,</if>
+            <if test="couponCode != null">coupon_code,</if>
+            <if test="couponStatus != null">coupon_status,</if>
+            <if test="allocatedTime != null">allocated_time,</if>
+            <if test="usedTime != null">used_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="validStartTime != null">valid_start_time,</if>
+            <if test="validEndTime != null">valid_end_time,</if>
+            <if test="orderNo != null">order_no,</if>
+            <if test="carNumber != null">car_number,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponId != null">#{couponId},</if>
+            <if test="couponCode != null">#{couponCode},</if>
+            <if test="couponStatus != null">#{couponStatus},</if>
+            <if test="allocatedTime != null">#{allocatedTime},</if>
+            <if test="usedTime != null">#{usedTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="validStartTime != null">#{validStartTime},</if>
+            <if test="validEndTime != null">#{validEndTime},</if>
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="carNumber != null">#{carNumber},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTCouponDetail" parameterType="TCouponDetail">
+        update t_coupon_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponId != null">coupon_id = #{couponId},</if>
+            <if test="couponCode != null">coupon_code = #{couponCode},</if>
+            <if test="couponStatus != null">coupon_status = #{couponStatus},</if>
+            <if test="allocatedTime != null">allocated_time = #{allocatedTime},</if>
+            <if test="usedTime != null">used_time = #{usedTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="validStartTime != null">valid_start_time = #{validStartTime},</if>
+            <if test="validEndTime != null">valid_end_time = #{validEndTime},</if>
+            <if test="orderNo != null">order_no=#{orderNo},</if>
+            <if test="carNumber != null">car_number=#{carNumber},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <update id="updateCouponUsedByCode" parameterType="TCouponDetail">
+        update t_coupon_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponId != null">coupon_id = #{couponId},</if>
+            <if test="couponCode != null">coupon_code = #{couponCode},</if>
+            <if test="couponStatus != null">coupon_status = #{couponStatus},</if>
+            <if test="allocatedTime != null">allocated_time = #{allocatedTime},</if>
+            <if test="usedTime != null">used_time = #{usedTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="validStartTime != null">valid_start_time = #{validStartTime},</if>
+            <if test="validEndTime != null">valid_end_time = #{validEndTime},</if>
+            <if test="orderNo != null">order_no=#{orderNo},</if>
+            <if test="carNumber != null">car_number=#{carNumber},</if>
+        </trim>
+        where coupon_code = #{couponCode}
+    </update>
+
+    <update id="updateCancelStatus" parameterType="TCouponDetail">
+        update t_coupon_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couponStatus != null">coupon_status = #{couponStatus},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="orderNo != null">order_no=#{orderNo},</if>
+
+            update_time = sysdate()
+        </trim>
+        where couponId = #{couponId} and coupon_status = '0'
+    </update>
+
+    <delete id="deleteTCouponDetailById" parameterType="Long">
+        delete
+        from t_coupon_detail
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTCouponDetailByIds" parameterType="String">
+        delete from t_coupon_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectMemberCouponVOList" resultMap="MemberCouponVOResult">
+        SELECT t2.park_no,t2.coupon_type,t2.coupon_mold,t2.coupon_value,t2.coupon_name,
+        t1.coupon_code,t1.coupon_status,t1.car_number,t1.valid_start_time,t1.valid_end_time,
+        t1.used_time,t1.order_no
+        FROM t_coupon_detail t1
+        LEFT JOIN t_coupon_type t2 ON t2.id = t1.coupon_id
+        LEFT JOIN b_my_car t3 ON t3.car_no = t1.car_number
+        WHERE t1.coupon_status = #{couponStatus} AND t3.create_by = #{memberId}
+        <if test="couponStatus != null">
+            <if test="couponStatus.name == 'UNALLOCATED'">
+                ORDER BY t1.create_time
+            </if>
+            <if test="couponStatus.name == 'ALLOCATED'">
+                AND DATE_FORMAT(t1.valid_end_time, '%Y-%m-%d %H:%i:%S') &gt;= DATE_FORMAT( now() , '%Y-%m-%d %H:%i:%S')
+                ORDER BY t1.valid_end_time
+            </if>
+            <if test="couponStatus.name == 'USED'">
+                ORDER BY t1.used_time DESC
+            </if>
+            <if test="couponStatus.name == 'INVALIDATION'">
+                OR ( t1.coupon_status = '1' AND DATE_FORMAT(t1.valid_end_time, '%Y-%m-%d %H:%i:%S') &lt;
+                DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%S'))
+                ORDER BY t1.valid_end_time DESC
+            </if>
+        </if>
+    </select>
+
+    <select id="selectMemberCouponVOListByCarNumber" resultMap="MemberCouponVOResult">
+        SELECT t2.park_no,t2.coupon_type,t2.coupon_mold,t2.coupon_value,t2.coupon_name,
+        t1.coupon_code,t1.coupon_status,t1.car_number,t1.valid_start_time,t1.valid_end_time,
+        t1.used_time,t1.order_no
+        FROM t_coupon_detail t1
+        LEFT JOIN t_coupon_type t2 ON t2.id = t1.coupon_id
+        WHERE t1.car_number = #{carNumber} AND t1.coupon_status = 1
+        AND DATE_FORMAT(t1.valid_end_time, '%Y-%m-%d %H:%i:%S') &gt;= DATE_FORMAT( now() , '%Y-%m-%d %H:%i:%S')
+        ORDER BY t1.valid_end_time
+    </select>
+
+    <select id="selectMemberCouponVOBatchByCode" resultMap="MemberCouponVOResult" parameterType="String">
+        SELECT t2.park_no,t2.coupon_type,t2.coupon_mold,t2.coupon_value,t2.coupon_name,
+        t1.coupon_code,t1.coupon_status,t1.car_number,t1.valid_start_time,t1.valid_end_time,
+        t1.used_time,t1.order_no
+        FROM t_coupon_detail t1
+        LEFT JOIN t_coupon_type t2 ON t2.id = t1.coupon_id
+        LEFT JOIN b_my_car t3 ON t3.car_no = t1.car_number
+        WHERE t1.coupon_code in
+        <foreach collection="codes" item="couponCode" open="(" separator="," close=")">
+            #{couponCode}
+        </foreach>
+    </select>
+
+    <select id="selectCouponReportList" parameterType="CouponReportParam" resultMap="CouponReportResult">
+        SELECT count(1) num, t.coupon_status
+        FROM t_coupon_detail t
+        join t_coupon_type d on d.id = t.coupon_id
+        where t.create_time >=#{startDate} and t.create_time &lt;=#{endDate} and d.id is not null
+        group by t.coupon_status
+        order by t.coupon_status
+    </select>
+</mapper>

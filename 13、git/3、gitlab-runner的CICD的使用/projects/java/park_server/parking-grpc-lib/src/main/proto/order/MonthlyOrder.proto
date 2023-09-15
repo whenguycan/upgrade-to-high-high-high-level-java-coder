@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.order;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = false;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.order";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "MonthlyOrder";
+
+service MonthlyOrderService {
+
+  rpc createMonthlyOrder(createMonthlyOrderRequest) returns (monthlyOrderResponse) {};
+
+  rpc searchMonthlyOrder(searchMonthlyOrderRequest) returns (searchMonthlyOrderResponse) {};
+
+}
+
+
+message searchMonthlyOrderRequest {
+  int32 orderUserId = 1;
+  string orderStatus = 2;
+  string payStatus = 3;
+  int32 pageNum = 4;
+  int32 pageSize = 5;
+  string orderNo = 6;
+  //是否查询可开票
+  bool billable = 7;
+}
+
+message searchMonthlyOrderResponse{
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+
+  int64 pageTotal = 3;
+
+  int64 pageCurrent = 4;
+
+  // 返回订单详情
+  repeated MonthlyOrderDetail orderDetail = 5;
+}
+
+message createMonthlyOrderRequest {
+  string parkNo = 1;
+
+  int32 orderUserId = 3;
+
+  double discountAmount = 4;
+
+  double payAmount = 5;
+}
+
+
+message monthlyOrderResponse{
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+
+  // 返回订单详情
+  MonthlyOrderDetail orderDetail = 3;
+}
+
+message MonthlyOrderDetail{
+  // 订单号
+  string orderNo = 1;
+  // 车场编号
+  string parkNo = 2;
+  // 所属商家ID
+  int32 orderUserId = 3;
+  // 车牌号
+  string carNumber = 4;
+  // 应付金额（元）
+  double payableAmount = 7;
+  // 优惠金额（元）
+  double discountAmount = 8;
+  // 已付金额（元）
+  double paidAmount = 9;
+  // 实付金额（元）
+  double payAmount = 10;
+  //  支付方式
+  string payMethod = 11;
+  // 支付时间
+  string payTime = 12;
+  // 支付状态
+  string payStatus = 13;
+  // 支付流水号
+  string payNumber = 14;
+  // 过期时间
+  string expireTime = 15;
+  // 备注
+  string remark = 16;
+  // 创建时间
+  string createTime = 17;
+  // 更新时间
+  string updateTime = 18;
+
+  string orderStatus = 19;
+
+  string billOutTradeNo = 20;
+
+}

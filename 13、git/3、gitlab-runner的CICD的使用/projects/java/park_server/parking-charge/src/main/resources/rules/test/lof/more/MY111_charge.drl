@@ -1,0 +1,117 @@
+package rules.test.lof.alone
+
+import com.czdx.parkingcharge.domain.pr.ParkingRecord
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+
+// 超出最高限价时间
+rule "MY111-divide-maxcharge"
+    activation-group "charge-rule"
+    salience 200
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration >= 1440)
+    then
+        System.out.println("触发规则：超出最高限价时间分割");
+        BigDecimal fee = ParkingFeeUtil.divideCP2ChargeFee($pRecord, 1440, BigDecimal.valueOf(50), "1", "1");
+        $pRecord.setParkingFee(fee);
+end
+
+// 超过时长后，隐藏的分割，不会考虑免费时长次数、首时段计费方式
+rule "MY111-hide-1"
+    activation-group "charge-rule"
+    salience 110
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 120, useFirstPeriod)
+    then
+        // 该分割，不允许使用免费时长、首时段
+        BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFeeOnce($pRecord, 120, BigDecimal.valueOf(50));
+        $pRecord.setParkingFee(fee);
+end
+
+// 超过时长后，隐藏的分割，不会考虑免费时长次数、首时段计费方式
+rule "MY111-hide-2"
+    activation-group "charge-rule"
+    salience 110
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 90, !useFirstPeriod)
+    then
+        // 该分割，不允许使用免费时长、首时段
+        BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFee($pRecord, 90, BigDecimal.valueOf(50));
+        $pRecord.setParkingFee(fee);
+end
+
+// 免费时间段 18 分钟
+rule "MY111-1"
+    activation-group "charge-rule"
+    salience 100
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration <= 18, useFreeTime)
+    then
+        System.out.println("触发规则：MY111-1");
+        $pRecord.setParkingFee(BigDecimal.ZERO);
+end
+
+// 首时段，时长30分钟，5元每30分钟
+rule "MY111-2"
+    activation-group "charge-rule"
+    salience 90
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 30, useFirstPeriod)
+    then
+        System.out.println("触发规则：MY111-2");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 0, 30, BigDecimal.valueOf(5), "1", BigDecimal.valueOf(25));
+        $pRecord.setParkingFee(fee);
+end
+
+// 第二时段，时长30分钟，4元每30分钟 - 可用首时段
+rule "MY111-3"
+    activation-group "charge-rule"
+    salience 90
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 30, parkingDuration <= 60, useFirstPeriod)
+    then
+        System.out.println("触发规则：MY111-3");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee(
+                $duration - 30, 30, BigDecimal.valueOf(4), "1", BigDecimal.valueOf(25), BigDecimal.valueOf(5));
+        $pRecord.setParkingFee(fee);
+end
+
+// 第二时段，时长30分钟，4元每30分钟 - 不可用首时段
+rule "MY111-4"
+    activation-group "charge-rule"
+    salience 90
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 30, !useFirstPeriod)
+    then
+        System.out.println("触发规则：MY111-4");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee(
+                $duration - 0, 30, BigDecimal.valueOf(4), "1", BigDecimal.valueOf(25), BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+
+// 第三时段，时长60分钟，3元每60分钟 - 可用首时段
+rule "MY111-5"
+    activation-group "charge-rule"
+    salience 90
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 60, useFirstPeriod)
+    then
+        System.out.println("触发规则：MY111-5");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee(
+                $duration - 60, 60, BigDecimal.valueOf(3), "1", BigDecimal.valueOf(25), BigDecimal.valueOf(9));
+        $pRecord.setParkingFee(fee);
+end
+
+// 第三时段，时长60分钟，3元每60分钟 - 不可用首时段
+rule "MY111-6"
+    activation-group "charge-rule"
+    salience 90
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 30, !useFirstPeriod)
+    then
+        System.out.println("触发规则：MY111-6");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee(
+                $duration - 30, 60, BigDecimal.valueOf(3), "1", BigDecimal.valueOf(25), BigDecimal.valueOf(4));
+        $pRecord.setParkingFee(fee);
+end

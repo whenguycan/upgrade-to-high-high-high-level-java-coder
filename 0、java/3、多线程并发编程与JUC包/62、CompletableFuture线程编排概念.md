@@ -1,0 +1,8 @@
+## CompletableFuture线程编排概念
+
+有了线程池，帮助我们解决了线程的管理工作，但是会发现即便有了线程池，有一个问题还是无法解决，就是如果线程A、线程B、线程C需要有执行顺序问题，线程C的执行还需要线程A的结果，那应该怎么办？这时候就需要线程编排CompletableFuture了！
+
+
+
+CompletableFuture实现了Future接口和CompletionStage接口，Future接口用于获取异步执行的任务的执行结果，CompletionStage接口可以对异步执行的任务进行编排。
+

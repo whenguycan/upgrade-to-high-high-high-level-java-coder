@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.EntryExitAnalysisDayFactMapper">
+
+    <resultMap type="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact" id="EntryExitAnalysisDayFactResult">
+        <result property="id" column="id"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="day" column="day"/>
+        <result property="timeInterval" column="time_interval"/>
+        <result property="entryCount" column="entry_count"/>
+        <result property="exitCount" column="exit_count"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectEntryExitAnalysisDayFactVo">
+        select id,
+               park_no,
+               day,
+               time_interval,
+               entry_count,
+               exit_count,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        from entry_exit_analysis_day_fact
+    </sql>
+
+    <select id="selectEntryExitAnalysisDayFactList"
+            parameterType="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact"
+            resultMap="EntryExitAnalysisDayFactResult">
+        <include refid="selectEntryExitAnalysisDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''">and day = #{day}</if>
+            <if test="timeInterval != null  and timeInterval != ''">and time_interval = #{timeInterval}</if>
+            <if test="entryCount != null ">and entry_count = #{entryCount}</if>
+            <if test="exitCount != null ">and exit_count = #{exitCount}</if>
+        </where>
+    </select>
+
+    <select id="selectEntryExitAnalysisDayFactById" parameterType="Integer" resultMap="EntryExitAnalysisDayFactResult">
+        <include refid="selectEntryExitAnalysisDayFactVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEntryExitAnalysisDayFact"
+            parameterType="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact">
+        insert into entry_exit_analysis_day_fact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="parkNo != null">park_no,</if>
+            <if test="day != null">day,</if>
+            <if test="timeInterval != null">time_interval,</if>
+            <if test="entryCount != null">entry_count,</if>
+            <if test="exitCount != null">exit_count,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="day != null">#{day},</if>
+            <if test="timeInterval != null">#{timeInterval},</if>
+            <if test="entryCount != null">#{entryCount},</if>
+            <if test="exitCount != null">#{exitCount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEntryExitAnalysisDayFact"
+            parameterType="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact">
+        update entry_exit_analysis_day_fact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="timeInterval != null">time_interval = #{timeInterval},</if>
+            <if test="entryCount != null">entry_count = #{entryCount},</if>
+            <if test="exitCount != null">exit_count = #{exitCount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEntryExitAnalysisDayFactById" parameterType="Integer">
+        delete
+        from entry_exit_analysis_day_fact
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteEntryExitAnalysisDayFactByIds" parameterType="String">
+        delete from entry_exit_analysis_day_fact where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="analyseEntryExitAnalysisDayFact" resultType="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact">
+        SELECT
+        t.time_interval,
+        (SELECT count(id) FROM t_entry_records
+        where (case when HOUR(entry_time) &lt; 10 then concat('0',HOUR(entry_time)) else HOUR(entry_time) end) =
+        left(t.time_interval, 2)
+        and date_format(entry_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>) as entry_count,
+        (SELECT count(id) FROM t_exit_records
+        where (case when HOUR(exit_time) &lt; 10 then concat('0',HOUR(exit_time)) else HOUR(exit_time) end) =
+        left(t.time_interval, 2)
+        and date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>) as exit_count
+        FROM
+        (select '00:00~01:00' as time_interval from dual union
+        select '01:00~02:00' as time_interval from dual union
+        select '02:00~03:00' as time_interval from dual union
+        select '03:00~04:00' as time_interval from dual union
+        select '04:00~05:00' as time_interval from dual union
+        select '05:00~06:00' as time_interval from dual union
+        select '06:00~07:00' as time_interval from dual union
+        select '07:00~08:00' as time_interval from dual union
+        select '08:00~09:00' as time_interval from dual union
+        select '09:00~10:00' as time_interval from dual union
+        select '10:00~11:00' as time_interval from dual union
+        select '11:00~12:00' as time_interval from dual union
+        select '12:00~13:00' as time_interval from dual union
+        select '13:00~14:00' as time_interval from dual union
+        select '14:00~15:00' as time_interval from dual union
+        select '15:00~16:00' as time_interval from dual union
+        select '16:00~17:00' as time_interval from dual union
+        select '17:00~18:00' as time_interval from dual union
+        select '18:00~19:00' as time_interval from dual union
+        select '19:00~20:00' as time_interval from dual union
+        select '20:00~21:00' as time_interval from dual union
+        select '21:00~22:00' as time_interval from dual union
+        select '22:00~23:00' as time_interval from dual union
+        select '23:00~24:00' as time_interval from dual) t
+        GROUP BY t.time_interval
+    </select>
+
+    <select id="selectEntryExitAnalysisDayFact"
+            parameterType="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact"
+            resultMap="EntryExitAnalysisDayFactResult">
+        <include refid="selectEntryExitAnalysisDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''">and day = #{day}</if>
+            <if test="timeInterval != null  and timeInterval != ''">and time_interval = #{timeInterval}</if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="getEntryAnalysisDayFact" parameterType="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact"
+            resultType="com.ruoyi.project.parking.domain.vo.EntryExitAnalysisFactVO">
+        select time_interval as name, entry_count as value
+        from entry_exit_analysis_day_fact
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''">and day = #{day}</if>
+        </where>
+    </select>
+
+    <select id="getExitAnalysisDayFact" parameterType="com.ruoyi.project.parking.domain.EntryExitAnalysisDayFact"
+            resultType="com.ruoyi.project.parking.domain.vo.EntryExitAnalysisFactVO">
+        select time_interval as name, exit_count as value
+        from entry_exit_analysis_day_fact
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''">and day = #{day}</if>
+        </where>
+    </select>
+    <select id="sumEntryOfDay" resultType="java.lang.Integer">
+        select coalesce(sum(entry_count),0)
+        from entry_exit_analysis_day_fact
+        where date_format(day, '%Y-%m-%d') = #{now}
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+    <select id="sumExitOfDay" resultType="java.lang.Integer">
+        select coalesce(sum(exit_count),0)
+        from entry_exit_analysis_day_fact
+        where date_format(day, '%Y-%m-%d') = #{now}
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+    <select id="getCarVolumeSheetDay" resultType="com.ruoyi.project.parking.domain.bo.CarVolumeSheetBO">
+        select park_no, day, coalesce(sum(coalesce(entry_count, 0)), 0) as entry_count,
+        coalesce(sum(coalesce(exit_count, 0)), 0) as exit_count
+        from
+        entry_exit_analysis_day_fact
+        <where>
+            <if test="parkNo != null and parkNo != ''">
+                and park_no = #{parkNo}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                and date_format(day,'%Y-%m-%d') &gt;= date_format(#{startDate}, '%Y-%m-%d')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and date_format(day, '%Y-%m-%d') &lt;= date_format(#{endDate}, '%Y-%m-%d')
+            </if>
+        </where>
+        group by day
+    </select>
+
+    <select id="getCarVolumeSheetHour" resultType="com.ruoyi.project.parking.domain.bo.CarVolumeSheetBO">
+        select park_no, time_interval, coalesce(sum(coalesce(entry_count, 0)), 0) as entry_count,
+        coalesce(sum(coalesce(exit_count, 0)), 0) as exit_count
+        from
+        entry_exit_analysis_day_fact
+        <where>
+            <if test="parkNo != null and parkNo != ''">
+                and park_no = #{parkNo}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                and date_format(day,'%Y-%m-%d') &gt;= date_format(#{startDate}, '%Y-%m-%d')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and date_format(day, '%Y-%m-%d') &lt;= date_format(#{endDate}, '%Y-%m-%d')
+            </if>
+        </where>
+        group by time_interval
+    </select>
+</mapper>

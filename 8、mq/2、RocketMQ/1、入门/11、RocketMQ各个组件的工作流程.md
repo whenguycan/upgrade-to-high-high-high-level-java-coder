@@ -1,0 +1,13 @@
+## RocketMQ各个组件的工作流程
+
+
+
+第一步：启动NameServer, NameServer启动后开始监听端口，等待Broker、 Producer、 Consumer连接。
+
+第二步：启动Broker时，Broker会 与所有的NameServer建立并保持长连接，然后每30秒向NameServer定时发送心跳包。
+
+第三步：发送消息前，可以先创建Topic,创建Topic时需要指定该Topic要存储在哪些Broker上，当然，在创建Topic时也会将Topic与Broker的关系写入到NameServer中。也可以在发送消息时自动创建Topic。
+
+第四步：Producer发送消息，启动时先跟NameServer集群中的其中一台建立长连接，并从NameServer中获取路由信息，即当前发送的Topic消息的Queue 与Broker的地址(IP+Port) 的映射关系。然后根据算法策略从中选择一个Queue, 与队列所在的Broker建立长连接从而向Broker发消息。当然，在获取到路由信息后，Producer会 首先将路由信息缓存到本地，再每30秒从NameServer更新一次路由信息。
+
+第五步：Consumer跟Producer类似， 跟其中一台NameServer建立长连接， 获取其所订阅Topic的路由信息，然后根据算法策略从路由信息中获取到其所要消费的Queue,然后直接跟Broker建立长连接，开始消费其中的消息。Consumer在获取到路由信息后，同样也会每30秒从NameServer更新一次路由信息。不过不同于Producer的是，Consumer还会向Broker发送心跳， 以确保Consumer的存活状态。

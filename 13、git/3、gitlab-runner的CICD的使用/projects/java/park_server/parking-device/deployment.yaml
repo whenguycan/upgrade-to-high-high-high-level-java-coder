@@ -1,0 +1,75 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: device
+  namespace: parking
+  labels:
+    app: device
+spec:
+  clusterIP: None
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8085
+      targetPort: 8085
+    - name: http2
+      protocol: TCP
+      port: 9085
+      targetPort: 9085
+  selector:
+    app: device
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: device
+  namespace: parking
+  labels:
+    app: device
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: device
+  template:
+    metadata:
+      labels:
+        app: device
+    spec:
+      nodeSelector:
+        node-network: internet
+      containers:
+        - name: device
+          image: __image__
+          ports:
+            - containerPort: 8085
+              protocol: TCP
+            - containerPort: 9085
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 500Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsConfig:
+        nameservers:
+          - 114.114.114.114
+          - 8.8.8.8
+      imagePullSecrets:
+        - name: parking-secret
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

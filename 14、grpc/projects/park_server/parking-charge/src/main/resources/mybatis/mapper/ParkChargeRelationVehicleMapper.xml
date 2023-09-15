@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingcharge.mapper.ParkChargeRelationVehicleMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingcharge.domain.ParkChargeRelationVehicle">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="ruleId" column="rule_id" jdbcType="INTEGER"/>
+            <result property="parkLotSign" column="park_lot_sign" jdbcType="VARCHAR"/>
+            <result property="vehicleCategorySign" column="vehicle_category_sign" jdbcType="VARCHAR"/>
+            <result property="vehicleTypeSign" column="vehicle_type_sign" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,rule_id,
+        park_lot_sign,vehicle_category_sign,vehicle_type_sign,
+        create_by,create_time,update_by,
+        update_time
+    </sql>
+</mapper>

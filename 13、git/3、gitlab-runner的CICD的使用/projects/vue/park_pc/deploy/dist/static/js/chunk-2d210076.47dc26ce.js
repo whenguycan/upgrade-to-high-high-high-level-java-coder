@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d210076"],{b5c0:function(n,t,e){"use strict";e.r(t),e.d(t,"getDeductionList",(function(){return c}));var r=e("b775");function c(n){return Object(r["a"])({url:"parking/deductionorder/list",method:"get",params:n})}}}]);

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BParkChargeRelationVehicleMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BParkChargeRelationVehicle" id="BParkChargeRelationVehicleResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="ruleId"    column="rule_id"    />
+        <result property="parkLotSign"    column="park_lot_sign"    />
+        <result property="vehicleCategorySign"    column="vehicle_category_sign"    />
+        <result property="vehicleTypeSign"    column="vehicle_type_sign"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBParkChargeRelationVehicleVo">
+        select bpcrv.id, bpcrv.park_no, bpcrv.rule_id, bpcr.rule_name,
+               bpcrv.park_lot_sign,
+               (case when bpcrv.park_lot_sign = 'ALL' then '全部(除专门设定的停车场外)' else bf.field_name end) as park_lot_name,
+               bpcrv.vehicle_category_sign,
+               (case when bpcrv.vehicle_category_sign = 'LS' then '临时车' when bpcrv.vehicle_category_sign = 'GD' then '全部固定车(除专门设定的固定车外)'
+                     else bsrcc.name end) as vehicle_category_name,
+               bpcrv.vehicle_type_sign,
+               (case when bpcrv.vehicle_type_sign = 'ALL' then '全部(除专门设定的车型外)' else bsct.name end) as vehicle_type_name,
+               bpcrv.create_by, bpcrv.create_time, bpcrv.update_by, bpcrv.update_time
+        from b_park_charge_relation_vehicle bpcrv
+        left join b_park_charge_rule bpcr on bpcr.park_no = bpcrv.park_no and bpcr.id = bpcrv.rule_id
+        left join b_field bf on bf.park_no = bpcrv.park_no and bf.id = bpcrv.park_lot_sign
+        left join b_setting_car_type bsct on bsct.park_no = bpcrv.park_no and bsct.id = bpcrv.vehicle_type_sign
+        left join b_setting_regular_car_category bsrcc on bsrcc.park_no = bpcrv.park_no and bsrcc.id = bpcrv.vehicle_category_sign
+    </sql>
+
+    <select id="selectBParkChargeRelationVehicleList" parameterType="com.ruoyi.project.parking.domain.BParkChargeRelationVehicle"
+            resultType="com.ruoyi.project.parking.domain.vo.BParkChargeRelationVehicleVO">
+        <include refid="selectBParkChargeRelationVehicleVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and bpcrv.park_no = #{parkNo}</if>
+            <if test="ruleId != null "> and bpcrv.rule_id = #{ruleId}</if>
+            <if test="parkLotSign != null  and parkLotSign != ''"> and bpcrv.park_lot_sign = #{parkLotSign}</if>
+            <if test="vehicleCategorySign != null  and vehicleCategorySign != ''"> and bpcrv.vehicle_category_sign = #{vehicleCategorySign}</if>
+            <if test="vehicleTypeSign != null  and vehicleTypeSign != ''"> and bpcrv.vehicle_type_sign = #{vehicleTypeSign}</if>
+        </where>
+    </select>
+    
+    <select id="selectBParkChargeRelationVehicleById" parameterType="Integer"
+            resultType="com.ruoyi.project.parking.domain.vo.BParkChargeRelationVehicleVO">
+        <include refid="selectBParkChargeRelationVehicleVo"/>
+        where bpcrv.id = #{id}
+    </select>
+        
+    <insert id="insertBParkChargeRelationVehicle" parameterType="com.ruoyi.project.parking.domain.BParkChargeRelationVehicle" useGeneratedKeys="true" keyProperty="id">
+        insert into b_park_charge_relation_vehicle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="ruleId != null">rule_id,</if>
+            <if test="parkLotSign != null">park_lot_sign,</if>
+            <if test="vehicleCategorySign != null">vehicle_category_sign,</if>
+            <if test="vehicleTypeSign != null">vehicle_type_sign,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="ruleId != null">#{ruleId},</if>
+            <if test="parkLotSign != null">#{parkLotSign},</if>
+            <if test="vehicleCategorySign != null">#{vehicleCategorySign},</if>
+            <if test="vehicleTypeSign != null">#{vehicleTypeSign},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <delete id="deleteBParkChargeRelationVehicleById" parameterType="Integer">
+        delete from b_park_charge_relation_vehicle where id = #{id}
+    </delete>
+
+    <delete id="deleteBParkChargeRelationVehicleByIds" parameterType="String">
+        delete from b_park_charge_relation_vehicle where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="checkRelationExist" parameterType="com.ruoyi.project.parking.domain.BParkChargeRelationVehicle" resultType="int">
+        select count(id) from b_park_charge_relation_vehicle
+        where park_no = #{parkNo} and rule_id = #{ruleId}
+        and park_lot_sign = #{parkLotSign}
+        and vehicle_category_sign = #{vehicleCategorySign}
+        and vehicle_type_sign = #{vehicleTypeSign}
+    </select>
+
+    <select id="selectRelatedStrList" parameterType="com.ruoyi.project.parking.domain.vo.BParkChargeRelationVehicleVO" resultType="String">
+        select concat( a.park_lot_sign, '-', b.vehicle_category_sign, '-', c.vehicle_type_sign )
+        from
+        <if test="parkLotSign == 'ALL'.toString()">
+            (select distinct bf.id as park_lot_sign from b_field bf where bf.park_no = #{parkNo} and bf.field_status = '1')
+        </if>
+        <if test="parkLotSign != 'ALL'.toString()">
+            (select #{parkLotSign} as park_lot_sign from dual)
+        </if> a,
+        <if test="vehicleCategorySign == 'GD'.toString()">
+            (select distinct bsrcc.id as vehicle_category_sign from b_setting_regular_car_category bsrcc where bsrcc.park_no = #{parkNo} and bsrcc.status = '1' and bsrcc.del_flag = 0)
+        </if>
+        <if test="vehicleCategorySign != 'GD'.toString()">
+            (select #{vehicleCategorySign} as vehicle_category_sign from dual)
+        </if> b,
+        <if test="vehicleTypeSign == 'ALL'.toString()">
+            (select distinct bsct.id as vehicle_type_sign from b_setting_car_type bsct where bsct.park_no = #{parkNo} and bsct.status = '1' and bsct.del_flag = 0)
+        </if>
+        <if test="vehicleTypeSign != 'ALL'.toString()">
+            (select #{vehicleTypeSign} as vehicle_type_sign from dual)
+        </if> c
+    </select>
+
+    <select id="selectNotRelatedList" resultType="com.ruoyi.project.parking.domain.vo.BParkChargeRelationVehicleVO">
+        (SELECT
+            bf.id as park_lot_sign,
+            bf.field_name as park_lot_name,
+            bsrcc.id as vehicle_category_sign,
+            bsrcc.name as vehicle_category_name,
+            bsct.id as vehicle_type_sign,
+            bsct.name as vehicle_type_name
+        from b_field bf,b_setting_regular_car_category bsrcc,b_setting_car_type bsct
+        where bf.park_no = #{parkNo}
+        and bsrcc.park_no = #{parkNo}
+        and bsct.park_no = #{parkNo}
+        and bf.field_status = '1'
+        and bsrcc.status = '1'
+        and bsrcc.del_flag = 0
+        and bsct.status = '1'
+        and bsct.del_flag = 0
+        <if test="relatedStrs != null and relatedStrs.size() > 0">
+            and concat( bf.id, '-', bsrcc.id, '-', bsct.id ) not in
+            <foreach item="str" collection="relatedStrs" open="(" separator="," close=")">
+                #{str}
+            </foreach>
+        </if>)
+        union
+        (SELECT
+        bf.id as park_lot_sign,
+        bf.field_name as park_lot_name,
+        bsrcc.vehicle_category_sign,
+        bsrcc.vehicle_category_name,
+        bsct.id as vehicle_type_sign,
+        bsct.name as vehicle_type_name
+        from b_field bf,(select 'LS' as vehicle_category_sign, '临时车' as vehicle_category_name from dual) bsrcc,b_setting_car_type bsct
+        where bf.park_no = #{parkNo}
+        and bsct.park_no = #{parkNo}
+        and bf.field_status = '1'
+        and bsct.status = '1'
+        and bsct.del_flag = 0
+        <if test="relatedStrs != null and relatedStrs.size() > 0">
+            and concat( bf.id, '-', bsrcc.vehicle_category_sign, '-', bsct.id ) not in
+            <foreach item="str" collection="relatedStrs" open="(" separator="," close=")">
+                #{str}
+            </foreach>
+        </if>)
+    </select>
+</mapper>

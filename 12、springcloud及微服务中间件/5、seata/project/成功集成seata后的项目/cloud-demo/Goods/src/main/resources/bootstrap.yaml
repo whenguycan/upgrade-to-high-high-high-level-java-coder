@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: goods
+  cloud:
+    nacos:
+      config:
+        server-addr: 10.10.210.24:8808 #指定nacos 配置中心的地址
+        prefix: goods #需要监听的配置文件的名称，在nacos中叫dataId,如果不写这个，默认会使用spring.application.name取代
+        file-extension: yaml #需要监听的配置文件的文件类型。
+        username: nacos
+        password: nacos
+        extension-configs:
+          - data-id: kk.yaml
+            refresh: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.10.210.19:3306/goods?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+
+seata:
+  enabled: true
+  application-id: Goods
+  tx-service-group: default_tx_group
+  config:
+    nacos:
+      server-addr: 10.10.210.24:8808 #这儿可以指向到nacos的地址，也可以指向到nacos的上层nginx的地址，端口是8808端口是nginx反向代理nacos8848端口端口。
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      data-id: seataServer.properties
+    type: nacos
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 10.10.210.24:8808
+      username: nacos
+      password: nacos
+      group: SEATA_GROUP
+  service:
+    vgroup-mapping:
+      default_tx_group: default

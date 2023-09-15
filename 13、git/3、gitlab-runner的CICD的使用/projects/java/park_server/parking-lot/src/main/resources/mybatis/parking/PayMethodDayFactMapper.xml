@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.PayMethodDayFactMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.PayMethodDayFact" id="PayMethodDayFactResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="day"    column="day"    />
+        <result property="payMethod"    column="pay_method"    />
+        <result property="amount"    column="amount"    />
+        <result property="ratio"    column="ratio"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPayMethodDayFactVo">
+        select id, park_no, day, pay_method, amount, ratio, create_by, create_time, update_by, update_time from pay_method_day_fact
+    </sql>
+
+    <select id="selectPayMethodDayFactList" parameterType="com.ruoyi.project.parking.domain.PayMethodDayFact" resultMap="PayMethodDayFactResult">
+        <include refid="selectPayMethodDayFactVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="payMethod != null  and payMethod != ''"> and pay_method = #{payMethod}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="ratio != null "> and ratio = #{ratio}</if>
+        </where>
+    </select>
+    
+    <select id="selectPayMethodDayFactById" parameterType="Integer" resultMap="PayMethodDayFactResult">
+        <include refid="selectPayMethodDayFactVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPayMethodDayFact" parameterType="com.ruoyi.project.parking.domain.PayMethodDayFact">
+        insert into pay_method_day_fact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="parkNo != null">park_no,</if>
+            <if test="day != null">day,</if>
+            <if test="payMethod != null">pay_method,</if>
+            <if test="amount != null">amount,</if>
+            <if test="ratio != null">ratio,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="day != null">#{day},</if>
+            <if test="payMethod != null">#{payMethod},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="ratio != null">#{ratio},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePayMethodDayFact" parameterType="com.ruoyi.project.parking.domain.PayMethodDayFact">
+        update pay_method_day_fact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="payMethod != null">pay_method = #{payMethod},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="ratio != null">ratio = #{ratio},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePayMethodDayFactById" parameterType="Integer">
+        delete from pay_method_day_fact where id = #{id}
+    </delete>
+
+    <delete id="deletePayMethodDayFactByIds" parameterType="String">
+        delete from pay_method_day_fact where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectPayMethodDayFact" parameterType="com.ruoyi.project.parking.domain.PayMethodDayFact" resultMap="PayMethodDayFactResult">
+        <include refid="selectPayMethodDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="payMethod != null  and payMethod != ''"> and pay_method = #{payMethod}</if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="getPayMethodDayFact" parameterType="com.ruoyi.project.parking.domain.PayMethodDayFact"
+            resultType="com.ruoyi.project.parking.domain.vo.PayStatisticFactVO">
+        select sdd.dict_label as name, pmdf.amount as value, pmdf.ratio
+        from pay_method_day_fact pmdf
+        left join sys_dict_data sdd on sdd.dict_value = pmdf.pay_method and sdd.dict_type = 'pay_method'
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and pmdf.park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and pmdf.day = #{day}</if>
+        </where>
+        order by sdd.dict_sort
+    </select>
+</mapper>

@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.lot;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.lot";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "RegularCarProto";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+// 固定车记录API列表
+service RegularCarService {
+  // RPC方法定义
+  // 根据车牌号查询固定车记录
+  rpc selectRegularCarByCarNumber(SelectRegularCarByCarNumberRequestProto) returns (SelectRegularCarByCarNumberResponseProto) {}
+}
+
+//在消息定义中，每个字段都有唯一的一个标识符。
+//这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。
+
+// 根据车牌号查询固定车记录接口请求参数定义
+message SelectRegularCarByCarNumberRequestProto{
+  string parkNo = 1;
+  repeated string carNumberList = 2;
+}
+
+// 根据车牌号查询固定车记录接口请求参数定义
+message SelectRegularCarByCarNumberResponseProto{
+  repeated RegularCarProtoInfo regularCarProtoList = 1;
+}
+
+message RegularCarProtoInfo{
+  int32 id = 1;
+  // 场库编号
+  string parkNo = 2;
+  // 场库名称
+  string parkName = 3;
+  // 固定车车牌号
+  string carNumber = 4;
+  // 固定车车辆颜色
+  string carColor = 5;
+  // 固定车车牌备注
+  string carRemark = 6;
+  // 固定车类型
+  int32 carCategoryId = 7;
+  // 固定车车主身份证号
+  string ownerCardId = 8;
+  // 固定车车主姓名
+  string ownerName = 9;
+  // 固定车车主联系地址
+  string ownerAddress = 10;
+  // 固定车车主联系电话
+  string ownerPhone = 11;
+  // 流动车位数
+  int32 flowPlaceNumber = 12;
+  // 有效期开始时间
+  string startTime = 13;
+  // 有效期结束时间
+  string endTime = 14;
+  // 备注
+  string remark = 15;
+  // 是否可续费 false：不可续费 true：可续费
+  bool renewFlag = 16;
+}
+

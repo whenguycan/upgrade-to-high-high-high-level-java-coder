@@ -1,0 +1,172 @@
+logging:
+  group:
+    abc: com.example.demolog.controller
+  level:
+    abc: info
+  file:
+    path: ./
+    name: ./demo.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz
+      max-file-size: 10KB
+      clean-history-on-start: false
+      total-size-cap: 1GB
+      max-history: 7
+server:
+  port: 8811
+#spring:
+#  web:
+#    resources:
+#      static-locations: classpath:/path
+#  mvc:
+#    static-path-pattern: /static/**
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+#spring:
+#  shardingsphere:
+#    datasource:
+#      names: te1 # 是用的数据源列表,每个数据源即是一个数据库,若分库,多个数据源逗号隔开,如ds0,ds1
+#      te1: # 数据源ds0配置
+#        driver-class-name: com.mysql.cj.jdbc.Driver # 数据库驱动名称
+#        type: com.zaxxer.hikari.HikariDataSource # 数据源类型
+#        jdbc-url: jdbc:mysql://10.10.210.19:3306/fast-parking-order?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8 # 数据库连接
+#        username: root # 用户名
+#        password: root # 密码
+#    rules: # 分片规则设置
+#      sharding:
+#        tables: # 表格分片设置
+#          t_order: # t_order表分片规则
+#            # t_order表实际是用的节点名称,ds0.t_order_0以及ds0.t_order_1。
+#            actual-data-nodes: te1.order_$->{0..1}
+#            #            database-strategy: # 数据库分片策略
+#            #              standard:
+#            #                sharding-column: id # 数据库分片依据的字段
+#            #                sharding-algorithm-name: database_inline # 数据库分片是用的算法名称
+#            table-strategy: # 是用的分片策略
+#              standard:
+#                sharding-column: num # 分片依赖的字段
+#                sharding-algorithm-name: order_inline  # 使用的分片算法名称
+#        sharding-algorithms: # 分片算法定义
+#          #          database_inline
+#          #            type: INLINE
+#          #            props:
+#          #              allow-range-query-with-inline-sharding: true # 允许范围查询
+#          #              algorithm-expression=ds_${id % 2}
+#
+#          order_inline: # 自定义分配算法名称
+#            type: INLINE # 分片类型
+#            props:
+#              allow-range-query-with-inline-sharding: true # 允许范围查询
+#              # 分片表达式，user_id与2取模,即user_id为奇数的会插入t_order_1，偶数的插入t_order_0
+#              algorithm-expression: order_${user_id % 2}
+#    props:
+#      sql:
+#        show: true
+
+
+
+
+
+
+
+#mybatis:
+#  config-location: classpath:/mybatis-config.xml
+#  mapper-locations: classpath:/mappers/*.xml
+
+
+spring:
+  shardingsphere:
+    mode:
+      type: Standalone
+      repository:
+        type: JDBC
+    datasource:
+      names: ds1
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://10.10.210.19:3306/user?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8 # 数据库连接
+        username: root # 用户名
+        password: root # 密码
+    rules:
+      sharding:
+        tables:
+          t_order:
+            actual-data-nodes: ds1.order_$->{1..2}
+            table-strategy:
+              standard:
+                sharding-column: num
+                sharding-algorithm-name: tetete
+
+        sharding-algorithms:
+          tetete:
+            type: INLINE
+            props:
+              algorithm-expression: order_$->{ num % 2 + 1}
+              allow-range-query-with-inline-sharding: true
+    props:
+      sql-show: true
+
+
+
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver # 数据库驱动名称
+#    type: com.zaxxer.hikari.HikariDataSource # 数据源类型
+#    url: jdbc:mysql://10.10.210.19:3306/fast-parking-order?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8 # 数据库连接
+#    username: root # 用户名
+#    password: root # 密码
+#  sharding-sphere:
+#    props:
+#      # 是否在日志中打印 SQL
+#      sql-show: true
+#    # 模式配置
+#
+#    # 数据源配置
+#    datasource:
+#      names: ds_0
+#      ds_0:
+#        type: com.zaxxer.hikari.HikariDataSource
+#        driverClassName: com.mysql.cj.jdbc.Driver
+#        jdbcUrl: jdbc:mysql://10.10.210.19:3306/fast-parking-order?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8 # 数据库连接
+#        username: root
+#        password: root
+#    # 规则配置
+#    rules:
+#      # 数据分片
+#      sharding:
+#        tables:
+#          # book_content 表
+#          book_content:
+#            # 数据节点
+#            actual-data-nodes: ds_$->{0}.book_content$->{0..9}
+#            # 分表策略
+#            table-strategy:
+#              standard:
+#                # 分片列名称
+#                sharding-column: chapter_id
+#                # 分片算法名称
+#                sharding-algorithm-name: bookContentSharding
+#        sharding-algorithms:
+#          bookContentSharding:
+#            # 行表达式分片算法，使用 Groovy 的表达式，提供对 SQL 语句中的 = 和 IN 的分片操作支持
+#            type: INLINE
+#            props:
+#              # 分片算法的行表达式
+#              algorithm-expression: book_content$->{chapter_id % 10}
+
+
+

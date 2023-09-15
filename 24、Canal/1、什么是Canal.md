@@ -1,0 +1,4 @@
+## 什么是Canal
+
+Canal是由阿里开发并开源的轻量级MySQL数据抓取中间件，Canal将自己伪装成mysql的从库，从而实时读取MySQL二进制日志Binlog，并生成JSON格式的消息，然后把消息发送给Kafka、RabbitMQ、Redis、Elasticsearch、文件或其它平台的应用程序，还可以使用TCP模式自定义数据格式以及发送的下游。
+

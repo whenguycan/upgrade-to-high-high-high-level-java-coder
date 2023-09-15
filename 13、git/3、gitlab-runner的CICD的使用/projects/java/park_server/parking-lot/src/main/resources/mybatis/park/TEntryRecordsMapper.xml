@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.TEntryRecordsMapper">
+
+    <resultMap type="TEntryRecordsVo" id="TEntryRecordsResult">
+        <result property="id" column="id"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="passageId" column="passage_id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="entryTime" column="entry_time"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="carNumberEdit" column="car_number_edit"/>
+        <result property="carNumberColor" column="car_number_color"/>
+        <result property="carImgUrl" column="car_img_url"/>
+        <result property="carColor" column="car_color"/>
+        <result property="carType" column="car_type"/>
+        <result property="platformCode" column="platform_code"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="fieldName" column="field_name"/>
+        <result property="passageName" column="passage_name"/>
+    </resultMap>
+
+    <sql id="selectTEntryRecordsVo">
+        select id,
+               park_no,
+               passage_id,
+               device_id,
+               entry_time,
+               car_number,
+               car_number_color,
+               car_img_url,
+               car_color,
+               car_type,
+               platform_code,
+               remark,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               car_number_edit
+        from t_entry_records
+    </sql>
+
+    <select id="selectTEntryRecordsList" parameterType="TEntryRecordsVo" resultMap="TEntryRecordsResult">
+        select ter.id, ter.park_no, ter.passage_id, ter.device_id, ter.entry_time, ter.car_number,
+        ter.car_number_color, ter.car_img_url, ter.car_color, ter.car_type, ter.platform_code,
+        ter.remark, ter.create_by, ter.create_time, ter.update_by, ter.update_time ,ter.car_number_edit,bp.passage_name,
+        bf.field_name
+        from t_entry_records ter
+        left join b_passage bp on bp.id=ter.passage_id
+        -- left join sys_dept sd on sd.park_no=bp.park_no
+        left join b_field bf on bf.id=bp.to_field_id
+        <where>
+            <if test="fieldName != null  and fieldName != ''">and bf.field_name  like concat('%',#{fieldName}, '%')
+            </if>
+            <if test="passageName != null  and passageName != ''">and bp.passage_name  like concat('%',#{passageName},
+                '%')
+            </if>
+            <if test="carType != null  and carType != ''">and ter.car_type = #{carType}</if>
+            <if test="carNumber != null  and carNumber != ''">and (ter.car_number  like concat('%',#{carNumber}, '%')
+                or ter.car_number_edit like concat('%',#{carNumber}, '%'))
+            </if>
+            <!--            <if test="entryTime != null "> and ter.entry_time = #{entryTime}</if>-->
+            <if test="beginDate != null ">AND ter.entry_time <![CDATA[>=]]> #{beginDate}</if>
+            <if test="endDate != null ">AND ter.entry_time <![CDATA[<=]]>#{endDate}</if>
+
+
+            <if test="parkNo != null  and parkNo != ''">and ter.park_no = #{parkNo}</if>
+            <if test="passageId != null ">and ter.passage_id = #{passageId}</if>
+            <if test="deviceId != null  and deviceId != ''">and ter.device_id = #{deviceId}</if>
+            <if test="carNumberColor != null  and carNumberColor != ''">and ter.car_number_color = #{carNumberColor}
+            </if>
+            <if test="carImgUrl != null  and carImgUrl != ''">and ter.car_img_url = #{carImgUrl}</if>
+            <if test="carColor != null  and carColor != ''">and ter.car_color = #{carColor}</if>
+            <if test="platformCode != null  and platformCode != ''">and ter.platform_code = #{platformCode}</if>
+            <if test="parkLiveId != null  and parkLiveId != ''">and ter.park_live_id = #{parkLiveId}</if>
+        </where>
+    </select>
+
+    <select id="selectTEntryRecordsById" parameterType="Long" resultMap="TEntryRecordsResult">
+        <include refid="selectTEntryRecordsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTEntryRecords" parameterType="TEntryRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into t_entry_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="passageId != null">passage_id,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="entryTime != null">entry_time,</if>
+            <if test="parkLiveId != null">park_live_id,</if>
+            <if test="carNumber != null and carNumber != ''">car_number,</if>
+            <if test="carNumberEdit != null and carNumberEdit != ''">car_number_edit,</if>
+            <if test="carNumberColor != null">car_number_color,</if>
+            <if test="carImgUrl != null">car_img_url,</if>
+            <if test="carColor != null">car_color,</if>
+            <if test="carType != null">car_type,</if>
+            <if test="platformCode != null">platform_code,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="passageId != null">#{passageId},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="entryTime != null">#{entryTime},</if>
+            <if test="parkLiveId != null">#{parkLiveId},</if>
+            <if test="carNumber != null and carNumber != ''">#{carNumber},</if>
+            <if test="carNumberEdit != null and carNumberEdit != ''">#{carNumberEdit},</if>
+            <if test="carNumberColor != null">#{carNumberColor},</if>
+            <if test="carImgUrl != null">#{carImgUrl},</if>
+            <if test="carColor != null">#{carColor},</if>
+            <if test="carType != null">#{carType},</if>
+            <if test="platformCode != null">#{platformCode},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTEntryRecords" parameterType="TEntryRecords">
+        update t_entry_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="passageId != null">passage_id = #{passageId},</if>
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="entryTime != null">entry_time = #{entryTime},</if>
+            <if test="carNumber != null and carNumber != ''">car_number = #{carNumber},</if>
+            <if test="carNumberEdit != null and carNumberEdit != ''">car_number_edit = #{carNumberEdit},</if>
+            <if test="carNumberColor != null">car_number_color = #{carNumberColor},</if>
+            <if test="carImgUrl != null">car_img_url = #{carImgUrl},</if>
+            <if test="carColor != null">car_color = #{carColor},</if>
+            <if test="carType != null">car_type = #{carType},</if>
+            <if test="platformCode != null">platform_code = #{platformCode},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTEntryRecordsById" parameterType="Long">
+        delete
+        from t_entry_records
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTEntryRecordsByIds" parameterType="String">
+        delete from t_entry_records where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

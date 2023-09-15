@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingorder.project.dao.MonthlyOrderDao">
+
+    <select id="sumOnlineIncome" resultType="java.math.BigDecimal">
+        select coalesce(sum(pay_amount), 0)
+        from t_monthly_order
+        where date_format(pay_time, '%Y-%m-%d') = #{day}
+        and order_status = '03'
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+
+    <select id="sumOnlineDeduction" resultType="java.math.BigDecimal">
+        select coalesce(sum(discount_amount), 0)
+        from t_monthly_order
+        where date_format(pay_time, '%Y-%m-%d') = #{day}
+        and order_status = '03'
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+</mapper>

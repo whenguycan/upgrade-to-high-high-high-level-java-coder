@@ -1,0 +1,140 @@
+10:38:35.579 [restartedMain] INFO  c.r.ParkingLotApplication - [logStarting,55] - Starting ParkingLotApplication using Java 17.0.5 on tangweideMacBook-Pro.local with PID 45571 (/Users/tangwei/javaProject/park_server/parking-lot/target/classes started by tangwei in /Users/tangwei/javaProject/park_server)
+10:38:35.577 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.2.3.Final
+10:38:35.581 [restartedMain] INFO  c.r.ParkingLotApplication - [logStartupProfileInfo,686] - The following 1 profile is active: "dev"
+10:38:39.331 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8080"]
+10:38:39.331 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:38:39.332 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.63]
+10:38:39.418 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:38:39.845 [restartedMain] INFO  org.redisson.Version - [logVersion,41] - Redisson 3.19.0
+10:38:40.184 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - [lambda$createConnection$0,162] - 1 connections initialized for 10.10.210.19/10.10.210.19:30002
+10:38:40.684 [redisson-netty-2-19] INFO  o.r.c.p.MasterConnectionPool - [lambda$createConnection$0,162] - 24 connections initialized for 10.10.210.19/10.10.210.19:30002
+10:38:44.423 [restartedMain] INFO  c.a.d.p.DruidDataSource - [init,985] - {dataSource-1} inited
+10:38:45.200 [restartedMain] INFO  o.q.i.StdSchedulerFactory - [instantiate,1220] - Using default implementation for ThreadExecutor
+10:38:45.216 [restartedMain] INFO  o.q.c.SchedulerSignalerImpl - [<init>,61] - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+10:38:45.217 [restartedMain] INFO  o.q.c.QuartzScheduler - [<init>,229] - Quartz Scheduler v.2.3.2 created.
+10:38:45.218 [restartedMain] INFO  o.q.s.RAMJobStore - [initialize,155] - RAMJobStore initialized.
+10:38:45.219 [restartedMain] INFO  o.q.c.QuartzScheduler - [initialize,294] - Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+10:38:45.219 [restartedMain] INFO  o.q.i.StdSchedulerFactory - [instantiate,1374] - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+10:38:45.219 [restartedMain] INFO  o.q.i.StdSchedulerFactory - [instantiate,1378] - Quartz scheduler version: 2.3.2
+10:38:45.219 [restartedMain] INFO  o.q.c.QuartzScheduler - [setJobFactory,2293] - JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@ac1f98c
+10:38:45.744 [restartedMain] INFO  n.d.b.g.c.a.GrpcClientAutoConfiguration - [shadedNettyGrpcChannelFactory,158] - Detected grpc-netty-shaded: Creating ShadedNettyChannelFactory + InProcessChannelFactory
+10:38:48.066 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - [captchaService,33] - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=redis, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+10:38:48.070 [restartedMain] INFO  c.a.c.s.i.CaptchaServiceFactory - [<clinit>,52] - supported-captchaCache-service:[redis, local]
+10:38:48.074 [restartedMain] INFO  c.a.c.s.i.CaptchaServiceFactory - [<clinit>,58] - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+10:38:48.099 [restartedMain] INFO  c.a.c.u.ImageUtils - [cacheImage,48] - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@632147e8, ORIGINAL=[Ljava.lang.String;@14d70a75, PIC_CLICK=[Ljava.lang.String;@5db5b013]
+10:38:48.100 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - [init,76] - --->>>初始化验证码底图<<<---clickWord
+10:38:48.859 [restartedMain] INFO  c.a.c.u.ImageUtils - [cacheImage,48] - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@12b0bef, ORIGINAL=[Ljava.lang.String;@56350df7, PIC_CLICK=[Ljava.lang.String;@2e286a62]
+10:38:48.859 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - [init,76] - --->>>初始化验证码底图<<<---blockPuzzle
+10:38:50.655 [restartedMain] INFO  n.d.b.g.s.a.GrpcServerFactoryAutoConfiguration - [shadedNettyGrpcServerFactory,74] - Detected grpc-netty-shaded: Creating ShadedNettyGrpcServerFactory
+10:38:50.682 [restartedMain] INFO  n.d.b.g.s.a.GrpcServerFactoryAutoConfiguration - [inProcessGrpcServerFactory,158] - 'grpc.server.in-process-name' is set: Creating InProcessGrpcServerFactory
+10:38:51.837 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Starting ProtocolHandler ["http-nio-8080"]
+10:38:52.489 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.LotParkingService, bean: lotParkingServiceImpl, class: com.ruoyi.project.parking.service.LotParkingServiceImpl$$EnhancerBySpringCGLIB$$597e82ae
+10:38:52.489 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSelfPaySchemeService, bean: BSelfPaySchemeGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSelfPaySchemeGrpcServiceImpl
+10:38:52.490 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSettingRegularCarCategoryService, bean: BSettingRegularCarCategoryGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSettingRegularCarCategoryGrpcServiceImpl
+10:38:52.490 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BVisitorCodeManageService, bean: BVisitorCodeManageGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BVisitorCodeManageGrpcServiceImpl
+10:38:52.490 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BlackListService, bean: blackListGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BlackListGrpcServiceImpl
+10:38:52.490 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.RegularCarService, bean: regularCarGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.RegularCarGrpcServiceImpl
+10:38:52.490 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.health.v1.Health, bean: grpcHealthService, class: io.grpc.protobuf.services.HealthServiceImpl
+10:38:52.490 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.reflection.v1alpha.ServerReflection, bean: protoReflectionService, class: io.grpc.protobuf.services.ProtoReflectionService
+10:38:52.569 [restartedMain] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [createAndStartGrpcServer,116] - gRPC Server started, listening on address: *, port: 9115
+10:38:52.571 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.LotParkingService, bean: lotParkingServiceImpl, class: com.ruoyi.project.parking.service.LotParkingServiceImpl$$EnhancerBySpringCGLIB$$597e82ae
+10:38:52.572 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSelfPaySchemeService, bean: BSelfPaySchemeGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSelfPaySchemeGrpcServiceImpl
+10:38:52.572 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSettingRegularCarCategoryService, bean: BSettingRegularCarCategoryGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSettingRegularCarCategoryGrpcServiceImpl
+10:38:52.572 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BVisitorCodeManageService, bean: BVisitorCodeManageGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BVisitorCodeManageGrpcServiceImpl
+10:38:52.572 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BlackListService, bean: blackListGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BlackListGrpcServiceImpl
+10:38:52.572 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.RegularCarService, bean: regularCarGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.RegularCarGrpcServiceImpl
+10:38:52.573 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.health.v1.Health, bean: grpcHealthService, class: io.grpc.protobuf.services.HealthServiceImpl
+10:38:52.573 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.reflection.v1alpha.ServerReflection, bean: protoReflectionService, class: io.grpc.protobuf.services.ProtoReflectionService
+10:38:52.575 [restartedMain] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [createAndStartGrpcServer,116] - gRPC Server started, listening on address: in-process:parking-lot-server, port: -1
+10:38:53.110 [restartedMain] INFO  o.q.c.QuartzScheduler - [start,547] - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+10:38:53.141 [restartedMain] INFO  c.r.ParkingLotApplication - [logStarted,61] - Started ParkingLotApplication in 18.018 seconds (JVM running for 18.944)
+10:38:53.149 [restartedMain] INFO  c.r.p.p.d.i.IccEventSubscribe - [eventSubscribe,70] - ----开始执行----事件订阅------请求地址:https://121.229.5.12:9443/evo-apigw/evo-event/1.0.0/subscribe/mqinfo
+10:38:53.526 [restartedMain] INFO  c.r.p.p.d.i.IccEventSubscribe - [eventSubscribe,130] - ----结束执行----事件订阅------返回报文:{"success":true,"data":{},"code":"0","errMsg":""}
+10:38:53.815 [RMI TCP Connection(2)-192.168.2.197] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+10:40:00.111 [schedule-pool-3] INFO  c.r.p.p.s.HomePageSchedule - [analysePayTypeDayFact,118] - 分析首页付费类型事实已在其他实例执行 !
+10:40:00.123 [schedule-pool-6] INFO  c.r.p.p.s.HomePageSchedule - [analyseParkUsageDayFact,262] - 分析首页今日泊车使用情况事实已在其他实例执行 !
+10:40:00.123 [schedule-pool-1] INFO  c.r.p.p.s.HomePageSchedule - [analysePayMethodDayFact,94] - 分析首页付费方式事实已在其他实例执行 !
+10:40:00.123 [schedule-pool-5] INFO  c.r.p.p.s.HomePageSchedule - [analyseDurationStatisticDayFact,142] - 分析首页时长统计事实已在其他实例执行 !
+10:40:00.124 [schedule-pool-4] INFO  c.r.p.p.s.HomePageSchedule - [analyseTopRankDayFact,238] - 分析首页车场热门排行事实已在其他实例执行 !
+10:40:00.126 [schedule-pool-2] INFO  c.r.p.p.s.HomePageSchedule - [analyseRevenueStatisticsDayFact,286] - 分析首页收入统计事实已在其他实例执行 !
+10:42:52.742 [SpringApplicationShutdownHook] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [stopAndReleaseGrpcServer,160] - Completed gRPC server shutdown
+10:42:52.742 [SpringApplicationShutdownHook] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [stopAndReleaseGrpcServer,160] - Completed gRPC server shutdown
+10:42:52.785 [SpringApplicationShutdownHook] INFO  o.q.c.QuartzScheduler - [standby,585] - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+10:44:46.932 [background-preinit] INFO  o.h.v.i.util.Version - [<clinit>,21] - HV000001: Hibernate Validator 6.2.3.Final
+10:44:46.938 [restartedMain] INFO  c.r.ParkingLotApplication - [logStarting,55] - Starting ParkingLotApplication using Java 17.0.5 on tangweideMacBook-Pro.local with PID 45903 (/Users/tangwei/javaProject/park_server/parking-lot/target/classes started by tangwei in /Users/tangwei/javaProject/park_server)
+10:44:46.939 [restartedMain] INFO  c.r.ParkingLotApplication - [logStartupProfileInfo,686] - The following 1 profile is active: "dev"
+10:44:50.540 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Initializing ProtocolHandler ["http-nio-8081"]
+10:44:50.540 [restartedMain] INFO  o.a.c.c.StandardService - [log,173] - Starting service [Tomcat]
+10:44:50.541 [restartedMain] INFO  o.a.c.c.StandardEngine - [log,173] - Starting Servlet engine: [Apache Tomcat/9.0.63]
+10:44:50.646 [restartedMain] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring embedded WebApplicationContext
+10:44:51.052 [restartedMain] INFO  org.redisson.Version - [logVersion,41] - Redisson 3.19.0
+10:44:51.398 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - [lambda$createConnection$0,162] - 1 connections initialized for 10.10.210.19/10.10.210.19:30002
+10:44:51.903 [redisson-netty-2-19] INFO  o.r.c.p.MasterConnectionPool - [lambda$createConnection$0,162] - 24 connections initialized for 10.10.210.19/10.10.210.19:30002
+10:44:55.536 [restartedMain] INFO  c.a.d.p.DruidDataSource - [init,985] - {dataSource-1} inited
+10:44:56.368 [restartedMain] INFO  o.q.i.StdSchedulerFactory - [instantiate,1220] - Using default implementation for ThreadExecutor
+10:44:56.385 [restartedMain] INFO  o.q.c.SchedulerSignalerImpl - [<init>,61] - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+10:44:56.385 [restartedMain] INFO  o.q.c.QuartzScheduler - [<init>,229] - Quartz Scheduler v.2.3.2 created.
+10:44:56.386 [restartedMain] INFO  o.q.s.RAMJobStore - [initialize,155] - RAMJobStore initialized.
+10:44:56.386 [restartedMain] INFO  o.q.c.QuartzScheduler - [initialize,294] - Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+10:44:56.387 [restartedMain] INFO  o.q.i.StdSchedulerFactory - [instantiate,1374] - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+10:44:56.387 [restartedMain] INFO  o.q.i.StdSchedulerFactory - [instantiate,1378] - Quartz scheduler version: 2.3.2
+10:44:56.387 [restartedMain] INFO  o.q.c.QuartzScheduler - [setJobFactory,2293] - JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@2e009078
+10:44:56.939 [restartedMain] INFO  n.d.b.g.c.a.GrpcClientAutoConfiguration - [shadedNettyGrpcChannelFactory,158] - Detected grpc-netty-shaded: Creating ShadedNettyChannelFactory + InProcessChannelFactory
+10:44:59.341 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - [captchaService,33] - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=redis, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+10:44:59.345 [restartedMain] INFO  c.a.c.s.i.CaptchaServiceFactory - [<clinit>,52] - supported-captchaCache-service:[redis, local]
+10:44:59.349 [restartedMain] INFO  c.a.c.s.i.CaptchaServiceFactory - [<clinit>,58] - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+10:44:59.369 [restartedMain] INFO  c.a.c.u.ImageUtils - [cacheImage,48] - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@490a14ea, ORIGINAL=[Ljava.lang.String;@29b84c79, PIC_CLICK=[Ljava.lang.String;@280d55d1]
+10:44:59.369 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - [init,76] - --->>>初始化验证码底图<<<---clickWord
+10:44:59.651 [restartedMain] INFO  c.a.c.u.ImageUtils - [cacheImage,48] - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@47f895ca, ORIGINAL=[Ljava.lang.String;@6745f465, PIC_CLICK=[Ljava.lang.String;@9a44d3d]
+10:44:59.651 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - [init,76] - --->>>初始化验证码底图<<<---blockPuzzle
+10:45:01.096 [restartedMain] INFO  n.d.b.g.s.a.GrpcServerFactoryAutoConfiguration - [shadedNettyGrpcServerFactory,74] - Detected grpc-netty-shaded: Creating ShadedNettyGrpcServerFactory
+10:45:01.127 [restartedMain] INFO  n.d.b.g.s.a.GrpcServerFactoryAutoConfiguration - [inProcessGrpcServerFactory,158] - 'grpc.server.in-process-name' is set: Creating InProcessGrpcServerFactory
+10:45:02.033 [restartedMain] INFO  o.a.c.h.Http11NioProtocol - [log,173] - Starting ProtocolHandler ["http-nio-8081"]
+10:45:02.537 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.LotParkingService, bean: lotParkingServiceImpl, class: com.ruoyi.project.parking.service.LotParkingServiceImpl$$EnhancerBySpringCGLIB$$7bf40fd0
+10:45:02.538 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSelfPaySchemeService, bean: BSelfPaySchemeGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSelfPaySchemeGrpcServiceImpl
+10:45:02.538 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSettingRegularCarCategoryService, bean: BSettingRegularCarCategoryGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSettingRegularCarCategoryGrpcServiceImpl
+10:45:02.538 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BVisitorCodeManageService, bean: BVisitorCodeManageGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BVisitorCodeManageGrpcServiceImpl
+10:45:02.538 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BlackListService, bean: blackListGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BlackListGrpcServiceImpl
+10:45:02.538 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.RegularCarService, bean: regularCarGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.RegularCarGrpcServiceImpl
+10:45:02.538 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.health.v1.Health, bean: grpcHealthService, class: io.grpc.protobuf.services.HealthServiceImpl
+10:45:02.538 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.reflection.v1alpha.ServerReflection, bean: protoReflectionService, class: io.grpc.protobuf.services.ProtoReflectionService
+10:45:02.601 [restartedMain] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [createAndStartGrpcServer,116] - gRPC Server started, listening on address: *, port: 9115
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.LotParkingService, bean: lotParkingServiceImpl, class: com.ruoyi.project.parking.service.LotParkingServiceImpl$$EnhancerBySpringCGLIB$$7bf40fd0
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSelfPaySchemeService, bean: BSelfPaySchemeGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSelfPaySchemeGrpcServiceImpl
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BSettingRegularCarCategoryService, bean: BSettingRegularCarCategoryGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BSettingRegularCarCategoryGrpcServiceImpl
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BVisitorCodeManageService, bean: BVisitorCodeManageGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BVisitorCodeManageGrpcServiceImpl
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.BlackListService, bean: blackListGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.BlackListGrpcServiceImpl
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: com.czdx.grpc.lib.lot.RegularCarService, bean: regularCarGrpcServiceImpl, class: com.ruoyi.project.parking.service.grpc.RegularCarGrpcServiceImpl
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.health.v1.Health, bean: grpcHealthService, class: io.grpc.protobuf.services.HealthServiceImpl
+10:45:02.602 [restartedMain] INFO  n.d.b.g.s.s.AbstractGrpcServerFactory - [configureServices,108] - Registered gRPC service: grpc.reflection.v1alpha.ServerReflection, bean: protoReflectionService, class: io.grpc.protobuf.services.ProtoReflectionService
+10:45:02.604 [restartedMain] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [createAndStartGrpcServer,116] - gRPC Server started, listening on address: in-process:parking-lot-server, port: -1
+10:45:03.093 [restartedMain] INFO  o.q.c.QuartzScheduler - [start,547] - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+10:45:03.117 [restartedMain] INFO  c.r.ParkingLotApplication - [logStarted,61] - Started ParkingLotApplication in 16.535 seconds (JVM running for 17.407)
+10:45:03.122 [restartedMain] INFO  c.r.p.p.d.i.IccEventSubscribe - [eventSubscribe,70] - ----开始执行----事件订阅------请求地址:https://121.229.5.12:9443/evo-apigw/evo-event/1.0.0/subscribe/mqinfo
+10:45:03.483 [restartedMain] INFO  c.r.p.p.d.i.IccEventSubscribe - [eventSubscribe,130] - ----结束执行----事件订阅------返回报文:{"success":true,"data":{},"code":"0","errMsg":""}
+10:45:03.927 [RMI TCP Connection(2)-192.168.2.197] INFO  o.a.c.c.C.[.[.[/] - [log,173] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+10:46:03.114 [SpringApplicationShutdownHook] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [stopAndReleaseGrpcServer,160] - Completed gRPC server shutdown
+10:46:03.115 [SpringApplicationShutdownHook] INFO  n.d.b.g.s.s.GrpcServerLifecycle - [stopAndReleaseGrpcServer,160] - Completed gRPC server shutdown
+10:46:03.158 [SpringApplicationShutdownHook] INFO  o.q.c.QuartzScheduler - [standby,585] - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+10:46:04.422 [SpringApplicationShutdownHook] INFO  o.q.c.QuartzScheduler - [shutdown,666] - Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+10:46:04.422 [SpringApplicationShutdownHook] INFO  o.q.c.QuartzScheduler - [standby,585] - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+10:46:04.423 [SpringApplicationShutdownHook] INFO  o.q.c.QuartzScheduler - [shutdown,740] - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+10:46:04.423 [SpringApplicationShutdownHook] INFO  sys-user - [shutdownAsyncManager,31] - ====关闭后台任务任务线程池====
+10:46:04.430 [SpringApplicationShutdownHook] INFO  c.a.d.p.DruidDataSource - [close,2105] - {dataSource-1} closing ...
+10:46:04.434 [SpringApplicationShutdownHook] INFO  c.a.d.p.DruidDataSource - [close,2178] - {dataSource-1} closed

@@ -1,0 +1,56 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://10.10.210.19:3306/fast-parking?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  #MQ
+  rabbitmq:
+    host: 10.10.210.20
+    port: 30801
+    username: acnftest
+    password: acnf@admin
+    virtualHost: /
+  # redis 配置
+  redis:
+    # 地址
+    host: 10.10.210.19
+    # 端口，默认为6379
+    port: 30002
+    # 数据库索引
+    database: 0
+    # 密码
+    password:
+
+grpc:
+  client:
+    parking-member-merchant-server:
+      address: 'static://127.0.0.1:9110'
+      negotiationType: plaintext
+
+wechat:
+  #测试微信号
+  appid: wxf4c3f854ce48364b
+  secret: b59fd5a0d313bb88e672de958228abf1
+  entryTemplateId: tuQRf7aEFjntkScplzE0Y_0SyXcstK_XxxnUi5yeogo
+  exitTemplateId: u2Ohs4Q5puG5BLe-o05YEIxODliCgVoNSmhzqXHN74U
+  payTemplateId: 6kFQk6lDCiw3SNTvF-txm6DPdsIQ-ulYBFoffTXtOWQ
+
+#  appid: wxc101796889981b6a
+#  secret: 5271b08a519b57dc2c1cc35f83bba5c1
+  accessTokenUrl: https://api.weixin.qq.com/cgi-bin/token
+  jsapiTicketUrl: https://api.weixin.qq.com/cgi-bin/ticket/getticket
+  pageAccessTokenUrl: https://api.weixin.qq.com/sns/oauth2/access_token?appid={appid}&secret={secret}&code={code}&grant_type=authorization_code
+  messageTemplateSendUrl: https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={accessToken}
+#  entryTemplateId: qMWOPqkj5bOx2_TDl1_6uNMYWtVwsonF-HL312PeWUA

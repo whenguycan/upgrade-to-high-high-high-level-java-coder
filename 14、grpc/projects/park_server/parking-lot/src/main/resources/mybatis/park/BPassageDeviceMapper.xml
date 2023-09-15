@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BPassageDeviceMapper">
+
+    <resultMap type="BPassageDeviceVo" id="BPassageDeviceResult">
+        <result property="id" column="id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="serverIp" column="server_ip"/>
+        <result property="softVer" column="soft_ver"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="passageId" column="passage_id"/>
+        <result property="passageNo" column="passage_no"/>
+        <result property="deviceStatus" column="device_status"/>
+        <result property="remark" column="remark"/>
+        <result property="fromFieldName" column="from_field_name"/>
+        <result property="toFieldName" column="to_field_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectBPassageDeviceVo">
+        select a.id,
+               device_id,
+               server_ip,
+               soft_ver,
+               device_type,
+               passage_id,
+               device_status,
+               a.remark,
+               a.create_by,
+               a.create_time,
+               a.update_by,
+               a.update_time,
+               b.passage_no,
+               (select field_name from b_field c where c.id=b.from_field_id) as from_field_name,
+               (select field_name from b_field c where c.id=b.to_field_id) as to_field_name
+        from b_passage_device a join b_passage b
+        on a.passage_id=b.id
+    </sql>
+
+    <select id="selectBPassageDeviceList" parameterType="BPassageDevice" resultMap="BPassageDeviceResult">
+        <include refid="selectBPassageDeviceVo"/>
+        <where>
+            <if test="deviceId != null  and deviceId != ''">and device_id = #{deviceId}</if>
+            <if test="serverIp != null  and serverIp != ''">and server_ip = #{serverIp}</if>
+            <if test="softVer != null  and softVer != ''">and soft_ver = #{softVer}</if>
+            <if test="deviceType != null  and deviceType != ''">and device_type = #{deviceType}</if>
+            <if test="passageId != null ">and passage_id = #{passageId}</if>
+            <if test="deviceStatus != null  and deviceStatus != ''">and device_status = #{deviceStatus}</if>
+        </where>
+    </select>
+
+    <select id="countBindDevice" resultType="Integer">
+        select count(1)
+        from b_passage_device
+        where passage_id = #{passageId}
+    </select>
+    <select id="selectBPassageDeviceById" parameterType="Long" resultMap="BPassageDeviceResult">
+        <include refid="selectBPassageDeviceVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertBPassageDevice" parameterType="BPassageDevice" useGeneratedKeys="true" keyProperty="id">
+        insert into b_passage_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null">device_id,</if>
+            <if test="serverIp != null">server_ip,</if>
+            <if test="softVer != null">soft_ver,</if>
+            <if test="deviceType != null">device_type,</if>
+            <if test="passageId != null">passage_id,</if>
+            <if test="deviceStatus != null">device_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="serverIp != null">#{serverIp},</if>
+            <if test="softVer != null">#{softVer},</if>
+            <if test="deviceType != null">#{deviceType},</if>
+            <if test="passageId != null">#{passageId},</if>
+            <if test="deviceStatus != null">#{deviceStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBPassageDevice" parameterType="BPassageDevice">
+        update b_passage_device
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="serverIp != null">server_ip = #{serverIp},</if>
+            <if test="softVer != null">soft_ver = #{softVer},</if>
+            <if test="deviceType != null">device_type = #{deviceType},</if>
+            <if test="passageId != null">passage_id = #{passageId},</if>
+            <if test="deviceStatus != null">device_status = #{deviceStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBPassageDeviceById" parameterType="Long">
+        delete
+        from b_passage_device
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteBPassageDeviceByIds" parameterType="String">
+        delete from b_passage_device where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BParkChargeDurationMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BParkChargeDuration" id="BParkChargeDurationResult">
+        <result property="id"    column="id"    />
+        <result property="ruleId"    column="rule_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="lengthOfTime"    column="length_of_time"    />
+        <result property="freeMinute"    column="free_minute"    />
+        <result property="maximumCharge"    column="maximum_charge"    />
+        <result property="sort"    column="sort"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBParkChargeDurationVo">
+        select id, rule_id, start_time, length_of_time, free_minute, maximum_charge, sort, create_by, create_time, update_by, update_time from b_park_charge_duration
+    </sql>
+
+    <select id="selectBParkChargeDurationList" parameterType="com.ruoyi.project.parking.domain.BParkChargeDuration" resultMap="BParkChargeDurationResult">
+        <include refid="selectBParkChargeDurationVo"/>
+        <where>  
+            <if test="ruleId != null "> and rule_id = #{ruleId}</if>
+            <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
+            <if test="lengthOfTime != null "> and length_of_time = #{lengthOfTime}</if>
+            <if test="freeMinute != null "> and free_minute = #{freeMinute}</if>
+            <if test="maximumCharge != null "> and maximum_charge = #{maximumCharge}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+        order by sort
+    </select>
+    
+    <select id="selectBParkChargeDurationById" parameterType="Integer" resultMap="BParkChargeDurationResult">
+        <include refid="selectBParkChargeDurationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBParkChargeDuration" parameterType="com.ruoyi.project.parking.domain.BParkChargeDuration" useGeneratedKeys="true" keyProperty="id">
+        insert into b_park_charge_duration
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">rule_id,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="lengthOfTime != null">length_of_time,</if>
+            <if test="freeMinute != null">free_minute,</if>
+            <if test="maximumCharge != null">maximum_charge,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">#{ruleId},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="lengthOfTime != null">#{lengthOfTime},</if>
+            <if test="freeMinute != null">#{freeMinute},</if>
+            <if test="maximumCharge != null">#{maximumCharge},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBParkChargeDuration" parameterType="com.ruoyi.project.parking.domain.BParkChargeDuration">
+        update b_park_charge_duration
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleId != null">rule_id = #{ruleId},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="lengthOfTime != null">length_of_time = #{lengthOfTime},</if>
+            <if test="freeMinute != null">free_minute = #{freeMinute},</if>
+            <if test="maximumCharge != null">maximum_charge = #{maximumCharge},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBParkChargeDurationById" parameterType="Integer">
+        delete from b_park_charge_duration where id = #{id}
+    </delete>
+
+    <delete id="deleteBParkChargeDurationByIds" parameterType="String">
+        delete from b_park_charge_duration where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByRuleId" parameterType="Integer">
+        delete from b_park_charge_duration where rule_id = #{ruleId}
+    </delete>
+
+    <delete id="deleteByRuleIds" parameterType="String">
+        delete from b_park_charge_duration where rule_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

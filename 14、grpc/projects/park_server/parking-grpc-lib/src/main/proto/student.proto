@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+/**
+ *
+ * description: 学生服务类查询Proto定义
+ * @author mingchenxu
+ * @date 2023/2/20 00:52
+ */
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.school;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.school";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "StudentServiceProto";
+
+service StudentService {
+  // 获取学生列表
+  rpc getStudentList(StudentListRequest) returns (StudentListReply) {}
+
+  rpc getStudentScore(StudentRequest) returns (StudentScoreReply) {}
+}
+
+// 学生对象定义
+message Student {
+  int32 id = 1;
+  string name = 2;
+  string no = 3;
+  int32 age = 4;
+  string address = 5;
+}
+
+// 学生列表查询条件
+message StudentListRequest {
+  string name = 1;
+  string no = 2;
+  int32 pageNum = 3;
+  int32 pageSize = 4;
+}
+
+// 学生请求
+message StudentRequest {
+  int32 id = 1;
+}
+
+// 学生列表返回结果
+message StudentListReply {
+  int32 total = 1;
+  int32 pageNum = 2;
+  int32 pageSize = 3;
+  // 表示字段可以包含0~N个元素，特性与Optional一样，但是一次可以包含多个值，类似于数组
+  repeated Student list = 4;
+}
+
+// 学生成绩返回结果
+message StudentScoreReply {
+  Student student = 1;
+  // 定义Map对象，科目-得分
+  map<string, double> scoreMap = 2;
+}

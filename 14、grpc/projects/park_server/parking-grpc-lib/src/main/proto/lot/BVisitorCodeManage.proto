@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.lot;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.lot";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "BVisitorCodeManage";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+// 固定车记录API列表
+service BVisitorCodeManageService {
+  // RPC方法定义
+  // 获取访客码信息
+  rpc getCodeInfo(GetCodeInfoRequestProto) returns (GetCodeInfoResponseProto) {}
+  // 刷新绑定次数
+  rpc updateNumber(UpdateNumberRequestProto) returns (UpdateNumberResponseProto) {}
+  // 设置白名单
+  rpc addWhiteList(AddWhiteListRequestProto) returns (AddWhiteListResponseProto) {}
+}
+
+//在消息定义中，每个字段都有唯一的一个标识符。
+//这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。
+
+// 获取访客码信息接口请求参数定义
+message GetCodeInfoRequestProto{
+  string code = 1;
+}
+
+// 获取访客码信息接口返回参数定义
+message GetCodeInfoResponseProto{
+  int32 id = 1;
+  // 场库编号
+  string parkNo = 2;
+  // 场库名称
+  string parkName = 3;
+  // 访客码名称
+  string codeName = 4;
+  // 绑定次数
+  int32 codeUseNumber = 5;
+  // 已绑定次数
+  int32 codeUsedNumber = 6;
+  // 免费天数
+  int32 codeFreeDay = 7;
+  // 有效时间-开始
+  string startTime = 8;
+  // 有效时间-结束
+  string endTime = 9;
+  // 是否永久有效期(0-否,1-是)
+  string timeLimit = 10;
+  // 备注
+  string remark = 11;
+  // 申请时间
+  string applyTime = 12;
+  // 码状态(1-启用 2-停用)
+  int32 status = 13;
+  // 二维码编号
+  string code = 14;
+  /** 创建者 */
+  string createBy = 15;
+  /** 创建时间 */
+  string createTime = 16;
+  /** 更新者 */
+  string updateBy = 17;
+  /** 更新时间 */
+  string updateTime = 18;
+}
+
+// 刷新绑定次数接口请求参数定义
+message UpdateNumberRequestProto{
+  // 逻辑ID
+  int32 id = 1;
+  // 已绑定次数
+  int32 codeUsedNumber = 2;
+  // 更新者
+  string updateBy = 3;
+}
+
+// 刷新绑定次数接口返回参数定义
+message UpdateNumberResponseProto{
+  // 结果
+  int32 result = 1;
+}
+
+// 设置白名单接口请求参数定义
+message AddWhiteListRequestProto{
+  // 车牌号
+  string carNumber = 1;
+  // 备注
+  string remark = 2;
+  // 起始时间
+  string startTime = 3;
+  // 截止时间
+  string endTime = 4;
+  // 场库编号
+  string parkNo = 5;
+  // 创建者
+  string createBy = 6;
+}
+
+// 设置白名单接口返回参数定义
+message AddWhiteListResponseProto{
+  // 结果
+  bool result = 1;
+}

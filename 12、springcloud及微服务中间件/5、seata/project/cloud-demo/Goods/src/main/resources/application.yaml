@@ -1,0 +1,12 @@
+server:
+  port: 8092
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.210.24:8808
+        group: DEFAULT_GROUP
+      username: nacos
+      password: nacos
+  application:
+    name: Goods

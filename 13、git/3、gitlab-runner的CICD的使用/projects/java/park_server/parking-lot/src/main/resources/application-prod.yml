@@ -1,0 +1,109 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:ry-vue}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: ${DB_USERNAME:root}
+        password: ${DB_PASSWORD:root}
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  # redis 配置
+  redis:
+    # 地址
+    host: ${REDIS_HOST:localhost}
+    # 端口，默认为6379
+    port: ${REDIS_PORT:6379}
+    # 数据库索引
+    database: 0
+    # 密码
+    password: ${REDIS_PASSWORD:''}
+  #MQ
+  rabbitmq:
+    host: ${RMQ_HOST:10.10.210.20}
+    port: ${RMQ_PORT:30801}
+    username: ${RMQ_USERNAME:acnftest}
+    password: ${RMQ_PASSWORD:acnf@admin}
+    virtualHost: /
+
+# grpc 配置
+grpc:
+  server:
+    in-process-name: parking-lot-server
+    # 修改服务端默认入参最大大小，默认值为4M ，这里修改为20M   20*1024*1024
+    max-inbound-message-size: 20971520
+    # grpc 端口号
+    port: 9115
+  client:
+    # 服务端地址
+    parking-device-server:
+      address: 'static://${DEVICE_SERVER:device}:9085'
+    parking-order-server:
+      address: 'static://${ORDER_SERVER:order}:9088'
+    parking-charge-server:
+      address: 'static://${CHARGE_SERVER:charge}:9095'
+    parking-payment-server:
+      address: 'static://${PAYMENT_SERVER:payment}:9100'
+    parking-notification-server:
+      address: 'static://${NOTIFICATION_SERVER:notification}:9105'
+    parking-member-merchant-server:
+      address: 'static://${MEMBER_SERVER:member}:9110'
+
+icc:
+  types: car.capture,car.access
+  Intranet:
+    ip: 192.168.0.27
+    port: 9480
+  carPicture:
+    url: ryt.czctown.com/iccCarPhoto
+    http: https
+  sdk:
+    host: 121.229.5.12
+    port: 9443
+    #icc.sdk.host=icc-dev.dahuatech.com
+    clientId: xth
+    clientSecret: c9f816ae-fcdd-4f27-8ea0-095915b54e16
+    pwdClientId: xth
+    pwdClientSecret: c9f816ae-fcdd-4f27-8ea0-095915b54e16
+    username: xthtc
+    password: xth@12345
+    #icc.sdk.password=dahua2022
+    grantType: password
+    #icc.sdk.enable.https=false
+    #icc.sdk.config.client.enable=false
+    version: 1.0.0
+    config:
+      client:
+        userId: 1
+
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefgHIJKLmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+  refreshExpireTime: 10080
+
+# Swagger配置，生产环境关闭
+swagger:
+  # 是否开启swagger
+  enabled: false
+
+# 大华推送消息的接受地址
+local:
+  ip: 127.0.0.1
+  port: 8080
+
+# 关闭滑动验证
+aj:
+  enabled: false

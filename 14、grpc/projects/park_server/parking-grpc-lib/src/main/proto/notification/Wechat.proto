@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.Wechat;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.WechatMessageTemplateSend";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "Wechat";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+service WechatMessageTemplateSendService {
+  // RPC方法定义
+  // 获取用户在公众号下的openid
+  rpc WechatGetOpenId(WechatGetOpenIdRequestProto) returns (WechatGetOpenIdResponseProto){}
+  // 推送模板消息
+  rpc WechatMessageTemplateSend(WechatMessageTemplateSendRequestProto) returns (WechatMessageTemplateSendResponseProto) {}
+}
+
+//在消息定义中，每个字段都有唯一的一个标识符。
+//这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。
+
+// 获取用户在公众号下的openid请求参数定义
+message WechatGetOpenIdRequestProto{
+  // 获取的 code 参数
+  string code = 1;
+}
+
+// 获取用户在公众号下的openid响应结果定义
+message WechatGetOpenIdResponseProto{
+  // 网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
+  string access_token = 1;
+  // access_token接口调用凭证超时时间，单位（秒）
+  int32 expires_in = 2;
+  // 用户刷新access_token
+  string refresh_token = 3;
+  // 用户唯一标识，请注意，在未关注公众号时，用户访问公众号的网页，也会产生一个用户和公众号唯一的OpenID
+  string openid = 4;
+  // 用户授权的作用域，使用逗号（,）分隔
+  string scope = 5;
+  // 是否为快照页模式虚拟账号，只有当用户是快照页模式虚拟账号时返回，值为1
+  int32 is_snapshotuser = 6;
+  // 用户统一标识（针对一个微信开放平台帐号下的应用，同一用户的 unionid 是唯一的），只有当 scope 为"snsapi_userinfo"时返回
+  string unionid = 7;
+  // 错误码
+  int32 errcode=8;
+  // 错误信息
+  string errmsg=9;
+}
+
+// 推送模板消息请求参数定义
+message WechatMessageTemplateSendRequestProto {
+  // -------必填参数---开始-------
+  // 接收者openid
+  string touser = 1;
+  // 模板ID
+  string template_id = 2;
+  // 所需跳转到的小程序appid（该小程序 appid 必须与发模板消息的公众号是绑定关联关系，暂不支持小游戏）
+  string appid = 3;
+  // 模板数据
+  string data = 4;
+  // -------必填参数---结束-------
+  // 模板跳转链接（海外帐号没有跳转能力）
+  string url = 5;
+  // 跳小程序所需数据，不需跳小程序可不用传该数据
+  string miniprogram = 6;
+  // 所需跳转到小程序的具体页面路径，支持带参数,（示例index?foo=bar），要求该小程序已发布，暂不支持小游戏
+  string pagepath = 7;
+  // 模板内容字体颜色，不填默认为黑色
+  string color = 8;
+  // 防重入id。对于同一个openid + client_msg_id, 只发送一条消息,10分钟有效,超过10分钟不保证效果。若无防重入需求，可不填
+  string client_msg_id = 9;
+}
+
+// 推送模板消息响应结果定义
+message WechatMessageTemplateSendResponseProto {
+  int32 errcode = 1;
+  string errmsg = 2;
+  int32 msgid = 3;
+}

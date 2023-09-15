@@ -1,0 +1,108 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://10.10.210.19:3306/fast-parking?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  # redis 配置
+  redis:
+    # 地址
+    host: 10.10.210.19
+    # 端口，默认为6379
+    port: 30002
+    # 数据库索引
+    database: 0
+    # 密码
+#    password:
+  #MQ
+  rabbitmq:
+    host: 10.10.210.20
+    port: 30801
+    username: acnftest
+    password: acnf@admin
+    virtualHost: /
+
+# grpc 配置
+grpc:
+  server:
+    in-process-name: parking-lot-server
+    # 修改服务端默认入参最大大小，默认值为4M ，这里修改为20M   20*1024*1024
+    max-inbound-message-size: 20971520
+    # grpc 端口号
+    port: 9115
+  client:
+    # 服务端地址
+    parking-device-server:
+      address: 'static://127.0.0.1:9085'
+    parking-order-server:
+      address: 'static://127.0.0.1:9088'
+    parking-charge-server:
+      address: 'static://127.0.0.1:9095'
+    parking-payment-server:
+      address: 'static://127.0.0.1:9100'
+    parking-notification-server:
+      address: 'static://127.0.0.1:9105'
+    parking-member-merchant-server:
+      address: 'static://127.0.0.1:9110'
+# 滑动/点选验证码配置
+aj:
+  enabled: true
+  captcha:
+    # 缓存local/redis，内存缓存只适合单节点部署的应用，否则验证码生产与验证在节点之间信息不同步，导致失败
+    cache-type: redis
+    # 滑动验证，底图路径，不配置将使用默认图片
+    # jigsaw: classpath:images/jigsaw
+    # 验证码类型default两种都实例化
+    type: default
+    # 水印
+    # water-mark: 常州电信
+    # 校验滑动拼图允许误差偏移量(默认5像素)
+    slip-offset: 5
+    # aes加密坐标开启或者禁用(true|false)
+    aes-status: true
+    # 滑动干扰项(0/1/2)
+    interference-options: 0
+    #点选字体样式 默认Font.BOLD
+    font-style: 1
+    #点选字体字体大小
+    font-size: 25
+icc:
+  types: car.capture,car.access
+  Intranet:
+    ip: 192.168.0.27
+    port: 9480
+  carPicture:
+    url:
+    http:
+  sdk:
+    host: 121.229.5.12
+    port: 9443
+    #icc.sdk.host=icc-dev.dahuatech.com
+    clientId: xth
+    clientSecret: c9f816ae-fcdd-4f27-8ea0-095915b54e16
+    pwdClientId: xth
+    pwdClientSecret: c9f816ae-fcdd-4f27-8ea0-095915b54e16
+    username: xthtc
+    password: xth@12345
+    #icc.sdk.password=dahua2022
+    grantType: password
+    #icc.sdk.enable.https=false
+    #icc.sdk.config.client.enable=false
+    version: 1.0.0
+    config:
+      client:
+        userId: 1
+local:
+  ip: 127.0.0.1
+  port: 8080

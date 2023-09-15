@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.BChargeSetMapper">
+
+    <resultMap type="BChargeSet" id="BChargeSetResult">
+        <result property="id" column="id"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="chargeAmount" column="charge_amount"/>
+        <result property="giveAmount" column="give_amount"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectBChargeSetVo">
+        select id,
+               park_no,
+               charge_amount,
+               give_amount,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        from b_charge_set
+    </sql>
+
+    <select id="selectChargeSetByRechargeAmount" resultMap="BChargeSetResult">
+        <include refid="selectBChargeSetVo"/>
+        <where>
+            park_no = #{parkNo} and charge_amount &lt; #{payAmount}
+        </where>
+        order by charge_amount limit 1
+    </select>
+    <select id="selectBChargeSetList" parameterType="BChargeSet" resultMap="BChargeSetResult">
+        <include refid="selectBChargeSetVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="chargeAmount != null ">and charge_amount = #{chargeAmount}</if>
+            <if test="giveAmount != null ">and give_amount = #{giveAmount}</if>
+        </where>
+    </select>
+
+    <select id="selectBChargeSetById" parameterType="Long" resultMap="BChargeSetResult">
+        <include refid="selectBChargeSetVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBChargeSet" parameterType="BChargeSet" useGeneratedKeys="true" keyProperty="id">
+        insert into b_charge_set
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="chargeAmount != null">charge_amount,</if>
+            <if test="giveAmount != null">give_amount,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="chargeAmount != null">#{chargeAmount},</if>
+            <if test="giveAmount != null">#{giveAmount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBChargeSet" parameterType="BChargeSet">
+        update b_charge_set
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="chargeAmount != null">charge_amount = #{chargeAmount},</if>
+            <if test="giveAmount != null">give_amount = #{giveAmount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBChargeSetById" parameterType="Long">
+        delete
+        from b_charge_set
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteBChargeSetByIds" parameterType="String">
+        delete from b_charge_set where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

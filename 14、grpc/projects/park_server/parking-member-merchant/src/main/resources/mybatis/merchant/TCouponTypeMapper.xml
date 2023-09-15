@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.TCouponTypeMapper">
+
+    <resultMap type="TCouponType" id="TCouponTypeResult">
+        <result property="id" column="id"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="couponName" column="coupon_name"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="couponMold" column="coupon_mold"/>
+        <result property="couponValue" column="coupon_value"/>
+        <result property="userId" column="user_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <resultMap type="CouponTypeVo" id="CouponTypeResultVo">
+        <result property="id" column="id"/>
+        <result property="amount" column="amount"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="couponName" column="coupon_name"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="couponMold" column="coupon_mold"/>
+        <result property="couponValue" column="coupon_value"/>
+        <result property="userId" column="user_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectTCouponTypeVo">
+        select id,
+               park_no,
+               coupon_name,
+               coupon_type,
+               coupon_mold,
+               coupon_value,
+               user_id,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from t_coupon_type
+    </sql>
+
+    <sql id="countCouponTypeForAppSql">
+        select a.id, a.park_no, coupon_name, coupon_type, coupon_mold, coupon_value, b.amount
+        from t_coupon_type a
+                 join (select coupon_id, count(1) as amount
+                       from t_coupon_detail
+                       where coupon_status = #{couponStatus}
+                         and id is not null
+                       group by coupon_id) b
+                      on a.id = b.coupon_id
+    </sql>
+
+    <select id="countCouponForApp" resultMap="CouponTypeResultVo">
+        <include refid="countCouponTypeForAppSql"></include>
+        <where>
+            <if test="userId != null  and userId != ''">and user_id = #{userId}</if>
+            <if test="couponType != null  and couponType != ''">and coupon_type = #{couponType}</if>
+            <if test="couponMold != null  and couponMold != ''">and coupon_mold = #{couponMold}</if>
+            <if test="id != null  and id != ''">and id = #{couponId}</if>
+        </where>
+    </select>
+    <select id="selectTCouponTypeList" parameterType="TCouponType" resultMap="TCouponTypeResult">
+        <include refid="selectTCouponTypeVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="couponType != null  and couponType != ''">and coupon_type = #{couponType}</if>
+            <if test="couponMold != null  and couponMold != ''">and coupon_mold = #{couponMold}</if>
+            <if test="couponValue != null ">and coupon_value = #{couponValue}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectTCouponTypeById" parameterType="Long" resultMap="TCouponTypeResult">
+        <include refid="selectTCouponTypeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTCouponType" parameterType="TCouponType" useGeneratedKeys="true" keyProperty="id">
+        insert into t_coupon_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null and parkNo != ''">park_no,</if>
+            <if test="couponName != null and couponName != ''">coupon_name,</if>
+            <if test="couponType != null">coupon_type,</if>
+            <if test="couponMold != null">coupon_mold,</if>
+            <if test="couponValue != null">coupon_value,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null and parkNo != ''">#{parkNo},</if>
+            <if test="couponName != null and couponName != ''">#{couponName},</if>
+            <if test="couponType != null">#{couponType},</if>
+            <if test="couponMold != null">#{couponMold},</if>
+            <if test="couponValue != null">#{couponValue},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTCouponType" parameterType="TCouponType">
+        update t_coupon_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null and parkNo != ''">park_no = #{parkNo},</if>
+            <if test="couponName != null and couponName != ''">coupon_name = #{couponName},</if>
+            <if test="couponType != null">coupon_type = #{couponType},</if>
+            <if test="couponMold != null">coupon_mold = #{couponMold},</if>
+            <if test="couponValue != null">coupon_value = #{couponValue},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTCouponTypeById" parameterType="Long">
+        delete
+        from t_coupon_type
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTCouponTypeByIds" parameterType="String">
+        delete from t_coupon_type where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

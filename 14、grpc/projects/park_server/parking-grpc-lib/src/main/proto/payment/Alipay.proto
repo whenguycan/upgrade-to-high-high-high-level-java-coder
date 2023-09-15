@@ -1,0 +1,667 @@
+syntax = "proto3";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.alipay;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.alipay";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "AliPayProto";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+// 支付宝支付API列表
+service AliPayService {
+  // RPC方法定义
+  // 手机网站支付接口
+  rpc AlipayTradeWapPay(AlipayTradeWapPayRequestProto) returns (AlipayTradeWapPayResponseProto) {}
+  // 统一收单交易查询接口
+  rpc AlipayTradeQuery(AlipayTradeQueryRequestProto) returns (AlipayTradeQueryResponseProto) {}
+  // 统一收单交易关闭接口
+  rpc AlipayTradeClose(AlipayTradeCloseRequestProto) returns (AlipayTradeCloseResponseProto) {}
+  // 统一收单交易退款接口
+  rpc AlipayTradeRefund(AlipayTradeRefundRequestProto) returns (AlipayTradeRefundResponseProto) {}
+  // 统一收单交易退款查询接口
+  rpc AlipayTradeFastpayRefundQuery(AlipayTradeFastpayRefundQueryRequestProto) returns (AlipayTradeFastpayRefundQueryResponseProto) {}
+  // 查询对账单下载地址接口
+  rpc AlipayDataDataserviceBillDownloadurlQuery(AlipayDataDataserviceBillDownloadurlQueryRequestProto) returns (AlipayDataDataserviceBillDownloadurlQueryResponseProto) {}
+}
+
+//在消息定义中，每个字段都有唯一的一个标识符。
+//这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。
+
+// 查询对账单下载地址接口请求参数定义
+message AlipayDataDataserviceBillDownloadurlQueryRequestProto{
+  // -------必填参数---开始-------
+  // 账单类型，商户通过接口或商户经开放平台授权后其所属服务商通过接口可以获取以下账单类型，支持：
+  //trade：商户基于支付宝交易收单的业务账单；
+  //signcustomer：基于商户支付宝余额收入及支出等资金变动的账务账单；
+  //merchant_act：营销活动账单，包含营销活动的发放，核销记录
+  //trade_zft_merchant：直付通二级商户查询交易的业务账单；
+  //zft_acc：直付通平台商查询二级商户流水使用，返回所有二级商户流水。
+  string bill_type = 1;
+  // 账单时间：
+  //* 日账单格式为yyyy-MM-dd，最早可下载2016年1月1日开始的日账单。不支持下载当日账单，只能下载前一日24点前的账单数据（T+1），当日数据一般于次日 9 点前生成，特殊情况可能延迟。
+  //* 月账单格式为yyyy-MM，最早可下载2016年1月开始的月账单。不支持下载当月账单，只能下载上一月账单数据，当月账单一般在次月 3 日生成，特殊情况可能延迟。
+  string bill_date = 2;
+  // -------必填参数---结束-------
+  // 二级商户smid，这个参数只在bill_type是trade_zft_merchant时才能使用
+  string smid = 3;
+}
+
+// 查询对账单下载地址接口响应参数定义
+message AlipayDataDataserviceBillDownloadurlQueryResponseProto{
+  // -------公共响应参数---开始-------
+  // 网关返回码,详见文档https://opendocs.alipay.com/common/02km9f
+  string code = 101;
+  // 网关返回码描述,详见文档https://opendocs.alipay.com/common/02km9f
+  string msg = 102;
+  // 业务返回码，参见具体的API接口文档
+  string sub_code = 103;
+  // 业务返回码描述，参见具体的API接口文档
+  string sub_msg = 104;
+  // 签名,详见文档https://opendocs.alipay.com/common/02kf5q
+  string sign = 105;
+  string body = 106;
+  // -------公共响应参数---结束-------
+  // 账单下载地址链接，获取连接后30秒后未下载，链接地址失效。
+  string bill_download_url = 1;
+}
+
+// 统一收单交易退款查询接口请求参数定义
+message AlipayTradeFastpayRefundQueryRequestProto{
+  // -------特殊必填参数---开始-------
+  // 订单支付时传入的商户订单号,和支付宝交易号不能同时为空。trade_no,out_trade_no如果同时存在优先取trade_no
+  string out_trade_no = 1;
+  // 该交易在支付宝系统中的交易流水号。最短 16 位，最长 64 位。和商户订单号不能同时为空
+  string trade_no = 2;
+  // -------特殊必填参数---结束-------
+  // -------必填参数---开始-------
+  // 退款请求号。请求退款接口时，传入的退款请求号，如果在退款请求时未传入，则该值为创建交易时的商户订单号。
+  double out_request_no = 3;
+  // -------必填参数---结束-------
+  // 查询选项，商户通过上送该参数来定制同步需要额外返回的信息字段，数组格式。枚举支持：
+  //refund_detail_item_list：本次退款使用的资金渠道；
+  //gmt_refund_pay：退款执行成功的时间；
+  //deposit_back_info：银行卡冲退信息；
+  repeated string query_options = 4;
+}
+
+// 统一收单交易退款查询接口响应参数定义
+message AlipayTradeFastpayRefundQueryResponseProto{
+  // -------公共响应参数---开始-------
+  // 网关返回码,详见文档https://opendocs.alipay.com/common/02km9f
+  string code = 101;
+  // 网关返回码描述,详见文档https://opendocs.alipay.com/common/02km9f
+  string msg = 102;
+  // 业务返回码，参见具体的API接口文档
+  string sub_code = 103;
+  // 业务返回码描述，参见具体的API接口文档
+  string sub_msg = 104;
+  // 签名,详见文档https://opendocs.alipay.com/common/02kf5q
+  string sign = 105;
+  string body = 106;
+  // -------公共响应参数---结束-------
+  // 支付宝交易号
+  string trade_no = 1;
+  // 创建交易传入的商户订单号
+  string out_trade_no = 2;
+  // 本笔退款对应的退款请求号
+  string out_request_no = 3;
+  // 该笔退款所对应的交易的订单金额
+  string total_amount = 4;
+  // 本次退款请求，对应的退款金额
+  string refund_amount = 5;
+  // 退款状态。枚举值：REFUND_SUCCESS 退款处理成功；未返回该字段表示退款请求未收到或者退款失败；
+  string refund_status = 6;
+  // 退分账明细信息
+  repeated RefundRoyaltyResult refund_royaltys = 7;
+  // 退款时间。默认不返回该信息，需要在入参的query_options中指定"gmt_refund_pay"值时才返回该字段信息。
+  string gmt_refund_pay = 8;
+  // 本次退款使用的资金渠道；默认不返回该信息，需要在入参的query_options中指定"refund_detail_item_list"值时才返回该字段信息。
+  repeated TradeFundBill refund_detail_item_list = 9;
+  // 本次商户实际退回金额；默认不返回该信息，需要在入参的query_options中指定"refund_detail_item_list"值时才返回该字段信息。
+  string send_back_fee = 10;
+  // 银行卡冲退信息；默认不返回该信息，需要在入参的query_options中指定"deposit_back_info"值时才返回该字段信息。
+  DepositBackInfo deposit_back_info = 11;
+  // 本次退款金额中退惠营宝的金额
+  string refund_hyb_amount = 12;
+  // 退费信息
+  repeated RefundChargeInfo refund_charge_info_list = 13;
+}
+
+// 统一收单交易退款接口请求参数定义
+message AlipayTradeRefundRequestProto{
+  // -------特殊必填参数---开始-------
+  // 订单支付时传入的商户订单号,和支付宝交易号不能同时为空。trade_no,out_trade_no如果同时存在优先取trade_no
+  string out_trade_no = 1;
+  // 该交易在支付宝系统中的交易流水号。最短 16 位，最长 64 位。和商户订单号不能同时为空
+  string trade_no = 2;
+  // -------特殊必填参数---结束-------
+  // -------必填参数---开始-------
+  // 退款金额。需要退款的金额，该金额不能大于订单金额，单位为元，支持两位小数。
+  double refund_amount = 3;
+  // -------必填参数---结束-------
+  // 退款原因说明。商家自定义，将在会在商户和用户的pc退款账单详情中展示
+  string refund_reason = 4;
+  // 退款请求号。标识一次退款请求，需要保证在交易号下唯一，如需部分退款，则此参数必传。
+  string out_request_no = 5;
+  // 退分账明细信息。
+  repeated OpenApiRoyaltyDetailInfoPojo refund_royalty_parameters = 6;
+  // 查询选项。
+  //商户通过上送该参数来定制同步需要额外返回的信息字段，数组格式。支持：refund_detail_item_list：退款使用的资金渠道；deposit_back_info：触发银行卡冲退信息通知；
+  repeated string query_options = 7;
+}
+
+// 统一收单交易退款接口响应参数定义
+message AlipayTradeRefundResponseProto{
+  // -------公共响应参数---开始-------
+  // 网关返回码,详见文档https://opendocs.alipay.com/common/02km9f
+  string code = 101;
+  // 网关返回码描述,详见文档https://opendocs.alipay.com/common/02km9f
+  string msg = 102;
+  // 业务返回码，参见具体的API接口文档
+  string sub_code = 103;
+  // 业务返回码描述，参见具体的API接口文档
+  string sub_msg = 104;
+  // 签名,详见文档https://opendocs.alipay.com/common/02kf5q
+  string sign = 105;
+  string body = 106;
+  // -------公共响应参数---结束-------
+  // 支付宝交易号
+  string trade_no = 1;
+  // 商户订单号
+  string out_trade_no = 2;
+  // 用户的登录id
+  string buyer_logon_id = 3;
+  // 本次退款是否发生了资金变化
+  string fund_change = 4;
+  // 退款总金额。指该笔交易累计已经退款成功的金额。
+  string refund_fee = 5;
+  // 退款使用的资金渠道。只有在签约中指定需要返回资金明细，或者入参的query_options中指定时才返回该字段信息。
+  repeated TradeFundBill refund_detail_item_list = 6;
+  // 交易在支付时候的门店名称
+  string store_name = 7;
+  // 买家在支付宝的用户id
+  string buyer_user_id = 8;
+  // 本次商户实际退回金额。
+  //说明：如需获取该值，需在入参query_options中传入 refund_detail_item_list。
+  string send_back_fee = 9;
+  // 本次请求退惠营宝金额
+  string refund_hyb_amount = 10;
+  // 退费信息
+  repeated RefundChargeInfo refund_charge_info_list = 11;
+}
+
+// 统一收单交易关闭接口请求参数定义
+message AlipayTradeCloseRequestProto{
+  // -------特殊必填参数---开始-------
+  // 订单支付时传入的商户订单号,和支付宝交易号不能同时为空。
+  // trade_no,out_trade_no如果同时存在优先取trade_no
+  string out_trade_no = 1;
+  // 该交易在支付宝系统中的交易流水号。最短 16 位，最长 64 位。和商户订单号不能同时为空
+  string trade_no = 2;
+  // -------特殊必填参数---结束-------
+  // 商家操作员编号 id，由商家自定义。
+  string  operator_id = 3;
+}
+
+// 统一收单交易关闭接口响应参数定义
+message AlipayTradeCloseResponseProto{
+  // -------公共响应参数---开始-------
+  // 网关返回码,详见文档https://opendocs.alipay.com/common/02km9f
+  string code = 101;
+  // 网关返回码描述,详见文档https://opendocs.alipay.com/common/02km9f
+  string msg = 102;
+  // 业务返回码，参见具体的API接口文档
+  string sub_code = 103;
+  // 业务返回码描述，参见具体的API接口文档
+  string sub_msg = 104;
+  // 签名,详见文档https://opendocs.alipay.com/common/02kf5q
+  string sign = 105;
+  string body = 106;
+  // -------公共响应参数---结束-------
+  // 订单支付时传入的商户订单号,和支付宝交易号不能同时为空。
+  // trade_no,out_trade_no如果同时存在优先取trade_no
+  string out_trade_no = 1;
+  // 支付宝交易号。和商户订单号不能同时为空
+  string trade_no = 2;
+}
+
+// 统一收单交易查询接口请求参数定义
+message AlipayTradeQueryRequestProto{
+  // -------特殊必填参数---开始-------
+  // 订单支付时传入的商户订单号,和支付宝交易号不能同时为空。
+  // trade_no,out_trade_no如果同时存在优先取trade_no
+  string out_trade_no = 1;
+  // 支付宝交易号，和商户订单号不能同时为空
+  string trade_no = 2;
+  // -------特殊必填参数---结束-------
+  // 银行间联模式下有用，其它场景请不要使用；
+  string org_pid = 3;
+  // 查询选项，商户传入该参数可定制本接口同步响应额外返回的信息字段，数组格式。支持枚举如下：
+  //trade_settle_info：返回的交易结算信息，包含分账、补差等信息；
+  //fund_bill_list：交易支付使用的资金渠道；
+  //voucher_detail_list：交易支付时使用的所有优惠券信息；
+  //discount_goods_detail：交易支付所使用的单品券优惠的商品优惠信息；
+  //mdiscount_amount：商家优惠金额；
+  repeated string query_options = 4;
+}
+
+// 统一收单交易查询接口响应参数定义
+message AlipayTradeQueryResponseProto{
+  // -------公共响应参数---开始-------
+  // 网关返回码,详见文档https://opendocs.alipay.com/common/02km9f
+  string code = 101;
+  // 网关返回码描述,详见文档https://opendocs.alipay.com/common/02km9f
+  string msg = 102;
+  // 业务返回码，参见具体的API接口文档
+  string sub_code = 103;
+  // 业务返回码描述，参见具体的API接口文档
+  string sub_msg = 104;
+  // 签名,详见文档https://opendocs.alipay.com/common/02kf5q
+  string sign = 105;
+  string body = 106;
+  // -------公共响应参数---结束-------
+  // -------必填参数---开始-------
+  // 支付宝交易号
+  string trade_no = 1;
+  // 商家订单号
+  string out_trade_no = 2;
+  // 买家支付宝账号
+  string buyer_logon_id = 3;
+  // 交易状态：
+  // WAIT_BUYER_PAY（交易创建，等待买家付款）
+  // TRADE_CLOSED（未付款交易超时关闭，或支付完成后全额退款）
+  // TRADE_SUCCESS（交易支付成功）
+  // TRADE_FINISHED（交易结束，不可退款）
+  string trade_status = 4;
+  // 交易的订单金额，单位为元，两位小数。该参数的值为支付时传入的total_amount
+  double total_amount = 5;
+  // -------必填参数---结束-------
+  // 标价币种，该参数的值为支付时传入的trans_currency
+  string trans_currency = 6;
+  // 订单结算币种，对应支付接口传入的settle_currency
+  string settle_currency = 7;
+  // 结算币种订单金额
+  double settle_amount = 8;
+  // 订单支付币种
+  string pay_currency = 9;
+  // 支付币种订单金额
+  double pay_amount = 10;
+  // 结算币种兑换标价币种汇率
+  double settle_trans_rate = 11;
+  // 标价币种兑换支付币种汇率
+  double trans_pay_rate = 12;
+  // 买家实付金额，单位为元，两位小数。该金额代表该笔交易买家实际支付的金额，不包含商户折扣等金额
+  double buyer_pay_amount = 13;
+  // 积分支付的金额，单位为元，两位小数。该金额代表该笔交易中用户使用积分支付的金额，比如集分宝或者支付宝实时优惠等
+  double point_amount = 14;
+  // 交易中用户支付的可开具发票的金额，单位为元，两位小数。该金额代表该笔交易中可以给用户开具发票的金额
+  double invoice_amount = 15;
+  // 本次交易打款给卖家的时间
+  string send_pay_date = 16;
+  // 实收金额，单位为元，两位小数。该金额为本笔交易，商户账户能够实际收到的金额
+  string receipt_amount = 17;
+  // 商户门店编号
+  string store_id = 18;
+  // 商户机具终端编号
+  string terminal_id = 19;
+  // 交易支付使用的资金渠道；只有在签约中指定需要返回资金明细，或者入参的query_options中指定时才返回该字段信息。
+  repeated TradeFundBill fund_bill_list = 20;
+  // 请求交易支付中的商户店铺的名称
+  string store_name = 21;
+  // 买家在支付宝的用户id
+  string buyer_user_id = 22;
+  // 行业特殊信息-统筹相关
+  string industry_sepc_detail_gov = 23;
+  // 行业特殊信息-个账相关
+  string industry_sepc_detail_acc = 24;
+  // 该笔交易针对收款方的收费金额；只在银行间联交易场景下返回该信息；
+  string charge_amount = 25;
+  // 费率活动标识；当交易享受特殊行业或活动费率时，返回该场景的标识。
+  string charge_flags = 26;
+  // 支付清算编号，用于清算对账使用；只在银行间联交易场景下返回该信息；
+  string settlement_id = 27;
+  // 返回的交易结算信息，包含分账、补差等信息；只有在query_options中指定时才返回该字段信息。
+  TradeSettleInfo trade_settle_info = 28;
+  // 预授权支付模式，该参数仅在信用预授权支付场景下返回。信用预授权支付：CREDIT_PREAUTH_PAY
+  string auth_trade_pay_mode = 29;
+  // 买家用户类型。CORPORATE:企业用户；PRIVATE:个人用户。
+  string buyer_user_type = 30;
+  // 商家优惠金额
+  string mdiscount_amount = 31;
+  // 平台优惠金额
+  string discount_amount = 32;
+  // 订单标题；只在银行间联交易场景下返回该信息；
+  string subject = 33;
+  // 订单描述；只在银行间联交易场景下返回该信息；
+  //  string body = 34;
+  // 间连商户在支付宝端的商户编号；只在银行间联交易场景下返回该信息；
+  string alipay_sub_merchant_id = 35;
+  // 交易额外信息，特殊场景下与支付宝约定返回。json格式。
+  string ext_infos = 36;
+  // 公用回传参数。返回支付时传入的passback_params参数信息
+  string passback_params = 37;
+  // 若用户使用花呗分期支付，且商家开通返回此通知参数，则会返回花呗分期信息。json格式其它说明详见花呗分期信息说明。注意：商家需与支付宝约定后才返回本参数。
+  HbFqPayInfo hb_fq_pay_info = 38;
+  // 信用支付模式。表示订单是采用信用支付方式（支付时买家没有出资，需要后续履约）。
+  string credit_pay_mode = 39;
+  // 信用业务单号。信用支付场景才有值，先用后付产品里是芝麻订单号。
+  string credit_biz_order_id = 40;
+  // 惠营宝回票金额
+  string hyb_amount = 41;
+  // 间联交易下，返回给机构的信息
+  BkAgentRespInfo bkagent_resp_info = 42;
+  // 计费信息列表
+  repeated ChargeInfo charge_info_list = 43;
+}
+
+// 手机网站支付接口请求参数定义
+message AlipayTradeWapPayRequestProto {
+  // -------必填参数---开始-------
+  // 商户网站唯一订单号
+  string out_trade_no = 1;
+  // 订单总金额。
+  // 单位为元，精确到小数点后两位，取值范围：[0.01,100000000]。
+  double total_amount = 2;
+  // 订单标题。注意：不可使用特殊字符，如 /，=，& 等。
+  string subject = 3;
+  // -------必填参数---结束-------
+  // 针对用户授权接口，获取用户相关数据时，用于标识用户授权关系
+  string auth_token = 4;
+  // 用户付款中途退出返回商户网站的地址
+  string quit_url = 5;
+  // 订单包含的商品列表信息，json格式，其它说明详见商品明细说明
+  repeated GoodsDetail goods_detail = 6;
+  // 绝对超时时间，格式为yyyy-MM-dd HH:mm:ss。超时时间范围：1m~15d。
+  string time_expire = 7;
+  // 业务扩展参数
+  ExtendParams extend_params = 8;
+  // 商户传入业务信息，具体值要和支付宝约定，应用于安全，营销等参数直传场景，格式为json格式
+  string business_params = 9;
+  // 公用回传参数，如果请求时传递了该参数，则返回给商户时会回传该参数。支付宝只会在同步返回（包括跳转回商户网站）和异步通知时将该参数原样返回。
+  // 本参数必须进行UrlEncode之后才可以发送给支付宝。
+  string passback_params = 10;
+  // 商户原始订单号，最大长度限制32位
+  string merchant_order_no = 11;
+  // 外部指定买家
+  ExtUserInfo ext_user_info = 12;
+}
+
+// 手机网站支付接口响应结果定义
+message AlipayTradeWapPayResponseProto {
+  // 网关返回码,详见文档https://opendocs.alipay.com/common/02km9f
+  string code = 101;
+  // 网关返回码描述,详见文档https://opendocs.alipay.com/common/02km9f
+  string msg = 102;
+  // 业务返回码，参见具体的API接口文档
+  string sub_code = 103;
+  // 业务返回码描述，参见具体的API接口文档
+  string sub_msg = 104;
+  // 签名,详见文档https://opendocs.alipay.com/common/02kf5q
+  string sign = 105;
+  string body = 106;
+  // 商户网站唯一订单号
+  string out_trade_no = 7;
+  // 该交易在支付宝系统中的交易流水号。最长64位。
+  string trade_no = 8;
+  // 该笔订单的资金总额，单位为人民币（元），取值范围为 0.01~100000000.00，精确到小数点后两位。
+  double total_amount = 9;
+  // 收款支付宝账号对应的支付宝唯一用户号。以2088开头的纯16位数字
+  string seller_id = 10;
+  // 商户原始订单号，最大长度限制32位
+  string merchant_order_no = 11;
+}
+
+// 银行卡冲退信息；默认不返回该信息，需要在入参的query_options中指定"deposit_back_info"值时才返回该字段信息。
+message DepositBackInfo{
+  // 是否存在银行卡冲退信息。
+  string has_deposit_back = 1;
+  // 银行卡冲退状态。S-成功，F-失败，P-处理中。银行卡冲退失败，资金自动转入用户支付宝余额。
+  string dback_status = 2;
+  // 银行卡冲退金额
+  string dback_amount = 3;
+  // 银行响应时间，格式为yyyy-MM-dd HH:mm:ss
+  string bank_ack_time = 4;
+  // 预估银行到账时间，格式为yyyy-MM-dd HH:mm:ss
+  string est_bank_receipt_time = 5;
+  // 是否包含因公付资产
+  string is_use_enterprise_pay = 6;
+}
+
+// 退分账明细信息
+message RefundRoyaltyResult{
+  // 退分账金额
+  double refund_amount = 1;
+  // 分账类型。普通分账为：transfer;补差为：replenish;为空默认为分账transfer;
+  string royalty_type = 2;
+  // 退分账结果码
+  string result_code = 3;
+  // 转出人支付宝账号对应用户ID
+  string trans_out = 4;
+  // 转出人支付宝账号
+  string trans_out_email = 5;
+  // 转入人支付宝账号对应用户ID
+  string trans_in = 6;
+  // 转入人支付宝账号
+  string trans_in_email = 7;
+}
+
+// 组合支付退费明细
+message RefundSubFee{
+  // 实退费用
+  double refund_charge_fee = 1;
+  // 签约费率
+  string switch_fee_rate = 2;
+}
+
+// 退费信息
+message RefundChargeInfo{
+  // 实退费用
+  double refund_charge_fee = 1;
+  // 签约费率
+  string switch_fee_rate = 2;
+  // 收单手续费trade，花呗分期手续hbfq，其他手续费charge
+  string charge_type = 3;
+  // 组合支付退费明细
+  repeated RefundSubFee refund_sub_fee_detail_list = 4;
+}
+
+// 退分账明细信息。
+message OpenApiRoyaltyDetailInfoPojo{
+  // 分账类型。普通分账为：transfer;补差为：replenish;为空默认为分账transfer;
+  string royalty_type = 1;
+  // 支出方账户。如果支出方账户类型为userId，本参数为支出方的支付宝账号对应的支付宝唯一用户号，以2088开头的纯16位数字；如果支出方类型为loginName，本参数为支出方的支付宝登录号。 泛金融类商户分账时，该字段不要上送。
+  string trans_out = 2;
+  // 支出方账户类型。userId表示是支付宝账号对应的支付宝唯一用户号;loginName表示是支付宝登录号； 泛金融类商户分账时，该字段不要上送。
+  string trans_out_type = 3;
+  // 收入方账户类型。userId表示是支付宝账号对应的支付宝唯一用户号;cardAliasNo表示是卡编号;loginName表示是支付宝登录号；
+  string trans_in_type = 4;
+  //必填
+  // 收入方账户。如果收入方账户类型为userId，本参数为收入方的支付宝账号对应的支付宝唯一用户号，以2088开头的纯16位数字；如果收入方类型为cardAliasNo，本参数为收入方在支付宝绑定的卡编号；如果收入方类型为loginName，本参数为收入方的支付宝登录号；
+  string trans_in = 5;
+  // 分账的金额，单位为元
+  double amount = 6;
+  // 分账描述
+  string desc = 7;
+  // 可选值：达人佣金、平台服务费、技术服务费、其他
+  string royalty_scene = 8;
+  // 分账收款方姓名，上送则进行姓名与支付宝账号的一致性校验，校验不一致则分账失败。不上送则不进行姓名校验
+  string trans_in_name = 9;
+}
+
+// 间联交易下，返回给机构的信息
+message BkAgentRespInfo{
+  // 原快捷交易流水号
+  string bindtrx_id = 1;
+  // 枚举值，01 银联；02 网联；03 连通等
+  string bindclrissr_id = 2;
+  // 付款机构在清算组织登记或分配的机构代码
+  string bindpyeracctbk_id = 3;
+  // 用户在银行付款账号的标记化处理编号
+  string bkpyeruser_code = 4;
+  // 设备推测位置
+  string estter_location = 5;
+}
+
+// 计费信息列表
+message ChargeInfo{
+  // 实收费用
+  double charge_fee = 1;
+  // 原始费用
+  double original_charge_fee = 2;
+  // 签约费率
+  string switch_fee_rate = 3;
+  // 是否收款账号出资，值为"Y"或"N"
+  string is_rating_on_trade_receiver = 4;
+  // 是否合约指定收费账号出资，值为"Y"或"N"
+  string is_rating_on_switch = 5;
+  // 收单手续费trade，花呗分期手续hbfq，其他手续费charge
+  string charge_type = 6;
+  // 组合支付收费明细
+  repeated SubFee sub_fee_detail_list = 7;
+}
+
+// 组合支付收费明细
+message SubFee{
+  // 实收费用
+  double charge_fee = 1;
+  // 原始费用
+  double original_charge_fee = 2;
+  // 签约费率
+  string switch_fee_rate = 3;
+}
+
+
+// 若用户使用花呗分期支付，且商家开通返回此通知参数，则会返回花呗分期信息。json格式其它说明详见花呗分期信息说明。
+// 注意：商家需与支付宝约定后才返回本参数。
+message HbFqPayInfo{
+  // 用户使用花呗分期支付的分期数
+  string user_install_num = 1;
+}
+
+// 返回的交易结算信息，包含分账、补差等信息。只有在query_options中指定时才返回该字段信息。
+message TradeSettleInfo{
+  // 交易结算明细信息
+  repeated TradeSettleDetail trade_settle_detail_list = 1;
+}
+
+// 交易结算明细信息
+message TradeSettleDetail{
+  // 结算操作类型。有以下几种类型：
+  // replenish(补差)、replenish_refund(退补差)、transfer(分账)、transfer_refund(退分账)、settle(结算)、settle_refund(退结算)、on_settle(待结算)。
+  string operation_type = 1;
+  // 商户操作序列号。商户发起请求的外部请求号。
+  string operation_serial_no = 2;
+  // 操作日期
+  string operation_dt = 3;
+  // 转出账号
+  string trans_out = 4;
+  // 转入账号
+  string trans_in = 5;
+  // 实际操作金额，单位为元，两位小数。该参数的值为分账或补差或结算时传入
+  double amount = 6;
+  // 商户请求的转出账号
+  string ori_trans_out = 7;
+  // 商户请求的转入账号
+  string ori_trans_in = 8;
+}
+
+// 交易支付使用的资金渠道。
+// 只有在签约中指定需要返回资金明细，或者入参的query_options中指定时才返回该字段信息。
+message TradeFundBill{
+  // 交易使用的资金渠道，见https://opendocs.alipay.com/open/common/103259
+  string fund_channel = 1;
+  // 该支付工具类型所使用的金额
+  double amount = 2;
+  // 渠道实际付款金额
+  double real_amount = 3;
+  // 渠道所使用的资金类型,目前只在资金渠道(fund_channel)是银行卡渠道(BANKCARD)的情况下才返回该信息(DEBIT_CARD:借记卡,CREDIT_CARD:信用卡,MIXED_CARD:借贷合一卡)
+  double fund_type = 4;
+}
+
+// 订单包含的商品列表信息，json格式，其它说明详见商品明细说明
+message GoodsDetail {
+  // -------必填参数---开始-------
+  // 商品的编号
+  string goods_id = 1;
+  // 商品名称
+  string goods_name = 2;
+  // 商品数量
+  int32 quantity = 3;
+  // 商品单价，单位为元
+  double price = 4;
+  // -------必填参数---结束-------
+  // 支付宝定义的统一商品编号
+  string alipay_goods_id = 5;
+  // 商品类目
+  string goods_category = 6;
+  // 商品类目树，从商品类目根节点到叶子节点的类目id组成，类目id值使用|分割
+  string categories_tree = 7;
+  // 商品描述信息
+  string body = 8;
+  // 商品的展示地址
+  string show_url = 9;
+}
+
+// 业务扩展参数
+message ExtendParams{
+  // 系统商编号
+  // 该参数作为系统商返佣数据提取的依据，请填写系统商签约协议的PID
+  string sys_service_provider_id = 1;
+  // 使用花呗分期要进行的分期数
+  string hb_fq_num = 2;
+  // 使用花呗分期需要卖家承担的手续费比例的百分值，传入100代表100%
+  string hb_fq_seller_percent = 3;
+  // 行业数据回流信息, 详见：地铁支付接口参数补充说明
+  string industry_reflux_info = 4;
+  // 卡类型
+  string card_type = 5;
+  // 特殊场景下，允许商户指定交易展示的卖家名称
+  string specified_seller_name = 6;
+}
+
+// 外部指定买家
+message ExtUserInfo{
+  // 指定买家姓名。
+  // 注： need_check_info=T或fix_buyer=T时该参数才有效
+  string name = 1;
+  // 指定买家手机号。
+  // 注：该参数暂不校验
+  string mobile = 2;
+  // 指定买家证件类型。
+  //枚举值：
+  //IDENTITY_CARD：身份证；
+  //PASSPORT：护照；
+  //OFFICER_CARD：军官证；
+  //SOLDIER_CARD：士兵证；
+  //HOKOU：户口本。如有其它类型需要支持，请与蚂蚁金服工作人员联系。
+  //注： need_check_info=T或fix_buyer=T时该参数才有效，支付宝会比较买家在支付宝留存的证件类型与该参数传入的值是否匹配。
+  string cert_type = 3;
+  // 买家证件号。
+  // 注：need_check_info=T或fix_buyer=T时该参数才有效，支付宝会比较买家在支付宝留存的证件号码与该参数传入的值是否匹配。
+  string cert_no = 4;
+  // 允许的最小买家年龄。
+  //买家年龄必须大于等于所传数值
+  //注：
+  //1. need_check_info=T时该参数才有效
+  //2. min_age为整数，必须大于等于0
+  string min_age = 5;
+  // 是否强制校验买家身份。
+  //需要强制校验传：T;
+  //不需要强制校验传：F或者不传；
+  //当传T时，接口上必须指定cert_type、cert_no和name信息且支付宝会校验传入的信息跟支付买家的信息都匹配，否则报错。
+  //默认为不校验。
+  string fix_buyer = 6;
+  //是否强制校验买家信息；
+  //需要强制校验传：T;
+  //不需要强制校验传：F或者不传；
+  //当传T时，支付宝会校验支付买家的信息与接口上传递的cert_type、cert_no、name或age是否匹配，只有接口传递了信息才会进行对应项的校验；只要有任何一项信息校验不匹配交易都会失败。如果传递了need_check_info，但是没有传任何校验项，则不进行任何校验。
+  //默认为不校验。
+  string need_check_info = 7;
+  //买家加密身份信息。当指定了此参数且指定need_check_info=T时，支付宝会对买家身份进行校验，校验逻辑为买家姓名、买家证件号拼接后的字符串，以sha256算法utf-8编码计算hash，若与传入的值不匹配则会拦截本次支付。注意：如果同时指定了用户明文身份信息（name，cert_type，cert_no中任意一个），则忽略identity_hash以明文参数校验。
+  string identity_hash = 8;
+}
+

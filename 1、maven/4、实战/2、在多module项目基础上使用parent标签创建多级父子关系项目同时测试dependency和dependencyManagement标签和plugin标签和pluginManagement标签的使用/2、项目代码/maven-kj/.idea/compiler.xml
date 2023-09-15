@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="demo3" />
+        <module name="sys" />
+        <module name="auth" />
+        <module name="demo1" />
+        <module name="gateway" />
+        <module name="demo2" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="app" target="1.8" />
+      <module name="auth" target="1.8" />
+      <module name="base" target="1.8" />
+      <module name="demo1" target="1.8" />
+      <module name="demo2" target="1.8" />
+      <module name="demo3" target="1.8" />
+      <module name="gateway" target="1.8" />
+      <module name="maven-kj" target="1.5" />
+      <module name="sys" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="app" options="" />
+      <module name="auth" options="-parameters" />
+      <module name="base" options="" />
+      <module name="demo1" options="-parameters" />
+      <module name="demo2" options="-parameters" />
+      <module name="demo3" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="sys" options="-parameters" />
+    </option>
+  </component>
+</project>

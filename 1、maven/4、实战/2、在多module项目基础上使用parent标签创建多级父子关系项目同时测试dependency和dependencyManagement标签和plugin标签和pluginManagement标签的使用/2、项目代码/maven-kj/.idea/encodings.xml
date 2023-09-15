@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-parent/2.6.6/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/sys/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/base/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/base/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo1/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo2/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo3/src/main/java" charset="UTF-8" />
+  </component>
+</project>

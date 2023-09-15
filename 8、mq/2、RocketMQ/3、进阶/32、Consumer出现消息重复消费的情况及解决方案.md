@@ -1,0 +1,15 @@
+## Consumer出现消息重复消费的情况及解决方案
+
+
+
+#### 消息被重复消费的情况
+
+1. producer向broker发送消息的时候，消息到了broker之后，由于网络波动导致broker没有发送ACK消息给producer，producer没有收到ACK认为消息发送失败了，会把之前的那条消息原封不动的再发送一遍，那么其实同样的消息broker中记录了2份，自然就会被消费2次。
+2. 消息已经投递到了consumer并完成业务处理，当consumer给broker反馈应答时网络闪断，broker并没有收到消费成功响应，所以无法记录当前queue中的消息被消费到哪个offset，为了保证消息至少被一次消费原则，broker将在网络恢复后会从当前记录的offset（实际当前offset的消息已经被消费了）拿到消息继续投递。
+3. rebalance时消息重复，当Consumer group中的consumer数量变化时，或其订阅的Topic的Queue数量变化时，会触发rebalance，因为rebalance会丢失记录一部分queue消费的offset，从而导致consumer可能会受到曾经被消费的消息。
+
+
+
+#### 在发送消息的时候就给消息一个在被consumer消费的时候，可以区分的唯一标识
+
+通过把业务中的唯一标识（比如：订单ID号）设置到消息的key值中

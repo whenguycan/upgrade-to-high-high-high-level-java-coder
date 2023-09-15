@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.BDurationAmountMapper">
+    
+    <resultMap type="BDurationAmount" id="BDurationAmountResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="duration"    column="duration"    />
+        <result property="amount"    column="amount"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBDurationAmountVo">
+        select id, park_no, duration, amount, create_by, create_time, update_by, update_time from b_duration_amount
+    </sql>
+
+    <select id="selectBDurationAmountList" parameterType="BDurationAmount" resultMap="BDurationAmountResult">
+        <include refid="selectBDurationAmountVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="duration != null "> and duration = #{duration}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+        </where>
+    </select>
+    
+    <select id="selectBDurationAmountById" parameterType="Long" resultMap="BDurationAmountResult">
+        <include refid="selectBDurationAmountVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBDurationAmount" parameterType="BDurationAmount" useGeneratedKeys="true" keyProperty="id">
+        insert into b_duration_amount
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="duration != null">duration,</if>
+            <if test="amount != null">amount,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBDurationAmount" parameterType="BDurationAmount">
+        update b_duration_amount
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBDurationAmountById" parameterType="Long">
+        delete from b_duration_amount where id = #{id}
+    </delete>
+
+    <delete id="deleteBDurationAmountByIds" parameterType="String">
+        delete from b_duration_amount where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.TParkSettingIssueRecordsMapper">
+    
+    <resultMap type="TParkSettingIssueRecords" id="TParkSettingIssueRecordsResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="issueStatus"    column="issue_status"    />
+        <result property="issueTime"    column="issue_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptName"    column="dept_name"    />
+    </resultMap>
+
+    <sql id="selectTParkSettingIssueRecordsVo">
+        select issue.id, issue.park_no, issue.issue_status, issue.issue_time, issue.remark, issue.create_by,
+        issue.create_time, issue.update_by, issue.update_time,dept.dept_name from t_park_setting_issue_records issue
+    </sql>
+
+    <select id="selectTParkSettingIssueRecordsList" parameterType="TParkSettingIssueRecords" resultMap="TParkSettingIssueRecordsResult">
+        <include refid="selectTParkSettingIssueRecordsVo"/>
+        left join sys_dept dept on issue.park_no = dept.park_no
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and issue.park_no = #{parkNo}</if>
+            <if test="issueStatus != null  and issueStatus != ''"> and issue.issue_status = #{issueStatus}</if>
+            <if test="issueTime != null "> and issue.issue_time = #{issueTime}</if>
+            <if test="deptName != null and deptName != ''"> and dept.dept_name = #{deptName}</if>
+        </where>
+    </select>
+    
+    <select id="selectTParkSettingIssueRecordsById" parameterType="Long" resultMap="TParkSettingIssueRecordsResult">
+        <include refid="selectTParkSettingIssueRecordsVo"/>
+        left join sys_dept dept on issue.park_no = dept.park_no
+        where issue.id = #{id}
+    </select>
+        
+    <insert id="insertTParkSettingIssueRecords" parameterType="TParkSettingIssueRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into t_park_setting_issue_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="issueStatus != null">issue_status,</if>
+            <if test="issueTime != null">issue_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="issueStatus != null">#{issueStatus},</if>
+            <if test="issueTime != null">#{issueTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTParkSettingIssueRecords" parameterType="TParkSettingIssueRecords">
+        update t_park_setting_issue_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="issueStatus != null">issue_status = #{issueStatus},</if>
+            <if test="issueTime != null">issue_time = #{issueTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTParkSettingIssueRecordsById" parameterType="Long">
+        delete from t_park_setting_issue_records where id = #{id}
+    </delete>
+
+    <delete id="deleteTParkSettingIssueRecordsByIds" parameterType="String">
+        delete from t_park_setting_issue_records where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

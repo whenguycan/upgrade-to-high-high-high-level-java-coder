@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.lot;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.lot";// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "DeviceLotParking";
+
+service DeviceLotParkingService {
+  // 创建停车订单
+  rpc capture(CaptureDeviceInfoRequest) returns (CaptureDeviceInfoResponse) {};
+
+  rpc updateCarRecord(CaptureDeviceInfoRequest) returns (CaptureDeviceInfoResponse) {};
+
+}
+//message SiteInfoRequest{
+//
+//  string carNum = 1;
+//  string parkNo = 2;
+//  string deviceIp = 3;
+//  string openFlag = 4;
+//  string entryOrExitId = 5;
+//}
+
+/**
+创建设备请求
+ */
+message CaptureDeviceInfoRequest {
+  string carNum = 1;
+  //车场编号
+  string parkNo = 2;
+  //设备本地ip
+  string deviceLocalIp = 3;
+  //抓拍图片链接
+  string carImgUrl = 4;
+  //车身颜色（Red）
+  string carColor = 5;
+  //车牌图片url
+  string carNumPic = 6;
+  //车牌颜色，见颜色枚举（Blue）
+  string carNumColor = 7;
+  //车辆种类  桥车，卡车（SaloonCar）
+  string parkingCarType = 8;
+  //车辆种类  桥车，卡车（小型车）-暂不用
+  string parkingCarSize = 9;
+  //车辆类型，见颜色枚举（Normal）-暂不用
+  int32 carNumType = 10;
+  string capTime = 11;
+}
+
+/**
+ 响应体
+ */
+message CaptureDeviceInfoResponse {
+  // 状态码
+  string status = 1;
+  // 成功/错误消息
+  string mess = 2;
+}
+

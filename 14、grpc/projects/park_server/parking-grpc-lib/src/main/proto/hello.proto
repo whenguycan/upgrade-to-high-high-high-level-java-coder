@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.demo;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.demo";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "HelloProto";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+service HelloService {
+  // RPC方法定义
+  rpc SayHello(HelloRequest) returns (HelloReply) {}
+}
+
+//在消息定义中，每个字段都有唯一的一个标识符。
+//这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。
+
+
+// 请求参数定义
+message HelloRequest {
+  string name = 1;
+}
+
+// 响应结果定义
+message HelloReply {
+  string message = 1;
+}

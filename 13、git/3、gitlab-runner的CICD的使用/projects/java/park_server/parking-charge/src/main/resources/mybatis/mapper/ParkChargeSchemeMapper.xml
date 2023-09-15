@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingcharge.mapper.ParkChargeSchemeMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingcharge.domain.ParkChargeScheme">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="roundWay" column="round_way" jdbcType="VARCHAR"/>
+            <result property="maximumCharge" column="maximum_charge" jdbcType="DECIMAL"/>
+            <result property="minimumChargeAccurary" column="minimum_charge_accurary" jdbcType="DECIMAL"/>
+            <result property="tcFreeTimeFlag" column="tc_free_time_flag" jdbcType="VARCHAR"/>
+            <result property="tcUseWay" column="tc_use_way" jdbcType="VARCHAR"/>
+            <result property="secondCarry" column="second_carry" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,round_way,
+        maximum_charge,minimum_charge_accurary,tc_free_time_flag,
+        tc_use_way,second_carry,create_by,
+        create_time,update_by,update_time
+    </sql>
+</mapper>

@@ -1,0 +1,6 @@
+com/example/agent/MethodInfoAdapter.class
+com/example/agent/LoadTimeAgent.class
+com/example/agent/DynamicAgent.class
+com/example/agent/InfoTransformer.class
+com/example/agent/MethodInfoVisitor.class
+com/example/Application.class

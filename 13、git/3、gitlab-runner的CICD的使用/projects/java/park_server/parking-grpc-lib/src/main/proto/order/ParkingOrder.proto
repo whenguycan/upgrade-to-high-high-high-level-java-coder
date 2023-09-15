@@ -1,0 +1,703 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.order;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = false;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.order";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "ParkingOrder";
+
+service ParkingOrderService {
+  rpc createParkingOrder(CreateOrderRequest) returns (CreateOrderReponse) {};
+  rpc getParkingOrderDetail(OrderDetailRequest) returns (CreateOrderReponse) {};
+  rpc confirmPay(ConfirmPayRequest) returns (ConfirmPayResponse) {};
+  rpc changeOrderStatus(ChangeOrderRequest) returns (CreateOrderReponse) {};
+  rpc searchOrder(searchOrderRequest) returns (searchOrderResponse) {};
+  rpc statisticIncome(StatisticIncomeRequest) returns (StatisticIncomeResponse) {};
+  rpc analysePayTypeDayFact(AnalysePayTypeDayFactRequest) returns (AnalysePayTypeDayFactResponse) {};
+  rpc analysePayMethodDayFact(AnalysePayMethodDayFactRequest) returns (AnalysePayMethodDayFactResponse) {};
+  rpc analyseOrderSituationDayFact(AnalyseOrderSituationDayFactRequest) returns (AnalyseOrderSituationDayFactResponse) {};
+  // 查询当日总实付金额
+  rpc analyseAmountAnalysisDayFact(AnalyseAmountAnalysisDayFactRequest) returns (AnalyseAmountAnalysisDayFactResponse) {};
+  rpc analyseRevenueStatisticsDayFact(AnalyseRevenueStatisticsRequest) returns (AnalyseRevenueStatisticsResponse) {};
+
+  // 手动结算 请求
+  rpc createManualParkingOrder(ManualParkingOrderRequest) returns (ManualParkingOrderReponse) {}
+
+  // 根据多个车牌号查询停车订单
+  rpc searchParkingOrderByCarNums(SearchParkingOrderRequest) returns (searchOrderResponse) {}
+
+  //停车订单申请开票
+  rpc applyBill(ApplyBillRequest) returns (ApplyBillResponse) {}
+
+  //获取个人开票记录
+  rpc getBillRecord(BillRecordRequest) returns (BillRecordResponse) {}
+
+  //根据开票流水号获取开票详情
+  rpc getBillDetail(BillDetailRequest) returns (BillDetailResponse) {}
+
+  //退款
+  rpc refundOrder(RefundOrderRequestProto) returns (RefundOrderResponseProto) {}
+
+  //退款查询通知
+  rpc refundOrderNotify(RefundOrderNotifyRequestProto) returns (RefundOrderNotifyResponseProto) {}
+
+  //退款单查询
+  rpc searchRefundOrder(SearchRefundOrderRequestProto) returns (SearchRefundOrderResponseProto) {}
+
+  //手动取消订单
+  rpc cancleOrder(cancleOrderRequest) returns (cancleOrderResponse) {}
+
+  //手动切换优惠券
+  rpc changeOrderCoupon (changeOrderCouponRequest) returns (changeOrderCouponResponse) {}
+
+  //异常订单统计指标
+  rpc abnormalStatistics(AbnormalStatisticsRequestProto) returns (AbnormalStatisticsResponseProto) {}
+
+  //查询一次停车的多个订单数据
+  rpc getOneParkMultiOrder(parkMultiOrderRequest) returns (parkMultiOrderResponse) {}
+}
+
+message parkMultiOrderRequest {
+  string carNum = 1;
+
+  string entryTime = 2;
+
+  string parkNo = 3;
+}
+
+message parkMultiOrderResponse{
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+
+  repeated OrderDetail orderDetail = 3;
+}
+
+message changeOrderCouponRequest{
+  string orderNo = 1;
+
+  repeated CouponInfo couponList = 8;
+
+  int32 todayParkCount = 9;
+}
+
+message changeOrderCouponResponse {
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+  // 返回订单详情
+  OrderDetail orderDetail = 3;
+
+  repeated CouponInfo couponlist = 4;
+}
+
+message AbnormalStatisticsRequestProto{
+  string parkNo = 1;
+  string startTime = 2;
+  string endTime = 3;
+}
+
+message AbnormalStatisticsResponseProto{
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+
+  //停车订单未支付数
+  int32 unpaidNum = 3;
+  //停车订单支付成功数
+  int32 payNum = 4;
+  //停车订单支付总金额
+  double payAmount = 5;
+  //停车订单优惠总金额
+  double discountAmount = 6;
+}
+
+message SearchRefundOrderRequestProto{
+  string orderNo = 1;
+  string parkNo = 2;
+  int32 pageNum = 3;
+  int32 pageSize = 4;
+  string carNumber = 5;
+}
+
+message SearchRefundOrderResponseProto{
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+
+
+  repeated RefundOrderDetail orderDetail = 3;
+
+  int64 pageTotal = 4;
+
+  int64 pageCurrent = 5;
+}
+
+message RefundOrderDetail{
+  // 订单号
+  string orderNo = 1;
+  // 车场编号
+  string parkNo = 2;
+  // 岗亭编号
+  string passageNo = 3;
+  // 车牌号
+  string carNumber = 4;
+  // 车型编码
+  string carTypeCode = 5;
+  // 入场时间
+  string entryTime = 6;
+  // 应付金额（元）
+  double payableAmount = 7;
+  // 优惠金额（元）
+  double discountAmount = 8;
+  // 已付金额（元）
+  double paidAmount = 9;
+  // 实付金额（元）
+  double payAmount = 10;
+  //  支付方式
+  string payMethod = 11;
+  // 支付时间
+  string payTime = 12;
+  // 支付状态
+  string payStatus = 13;
+  // 支付流水号
+  string payNumber = 14;
+  // 过期时间
+  string expireTime = 15;
+  // 备注
+  string remark = 16;
+  //创建人
+  string createBy = 24;
+  // 创建时间
+  string createTime = 17;
+  // 更新时间
+  string updateTime = 18;
+
+  repeated OrderItem itemList = 19;
+  //退款状态
+  string refundStatus = 20;
+  //退款原因
+  string reason = 21;
+  //退款时间
+  string refundTime = 22;
+  //退款金额
+  double refundAmount = 23;
+
+}
+
+message RefundOrderNotifyRequestProto{
+  //订单号
+  string orderNo = 1;
+  //退款单号
+  string refundNo = 2;
+}
+
+message RefundOrderNotifyResponseProto{
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+
+}
+
+message cancleOrderResponse {
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+}
+
+message RefundOrderRequestProto{
+  //订单号
+  string orderNo = 1;
+  //退款理由
+  string reason = 2;
+  //操作人
+  string createBy = 3;
+}
+
+message RefundOrderResponseProto{
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+}
+
+message cancleOrderRequest {
+  string orderNo = 1;
+}
+
+message BillDetailRequest {
+
+  string billOutTradeNo = 1;
+
+}
+
+message BillDetailResponse {
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+
+  //开票人姓名
+  string billUsername = 3;
+
+  //开票人税号
+  string billTaxNum = 4;
+
+  //开票人手机号
+  string billPhone = 5;
+
+  //开票人邮箱
+  string billEmail = 6;
+
+  //需要开票的订单号
+  string orderNo = 7;
+
+  int32 userId = 8;
+
+  string billCreateTime = 9;
+
+  string billNo = 10;
+
+  string reasonCode = 11;
+
+  string billPdfUrl = 12;
+
+  string billStatus = 13;
+
+  string type = 14;
+
+  double billAmount = 15;
+
+  string billAddress = 16;
+
+  // 开户行地址
+  string billDepositBank = 17;
+
+  // 银行账号
+  string billDepositAccount = 18;
+
+}
+
+message BillRecordRequest {
+  int32 userId = 1;
+  int32 pageNum = 2;
+  int32 pageSize = 3;
+}
+
+message BillRecordResponse {
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+
+
+  repeated BillDetail billDetail = 3;
+
+  int64 pageTotal = 4;
+
+  int64 pageCurrent = 5;
+}
+
+message BillDetail {
+  string billOutTradeNo = 1;
+
+  string billOrderNos = 2;
+
+  string billcreateTime = 3;
+
+  //开票金额
+  double billAmount = 4;
+
+  //开票状态
+  string billStatus = 5;
+
+  //类型 1-停车 2-月租
+  string type = 6;
+
+  string billPdfUrl = 7;
+}
+
+message ApplyBillRequest {
+
+  //开票人姓名
+  string billUsername = 1;
+
+  //开票人税号
+  string billTaxNum = 2;
+
+  // 开票人地址
+  string billAddress = 3;
+
+  //开票人手机号
+  string billPhone = 4;
+
+  //开票人邮箱
+  string billEmail = 5;
+
+  // 开户行地址
+  string billDepositBank = 6;
+
+  // 银行账号
+  string billDepositAccount = 7;
+
+  //需要开票的订单号
+  repeated string orderNo = 8;
+
+  //开票人ID号
+  int32 userId = 9;
+
+  //类型 1-停车 2-月租
+  string type = 10;
+}
+
+message ApplyBillResponse {
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+  string outTradeNo = 3;
+}
+
+message SearchParkingOrderRequest {
+
+  repeated string carNums = 1;
+  int32 pageNum = 2;
+  int32 pageSize = 3;
+  //是否查询可开票
+  bool billable = 4;
+
+}
+
+
+message searchOrderRequest {
+  string  orderNo = 1;
+  int32 paymetnod = 2;
+  int32 pageNum = 3;
+  int32 pageSize = 4;
+  string carNumber = 5;
+  string startDate = 6;
+  string endDate = 7;
+  string orderStatus = 8;
+  string parkNo = 9;
+  string orderType = 10;
+}
+
+message searchOrderResponse {
+  // 返回状态码
+  string status = 1;
+  string mess = 2;
+
+
+  repeated OrderDetail orderDetail = 3;
+
+  int64 pageTotal = 4;
+
+  int64 pageCurrent = 5;
+}
+
+message ChangeOrderRequest {
+  string orderNo = 1;
+}
+
+message ConfirmPayRequest {
+  string orderNo = 1;
+  //支付类型 1为支付宝 2为微信
+  int32 payType = 2;
+
+  //微信支付的支付方式 1为JSAPI支付 2为H5支付
+  int32 weChatPayMethod = 3;
+
+  //如果是微信的jsapi支付，这个参数必传
+  string openid = 4;
+
+  //下面如果是微信h5支付的情况下，才要传参
+  // 用户的客户端IP，支持IPv4和IPv6两种格式的IP地址。
+  string payer_client_ip = 5;
+  // 场景类型
+  // 示例值：iOS, Android, Wap
+  string h5_type = 6;
+  // -------必填参数---结束-------
+
+  repeated CouponInfo couponList = 7;
+
+  string discountReason = 8;
+}
+
+message ConfirmPayResponse {
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+  // 返回订单详情
+  string payUrl = 3;
+
+  string appId = 4;
+  // 时间戳，标准北京时间，时区为东八区，自1970年1月1日 0点0分0秒以来的秒数。
+  string timestamp = 5;
+  // 随机字符串，不长于32位。
+  string nonceStr = 6;
+  // JSAPI下单接口返回的prepay_id参数值，提交格式如：prepay_id=***
+  string packageVal = 7;
+  // 签名类型，默认为RSA，仅支持RSA。
+  string signType = 8;
+  // 签名，使用字段appId、timeStamp、nonceStr、package计算得出的签名值
+  string paySign = 9;
+}
+
+message OrderDetailRequest {
+  string orderNo = 1;
+}
+
+message CreateOrderRequest {
+  // 车场编号
+  string parkNo = 1;
+  // 岗亭编号
+  string passageNo = 2;
+  // 车牌号
+  string carNumber = 3;
+  // 车型编码
+  string carTypeCode = 4;
+  // 入场时间
+  string entryTime = 5;
+  //出场时间
+  string exitTime = 6;
+
+  repeated OrderItem itemList = 7;
+
+  repeated CouponInfo couponList = 8;
+
+  string orderNo = 9;
+
+  string discountReason = 10;
+
+  int32 todayParkCount = 11;
+
+}
+
+message CouponInfo {
+  int32 couponType = 1;
+
+  int32 couponMold = 2;
+
+  int32 couponValue = 3;
+
+  string couponCode = 4;
+
+  bool choosed = 5;
+
+  bool canUse = 6;
+}
+
+message OrderItem {
+  //场地ID
+  int32 parkFieldId = 1;
+  // 入场时间
+  string entryTime = 2;
+  //  //出场时间
+  string exitTime = 3;
+
+  double payedAmount = 4;
+}
+
+message CreateOrderReponse {
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+  // 返回订单详情
+  OrderDetail orderDetail = 3;
+
+  repeated CouponInfo couponlist = 4;
+
+  string reasonCode = 5;
+}
+
+message OrderDetail {
+  // 订单号
+  string orderNo = 1;
+  // 车场编号
+  string parkNo = 2;
+  // 岗亭编号
+  string passageNo = 3;
+  // 车牌号
+  string carNumber = 4;
+  // 车型编码
+  string carTypeCode = 5;
+  // 入场时间
+  string entryTime = 6;
+  // 应付金额（元）
+  double payableAmount = 7;
+  // 优惠金额（元）
+  double discountAmount = 8;
+  // 已付金额（元）
+  double paidAmount = 9;
+  // 实付金额（元）
+  double payAmount = 10;
+  //  支付方式
+  string payMethod = 11;
+  // 支付时间
+  string payTime = 12;
+  // 支付状态
+  string payStatus = 13;
+  // 支付流水号
+  string payNumber = 14;
+  // 过期时间
+  string expireTime = 15;
+  // 备注
+  string remark = 16;
+  // 创建时间
+  string createTime = 17;
+  // 更新时间
+  string updateTime = 18;
+
+  repeated OrderItem itemList = 19;
+
+  string coupons = 20;
+
+  string billOutTradeNo = 21;
+}
+
+message StatisticIncomeRequest {
+  // 车场编号
+  repeated string parkNos = 1;
+}
+
+message StatisticIncomeResponse {
+  // 今日收入
+  double todayIncome = 1;
+  // 总收入
+  double totalIncome = 2;
+}
+
+message AnalysePayTypeDayFactRequest {
+  // 日期
+  string day = 1;
+  // 车场编号
+  repeated string parkNos = 2;
+}
+
+message AnalysePayTypeDayFactResponse {
+  // 付费类型事实
+  repeated AnalysePayTypeDayFactProto rows = 1;
+}
+
+message AnalysePayTypeDayFactProto {
+  /** 付费类型【字典表】 */
+  string payType = 1;
+  /** 金额（元） */
+  double amount = 2;
+  /** 占比 */
+  double ratio = 3;
+}
+
+message AnalysePayMethodDayFactRequest {
+  // 日期
+  string day = 1;
+  // 车场编号
+  repeated string parkNos = 2;
+}
+
+message AnalysePayMethodDayFactResponse {
+  // 付费方式事实
+  repeated AnalysePayMethodDayFactProto rows = 1;
+}
+
+message AnalysePayMethodDayFactProto {
+  /** 付费方式【字典表】 */
+  string payMethod = 1;
+  /** 金额（元） */
+  double amount = 2;
+  /** 占比 */
+  double ratio = 3;
+}
+
+message AnalyseOrderSituationDayFactRequest {
+  // 日期
+  string day = 1;
+  // 车场编号
+  repeated string parkNos = 2;
+}
+
+message AnalyseOrderSituationDayFactResponse {
+  // 订单情况事实对象
+  repeated AnalyseOrderSituationDayFactProto rows = 1;
+}
+
+message AnalyseOrderSituationDayFactProto {
+  /** 统计日期 */
+  string day = 1;
+  /** 订单数 */
+  int64 count = 2;
+}
+
+message AnalyseAmountAnalysisDayFactRequest {
+  //车场编号
+  repeated string parkNos = 1;
+  //日期
+  string day = 2;
+}
+
+message AnalyseAmountAnalysisDayFactResponse {
+  //线上收入
+  double onlineIncome = 1;
+  //减免金额
+  double deductionAmount = 2;
+}
+
+message AnalyseRevenueStatisticsRequest {
+  // 日期
+  string day = 1;
+  // 车场编号
+  repeated string parkNos = 2;
+}
+
+message AnalyseRevenueStatisticsResponse {
+  /** 线上应收金额（元） */
+  double onlinePayableAmount = 1;
+  /** 线上实收金额（元） */
+  double onlinePayAmount = 2;
+  /** 现金应收金额（元） */
+  double cashPayableAmount = 3;
+  /** 现金实收金额（元） */
+  double cashPayAmount = 4;
+  /** 免费应收金额（元） */
+  double freePayableAmount = 5;
+  /** 免费实收金额（元） */
+  double freePayAmount = 6;
+  /** 车场优惠（笔） */
+  int32 concession = 7;
+  /** 交易（笔） */
+  int32 transactionNumber = 8;
+  //减免金额
+  double deductionAmount = 9;
+}
+
+message ManualParkingOrderRequest {
+  // 车场编号
+  string parkNo = 1;
+  // 车牌号
+  string carNumber = 2;
+  // 车型编码
+  string carTypeCode = 3;
+  // 入场时间
+  string entryTime = 4;
+  //出场时间
+  string exitTime = 5;
+  // 手动结算金额
+  double manualAmount = 6;
+  // 手动结算原因
+  string manualReason = 7;
+}
+
+message ManualParkingOrderReponse {
+  // 返回状态码
+  string status = 1;
+  // 返回消息
+  string mess = 2;
+  // 返回订单详情
+  string orderNo = 3;
+}

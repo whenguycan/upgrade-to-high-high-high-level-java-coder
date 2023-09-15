@@ -1,0 +1,37 @@
+package rules.parking
+import com.czdx.parkingcharge.domain.pr.ParkingRecord
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+rule "park_charge_P20230222150046_41_0_555"
+    activation-group "charge-rule"
+    salience 555
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 1)
+    then
+        System.out.println("触发规则：park_charge_P20230222150046_41_0_555");
+            BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFee($pRecord, 1, "N", null);
+    $pRecord.setParkingFee(fee);
+end
+
+rule "park_charge_P20230222150046_41_148_0"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord(    $duration: parkingDuration <= 0, useFreeTime)
+    then
+        System.out.println("触发规则：park_charge_P20230222150046_41_148_0");
+            $pRecord.setParkingFee(BigDecimal.ZERO);
+end
+
+rule "park_charge_P20230222150046_41_148_1"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0)
+    then
+        System.out.println("触发规则：park_charge_P20230222150046_41_148_1");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration, 60, BigDecimal.valueOf(1), "1", BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+

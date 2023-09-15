@@ -1,0 +1,35 @@
+.addBtn {
+  background: #49c8ea;
+  border-radius: 6px;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0);
+  padding: 7px 6px;
+  margin: 0 0 8px 8px;
+  &:hover {
+    background: #90daed;
+  }
+}
+
+.searchBtn {
+  background: #1b88be;
+  border-radius: 6px;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0);
+  padding: 7px 6px;
+  margin: 0 0 8px 8px;
+  &:hover {
+    background: #649bb6;
+  }
+}
+
+.exportBtn {
+  background: #57aac2;
+  border-radius: 6px;
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0);
+  margin: 0 0 8px 8px;
+  padding: 7px 6px;
+  &:hover {
+    background: rgb(84, 129, 152);
+  }
+}

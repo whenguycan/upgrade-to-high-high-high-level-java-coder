@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingcharge.mapper.RegularCarMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingcharge.domain.RegularCar">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="carNumber" column="car_number" jdbcType="VARCHAR"/>
+            <result property="carColor" column="car_color" jdbcType="VARCHAR"/>
+            <result property="carRemark" column="car_remark" jdbcType="VARCHAR"/>
+            <result property="carType" column="car_type" jdbcType="VARCHAR"/>
+            <result property="carCategoryId" column="car_category_id" jdbcType="INTEGER"/>
+            <result property="ownerCardId" column="owner_card_id" jdbcType="VARCHAR"/>
+            <result property="ownerName" column="owner_name" jdbcType="VARCHAR"/>
+            <result property="ownerAddress" column="owner_address" jdbcType="VARCHAR"/>
+            <result property="ownerPhone" column="owner_phone" jdbcType="VARCHAR"/>
+            <result property="flowPlaceNumber" column="flow_place_number" jdbcType="INTEGER"/>
+            <result property="startTime" column="start_time" jdbcType="DATE"/>
+            <result property="endTime" column="end_time" jdbcType="DATE"/>
+            <result property="timeLimit" column="time_limit" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,car_number,
+        car_color,car_remark,car_type,
+        car_category_id,owner_card_id,owner_name,
+        owner_address,owner_phone,flow_place_number,
+        start_time,end_time,time_limit,
+        status,del_flag,remark,
+        create_by,create_time,update_by,
+        update_time
+    </sql>
+
+    <!-- 获取固定车信息 -->
+    <select id="getRegularCarInfo" resultType="com.czdx.parkingcharge.domain.custom.RegularCarCustom">
+        SELECT
+            a.id,
+            a.car_category_id,
+            b.group_id
+        FROM
+            t_regular_car a
+        LEFT JOIN b_setting_regular_car_category b ON b.id = a.car_category_id
+        WHERE
+            a.car_number = #{carNumber}
+            <if test="parkNos != null and parkNos.size > 0" >
+                AND a.park_no IN
+                <foreach collection="parkNos" item="parkNo" open="(" separator="," close=")">
+                    #{parkNo}
+                </foreach>
+            </if>
+            AND a.start_time &lt;= DATE_FORMAT(now(), '%Y-%m-%d') and a.end_time >= DATE_FORMAT(now(), '%Y-%m-%d')
+            and a.`status` = 0
+            and a.del_flag = 0
+            ORDER BY a.park_no desc
+    </select>
+</mapper>

@@ -1,0 +1,7 @@
+org.springframework.boot.SpringApplicationRunListener=com.example.demolog.listener.MyListener
+
+org.springframework.boot.BootstrapRegistryInitializer=com.example.demolog.listener.MyBootstrapRegitryInitializer
+
+org.springframework.context.ApplicationContextInitializer=com.example.demolog.listener.MyApplicationContextInitializer
+
+org.springframework.context.ApplicationListener =com.example.demolog.listener.MyApplicationListener

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.project.parking.mapper.BSettingLotMapper">
+
+    <resultMap type="BSettingLot" id="BSettingLotResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="isPermitEntry"    column="is_permit_entry"    />
+        <result property="isUseLot"    column="is_use_lot"    />
+        <result property="bandCarTypes"    column="band_car_types"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBSettingLotVo">
+        select id, park_no, is_permit_entry, is_use_lot, band_car_types, create_by, create_time, update_by, update_time from b_setting_lot
+    </sql>
+
+    <select id="selectBSettingLotList" parameterType="BSettingLot" resultMap="BSettingLotResult">
+        <include refid="selectBSettingLotVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="isPermitEntry != null  and isPermitEntry != ''"> and is_permit_entry = #{isPermitEntry}</if>
+            <if test="isUseLot != null  and isUseLot != ''"> and is_use_lot = #{isUseLot}</if>
+            <if test="bandCarTypes != null  and bandCarTypes != ''"> and band_car_types = #{bandCarTypes}</if>
+        </where>
+    </select>
+
+    <select id="selectBSettingLotById" parameterType="Long" resultMap="BSettingLotResult">
+        <include refid="selectBSettingLotVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBSettingLot" parameterType="BSettingLot" useGeneratedKeys="true" keyProperty="id">
+        insert into b_setting_lot
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="isPermitEntry != null">is_permit_entry,</if>
+            <if test="isUseLot != null">is_use_lot,</if>
+            <if test="bandCarTypes != null">band_car_types,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="isPermitEntry != null">#{isPermitEntry},</if>
+            <if test="isUseLot != null">#{isUseLot},</if>
+            <if test="bandCarTypes != null">#{bandCarTypes},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBSettingLot" parameterType="BSettingLot">
+        update b_setting_lot
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="isPermitEntry != null">is_permit_entry = #{isPermitEntry},</if>
+            <if test="isUseLot != null">is_use_lot = #{isUseLot},</if>
+            <if test="bandCarTypes != null">band_car_types = #{bandCarTypes},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBSettingLotById" parameterType="Long">
+        delete from b_setting_lot where id = #{id}
+    </delete>
+
+    <delete id="deleteBSettingLotByIds" parameterType="String">
+        delete from b_setting_lot where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

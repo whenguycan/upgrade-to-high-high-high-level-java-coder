@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingpayment.mapper.AlipayNotificationMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingpayment.domain.AlipayNotification">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="outTradeNo" column="out_trade_no" jdbcType="VARCHAR"/>
+            <result property="tradeNo" column="trade_no" jdbcType="VARCHAR"/>
+            <result property="outBizNo" column="out_biz_no" jdbcType="VARCHAR"/>
+            <result property="notifyTime" column="notify_time" jdbcType="TIMESTAMP"/>
+            <result property="notifyType" column="notify_type" jdbcType="VARCHAR"/>
+            <result property="notifyId" column="notify_id" jdbcType="VARCHAR"/>
+            <result property="appId" column="app_id" jdbcType="VARCHAR"/>
+            <result property="charset" column="charset" jdbcType="VARCHAR"/>
+            <result property="version" column="version" jdbcType="VARCHAR"/>
+            <result property="signType" column="sign_type" jdbcType="VARCHAR"/>
+            <result property="sign" column="sign" jdbcType="VARCHAR"/>
+            <result property="buyerId" column="buyer_id" jdbcType="VARCHAR"/>
+            <result property="buyerLogonId" column="buyer_logon_id" jdbcType="VARCHAR"/>
+            <result property="sellerId" column="seller_id" jdbcType="VARCHAR"/>
+            <result property="sellerEmail" column="seller_email" jdbcType="VARCHAR"/>
+            <result property="tradeStatus" column="trade_status" jdbcType="VARCHAR"/>
+            <result property="totalAmount" column="total_amount" jdbcType="DECIMAL"/>
+            <result property="receiptAmount" column="receipt_amount" jdbcType="DECIMAL"/>
+            <result property="invoiceAmount" column="invoice_amount" jdbcType="DECIMAL"/>
+            <result property="buyerPayAmount" column="buyer_pay_amount" jdbcType="DECIMAL"/>
+            <result property="pointAmount" column="point_amount" jdbcType="DECIMAL"/>
+            <result property="refundFee" column="refund_fee" jdbcType="DECIMAL"/>
+            <result property="subject" column="subject" jdbcType="VARCHAR"/>
+            <result property="body" column="body" jdbcType="VARCHAR"/>
+            <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+            <result property="gmtPayment" column="gmt_payment" jdbcType="TIMESTAMP"/>
+            <result property="gmtRefund" column="gmt_refund" jdbcType="TIMESTAMP"/>
+            <result property="gmtClose" column="gmt_close" jdbcType="TIMESTAMP"/>
+            <result property="fundBillList" column="fund_bill_list" jdbcType="VARCHAR"/>
+            <result property="passbackParams" column="passback_params" jdbcType="VARCHAR"/>
+            <result property="voucherDetailList" column="voucher_detail_list" jdbcType="VARCHAR"/>
+            <result property="authAppId" column="auth_app_id" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,out_trade_no,trade_no,
+        out_biz_no,notify_time,notify_type,
+        notify_id,app_id,charset,
+        version,sign_type,sign,
+        buyer_id,buyer_logon_id,seller_id,
+        seller_email,trade_status,total_amount,
+        receipt_amount,invoice_amount,buyer_pay_amount,
+        point_amount,refund_fee,subject,
+        body,gmt_create,gmt_payment,
+        gmt_refund,gmt_close,fund_bill_list,
+        passback_params,voucher_detail_list,auth_app_id,
+        create_time,update_time
+    </sql>
+</mapper>

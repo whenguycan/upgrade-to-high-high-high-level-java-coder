@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.TCouponOperLogsMapper">
+    
+    <resultMap type="TCouponOperLogsVo" id="TCouponOperLogsResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="couponType"    column="coupon_type"    />
+        <result property="couponMold"    column="coupon_mold"    />
+        <result property="couponValue"    column="coupon_value"    />
+        <result property="couponCode"    column="coupon_code"    />
+        <result property="operType"    column="oper_type"    />
+        <result property="userId"    column="user_id"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="carNumber"    column="car_number"    />
+        <result property="operTime"    column="oper_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="allocatedTime"    column="allocated_time"    />
+        <result property="usedTime"    column="used_time"    />
+    </resultMap>
+
+    <sql id="selectTCouponOperLogsVo">
+        select id, park_no, coupon_type, coupon_mold, coupon_value, coupon_code, oper_type, user_id, order_no, car_number, oper_time, create_by, create_time, update_by, update_time, remark from t_coupon_oper_logs
+    </sql>
+
+    <select id="selectTCouponOperLogsList" parameterType="TCouponOperLogs" resultMap="TCouponOperLogsResult">
+        select log.id, log.park_no, log.coupon_type, log.coupon_mold, log.coupon_value, log.coupon_code, log.oper_type,
+        log.user_id, log.order_no, log.car_number, log.oper_time, log.create_by,
+        log.create_time, log.update_by, log.update_time,log.remark,detail.allocated_time,detail.used_time from t_coupon_oper_logs log
+        left join t_coupon_detail  detail on log.coupon_code=detail.coupon_code
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and log.park_no = #{parkNo}</if>
+            <if test="couponType != null  and couponType != ''"> and log.coupon_type = #{couponType}</if>
+            <if test="couponMold != null  and couponMold != ''"> and log.coupon_mold = #{couponMold}</if>
+            <if test="couponValue != null  and couponValue != ''"> and log.coupon_value = #{couponValue}</if>
+            <if test="couponCode != null  and couponCode != ''"> and log.coupon_code = #{couponCode}</if>
+            <if test="operType != null  and operType != ''"> and log.oper_type = #{operType}</if>
+            <if test="userId != null "> and log.user_id = #{userId}</if>
+            <if test="orderNo != null  and orderNo != ''"> and log.order_no = #{orderNo}</if>
+            <if test="carNumber != null  and carNumber != ''"> and log.car_number = #{carNumber}</if>
+            <if test="operTime != null "> and log.oper_time = #{operTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTCouponOperLogsById" parameterType="Long" resultMap="TCouponOperLogsResult">
+        <include refid="selectTCouponOperLogsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTCouponOperLogs" parameterType="TCouponOperLogs" useGeneratedKeys="true" keyProperty="id">
+        insert into t_coupon_oper_logs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null and parkNo != ''">park_no,</if>
+            <if test="couponType != null">coupon_type,</if>
+            <if test="couponMold != null">coupon_mold,</if>
+            <if test="couponValue != null">coupon_value,</if>
+            <if test="couponCode != null">coupon_code,</if>
+            <if test="operType != null">oper_type,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="orderNo != null">order_no,</if>
+            <if test="carNumber != null">car_number,</if>
+            <if test="operTime != null">oper_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null and parkNo != ''">#{parkNo},</if>
+            <if test="couponType != null">#{couponType},</if>
+            <if test="couponMold != null">#{couponMold},</if>
+            <if test="couponValue != null">#{couponValue},</if>
+            <if test="couponCode != null">#{couponCode},</if>
+            <if test="operType != null">#{operType},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="carNumber != null">#{carNumber},</if>
+            <if test="operTime != null">#{operTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTCouponOperLogs" parameterType="TCouponOperLogs">
+        update t_coupon_oper_logs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null and parkNo != ''">park_no = #{parkNo},</if>
+            <if test="couponType != null">coupon_type = #{couponType},</if>
+            <if test="couponMold != null">coupon_mold = #{couponMold},</if>
+            <if test="couponValue != null">coupon_value = #{couponValue},</if>
+            <if test="couponCode != null">coupon_code = #{couponCode},</if>
+            <if test="operType != null">oper_type = #{operType},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="carNumber != null">car_number = #{carNumber},</if>
+            <if test="operTime != null">oper_time = #{operTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTCouponOperLogsById" parameterType="Long">
+        delete from t_coupon_oper_logs where id = #{id}
+    </delete>
+
+    <delete id="deleteTCouponOperLogsByIds" parameterType="String">
+        delete from t_coupon_oper_logs where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

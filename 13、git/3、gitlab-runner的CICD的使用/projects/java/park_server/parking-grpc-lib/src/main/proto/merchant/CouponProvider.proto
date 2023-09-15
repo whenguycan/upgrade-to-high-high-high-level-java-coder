@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.merchant;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = false;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.merchant";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "CouponProvider";
+
+service CouponProviderService {
+  //获取优惠券列表
+  rpc acquireCouponList(CouponRequest) returns (CouponResponse) {};
+
+  //支付成功后，更新优惠券状态已经使用
+  rpc updateCouponStatus(UsedCarCouponRequest) returns (CouponStatusResponse) {};
+
+  //统计月发放优惠券总数
+  rpc analyseCouponDetailDayFact(AnalyseCouponDetailRequest) returns (AnalyseCouponDetailResponse) {};
+
+  //统计商家券数
+  rpc analyseMerchantVoucher(AnalyseMerchantVoucherRequest) returns (AnalyseMerchantVoucherResponse) {};
+}
+
+message AnalyseCouponDetailRequest {
+  // 时间
+  string day = 1;
+  // 车场编号
+  string parkNo = 2;
+}
+
+message AnalyseCouponDetailResponse {
+  int32 month = 1;
+  int32 year = 2;
+  int32 count = 3;
+}
+
+
+message CouponRequest {
+  // 车牌号
+  string carNumber = 1;
+  //场地编号
+  string parkNo = 2;
+}
+
+
+message UsedCarCouponRequest {
+
+  //场地编号
+  string couponDetailId = 1;
+  //使用时间
+  string usedTime = 2;
+}
+
+message CouponResponse {
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+  // 返回优惠券详情
+  repeated AssignedCouponVo itemList = 3;
+}
+message CouponStatusResponse{
+  // 返回状态码
+  string status = 1;
+
+  string mess = 2;
+
+  AssignedCouponVo usedCoupon = 3;
+
+}
+
+message AssignedCouponVo {
+
+  int32 id = 1;
+  //场地编号
+  string parkNo = 2;
+  // 车牌号
+  string carNumber = 3;
+  //优惠券费用
+  string couponValue = 4;
+  //优惠券种类;1-面值型；2-小时型
+  string couponType = 5;
+  //优惠券类型；1-平台券；2-商户券
+  string couponMold = 6;
+  //优惠券编号
+  string couponCode = 7;
+  //优惠券状态
+  string couponStatus = 8;
+  //领取时间
+  string allocatedTime = 9;
+  // 有效结束时间
+  string validEndTime = 10;
+
+
+}
+
+message AnalyseMerchantVoucherRequest {
+  // 时间
+  string day = 1;
+  // 车场编号
+  repeated string parkNos = 2;
+}
+
+message AnalyseMerchantVoucherResponse {
+  /** 商家券 */
+  int32 merchantVoucher = 1;
+}

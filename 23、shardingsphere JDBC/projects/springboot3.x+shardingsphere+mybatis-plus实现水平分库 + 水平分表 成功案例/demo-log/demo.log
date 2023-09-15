@@ -1,0 +1,32 @@
+2023-07-20T14:26:41.490+08:00  INFO 53653 --- [http-nio-8811-exec-3] ShardingSphere-SQL                       : Logic SQL: DELETE FROM t_order 
+ 
+ WHERE (num <= ?)
+2023-07-20T14:26:41.491+08:00  INFO 53653 --- [http-nio-8811-exec-3] ShardingSphere-SQL                       : SQLStatement: MySQLDeleteStatement(super=DeleteStatement(super=AbstractSQLStatement(parameterCount=1, parameterMarkerSegments=[ParameterMarkerExpressionSegment(startIndex=38, stopIndex=38, parameterMarkerIndex=0, parameterMarkerType=QUESTION, alias=Optional.empty)], commentSegments=[]), table=SimpleTableSegment(tableName=TableNameSegment(startIndex=12, stopIndex=18, identifier=IdentifierValue(value=t_order, quoteCharacter=NONE)), owner=Optional.empty, alias=Optional.empty), where=Optional[WhereSegment(startIndex=24, stopIndex=39, expr=BinaryOperationExpression(startIndex=31, stopIndex=38, left=ColumnSegment(startIndex=31, stopIndex=33, identifier=IdentifierValue(value=num, quoteCharacter=NONE), owner=Optional.empty), right=ParameterMarkerExpressionSegment(startIndex=38, stopIndex=38, parameterMarkerIndex=0, parameterMarkerType=QUESTION, alias=Optional.empty), operator=<=, text=num <= ?))]), orderBy=Optional.empty, limit=Optional.empty)
+2023-07-20T14:26:41.491+08:00  INFO 53653 --- [http-nio-8811-exec-3] ShardingSphere-SQL                       : Actual SQL: ds1 ::: DELETE FROM order_1 
+ 
+ WHERE (num <= ?) ::: [2]
+2023-07-20T14:26:41.491+08:00  INFO 53653 --- [http-nio-8811-exec-3] ShardingSphere-SQL                       : Actual SQL: ds1 ::: DELETE FROM order_2 
+ 
+ WHERE (num <= ?) ::: [2]
+2023-07-20T14:26:41.492+08:00  INFO 53653 --- [http-nio-8811-exec-3] ShardingSphere-SQL                       : Actual SQL: ds2 ::: DELETE FROM order_1 
+ 
+ WHERE (num <= ?) ::: [2]
+2023-07-20T14:26:41.492+08:00  INFO 53653 --- [http-nio-8811-exec-3] ShardingSphere-SQL                       : Actual SQL: ds2 ::: DELETE FROM order_2 
+ 
+ WHERE (num <= ?) ::: [2]
+2023-07-20T14:27:22.393+08:00  INFO 53653 --- [http-nio-8811-exec-5] ShardingSphere-SQL                       : Logic SQL: UPDATE t_order  SET content=?  
+ 
+ WHERE (num < ?)
+2023-07-20T14:27:22.393+08:00  INFO 53653 --- [http-nio-8811-exec-5] ShardingSphere-SQL                       : SQLStatement: MySQLUpdateStatement(super=UpdateStatement(super=AbstractSQLStatement(parameterCount=2, parameterMarkerSegments=[ParameterMarkerExpressionSegment(startIndex=28, stopIndex=28, parameterMarkerIndex=0, parameterMarkerType=QUESTION, alias=Optional.empty), ParameterMarkerExpressionSegment(startIndex=48, stopIndex=48, parameterMarkerIndex=1, parameterMarkerType=QUESTION, alias=Optional.empty)], commentSegments=[]), table=SimpleTableSegment(tableName=TableNameSegment(startIndex=7, stopIndex=13, identifier=IdentifierValue(value=t_order, quoteCharacter=NONE)), owner=Optional.empty, alias=Optional.empty), setAssignment=SetAssignmentSegment(startIndex=16, stopIndex=28, assignments=[ColumnAssignmentSegment(super=AssignmentSegment(), startIndex=20, stopIndex=28, columns=[ColumnSegment(startIndex=20, stopIndex=26, identifier=IdentifierValue(value=content, quoteCharacter=NONE), owner=Optional.empty)], value=ParameterMarkerExpressionSegment(startIndex=28, stopIndex=28, parameterMarkerIndex=0, parameterMarkerType=QUESTION, alias=Optional.empty))]), where=Optional[WhereSegment(startIndex=35, stopIndex=49, expr=BinaryOperationExpression(startIndex=42, stopIndex=48, left=ColumnSegment(startIndex=42, stopIndex=44, identifier=IdentifierValue(value=num, quoteCharacter=NONE), owner=Optional.empty), right=ParameterMarkerExpressionSegment(startIndex=48, stopIndex=48, parameterMarkerIndex=1, parameterMarkerType=QUESTION, alias=Optional.empty), operator=<, text=num < ?))]), orderBy=Optional.empty, limit=Optional.empty)
+2023-07-20T14:27:22.393+08:00  INFO 53653 --- [http-nio-8811-exec-5] ShardingSphere-SQL                       : Actual SQL: ds1 ::: UPDATE order_1  SET content=?  
+ 
+ WHERE (num < ?) ::: [mmm, 4]
+2023-07-20T14:27:22.393+08:00  INFO 53653 --- [http-nio-8811-exec-5] ShardingSphere-SQL                       : Actual SQL: ds1 ::: UPDATE order_2  SET content=?  
+ 
+ WHERE (num < ?) ::: [mmm, 4]
+2023-07-20T14:27:22.394+08:00  INFO 53653 --- [http-nio-8811-exec-5] ShardingSphere-SQL                       : Actual SQL: ds2 ::: UPDATE order_1  SET content=?  
+ 
+ WHERE (num < ?) ::: [mmm, 4]
+2023-07-20T14:27:22.394+08:00  INFO 53653 --- [http-nio-8811-exec-5] ShardingSphere-SQL                       : Actual SQL: ds2 ::: UPDATE order_2  SET content=?  
+ 
+ WHERE (num < ?) ::: [mmm, 4]

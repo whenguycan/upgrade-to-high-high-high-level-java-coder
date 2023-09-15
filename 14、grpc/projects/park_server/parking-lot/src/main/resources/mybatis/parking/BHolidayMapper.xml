@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BHolidayMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BHoliday" id="BHolidayResult">
+        <result property="id"    column="id"    />
+        <result property="year"    column="year"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBHolidayVo">
+        select id, year, name, type, start_date, end_date, create_by, create_time, update_by, update_time from b_holiday
+    </sql>
+
+    <select id="selectBHolidayList" parameterType="com.ruoyi.project.parking.domain.BHoliday" resultMap="BHolidayResult">
+        <include refid="selectBHolidayVo"/>
+        <where>  
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectBHolidayById" parameterType="Integer" resultMap="BHolidayResult">
+        <include refid="selectBHolidayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBHoliday" parameterType="com.ruoyi.project.parking.domain.BHoliday" useGeneratedKeys="true" keyProperty="id">
+        insert into b_holiday
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="year != null">year,</if>
+            <if test="name != null">name,</if>
+            <if test="type != null">type,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="year != null">#{year},</if>
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBHoliday" parameterType="com.ruoyi.project.parking.domain.BHoliday">
+        update b_holiday
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null">year = #{year},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBHolidayById" parameterType="Integer">
+        delete from b_holiday where id = #{id}
+    </delete>
+
+    <delete id="deleteBHolidayByIds" parameterType="String">
+        delete from b_holiday where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="clearBHoliday" parameterType="com.ruoyi.project.parking.domain.BHoliday">
+        delete from b_holiday where year = #{year} and name = #{name}
+        and type = #{type} and start_date = #{startDate} and end_date = #{endDate}
+    </delete>
+</mapper>

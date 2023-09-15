@@ -1,0 +1,13 @@
+## Consumer在消费过程中Broker Server会有的rebalance操作
+
+
+
+#### rebalance的概念
+
+当Consumer group中的consumer数量变化时，或其订阅的Topic的Queue数量变化时，会触发rebalance操作。
+
+
+
+#### rebalance会带来消息被重复消费的问题
+
+在rebalance过程中，会重新分配Consumer和Queue。就会出现这种情况，原本监听queue1的consumer，在rebalance后就不再监听了，而在rebalance之前已经发送给consumer的消息也不会撤回，consumer继续消费。而新的consumer在rebalance后监听了queue1，那么queue1中已经发给之前consumer的消息有可能再一次发送给了新的consumer，新的consumer又把消息消费了一次。所以，我们一定在Consumer端一定要做好消息的幂等！

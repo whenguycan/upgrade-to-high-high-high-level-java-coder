@@ -1,0 +1,66 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://10.10.210.19:3306/fast-parking-payment?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        password: root
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  # redis 配置
+  redis:
+    # 地址
+    host: 10.10.210.19
+    # 端口，默认为6379
+    port: 30002
+    # 数据库索引
+    database: 0
+    # 密码
+    password:
+  #MQ
+  rabbitmq:
+    host: 10.10.210.20
+    port: 30801
+    username: acnftest
+    password: acnf@admin
+    virtualHost: /
+grpc:
+  client:
+    parking-order-server:
+      address: 'static://127.0.0.1:9088'
+      # 通信类型
+      # plaintext | plaintext_upgrade | tls
+      # 明文通信且http/2 | 明文通信且升级http/1.1为http/2 | 使用TLS（ALPN/NPN）通信
+      negotiationType: plaintext
+alipay:
+  #  支付宝沙箱测试参数
+  appId: 2016101200666723
+  sellerId: 2088102179195399
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhdCtKaUWnT8bB4N5PimrLv+x1d7Z3noTKz/yTMp/aYhDrnaeRrQGKd8tIC7wyb8pJiCyttNKg3y1YCETTTko6x5vvvZ1uBB/7Y5BdWVqW3bm2f6ZPFvQEAVtR3tSANfpfoOiWRLeiP7p6OrSLf2wlQ1j/DMldF5EFSiima+xZblW58Vlf5jncbroO+JrFNut2BsXctB+J9Oe7l7czV5mg+UYD4tsUfRhSXRIoPe5u+26ZF6lSmhuWoLn7QJilzRxYrCtkGUg4+o4Y+hi38JBiofKGoPcWOVcMkF+65XHq0bj+HZIjtQEFlswZjYys7j+2F6rmIVQGtor7P8WnsFToQIDAQAB
+  rsaPrivateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCNWwmhGDDt9g4HWpfYIZIEqJu312ywkKF/lD5ZfbF6FgtXA8zX89563NQw14DEwLLToMSB6o2KQXz1+jsuUVe+Byl95ZvdS2pmC0NHgQ2jRfIXlSfw6Ah6UO/8iSrjOWBU+uBtTJAQpnyZg66gysz3+QJ83nC+QsATG/yb87vqJZf3F5B+YOE3K6dF4rrmn8V4rCdpGqg3UPqj2LK/xST3fQzqKC6ZLGUPItVGm9oJOexZnfqUhLo1MdxyvnZB7kg+eSTF9BnBD/J41+EQ1xXyY8BsL2KrDW8y4MwuPajEGHoRqpCUbSXo/V1PT+RJuxEM3qwrDC0ponWTNK7I2/+lAgMBAAECggEACZbpelJHz3znyrvsnS751vMRTVGCACBvtFX8PNn4Fk40irypQuU6bJ9ajc2w4Kgp+Y1oh1/AJmb28UD+js/Z4fxeZjoTbtnU6ANPlyQ8Jp1yJQNraD51hMbE4R71F+Emld1HKGMPSvHgdhGm4SWg7hmof4wfneitWx6E7peEYgf83RvO4HXVHcQuJbbX5REbJI3q8SqloERvevkmjLK2iFDc9qXivw2TZO6+3bBgWiB3F6Wa/jjLiuzjutGuHRZTd+652zstnWvfL0IY8e8I/KtS7aFScP35Z79hGCPaHfX4b2PPgLF+OepTyEj0zamwZy0i0Hcjh9qATE+NDcmYKQKBgQDWwC/4j93MfxWGXsuz4emhOX5CEvxpPELKH4ezceVRdVhW6TrEYytMmXczYMjqRI5ubTMdiEwKMMrD9Q0OCPaUtcKLtA9VS0Kv6AhcNMjq7SpGjRo4OFNHSNqrDEHDXqxI8NZHw81l/qvM5LwSDX8FQiJOnfDUWj1mtgIfX60CJwKBgQCogdW+nCHLnaPlJBFKvMtRo6cSpZocucGfcx8Loo8kwHrG2FeggySJ+lOL/g0XAju3fzSzmaZVSZa761vnqP4eRa3bonmBSZwqxxeY5UTuWSh0omENS28Mhay3jxnSosw2WOXaO4zPfvU5NIZmaQDZpcvMIKEMK/s3svFNHfJrUwKBgAbrqqAYAs3USp1J8MabQSww7iCy++9oQb7BxV3DDeDSJ0alvX8Wsw6E45KES/VAwFZOrpcFDW5GpEIsY39QSqIAOYTHCLd29W81yw8tpEvt2K7tXSrypbxmXKWmf3gMVQEEweMOLFBdJKw1stniFXXV68Uc0eYGAnSM6QSZ0LmBAoGBAIxB9b4Ai4jGICOcj+AboUjE5U36FXsPiwDDe/XdSzSWGhvk+5sZTZKjkGMYBaE/NKGZ+i38GJ0o8ZRdZVRAL7TW3s3QQT7CHIDm0tdrDqMuByR9/DZqsXZE1ey76gyPgVdDS58Irj4QOOFyvOQFRrXi8O1pw2M0QJiuE3fTE3MNAoGAN3fAiEGb1tz7D+qon1r5ehw8DEp4rPOzOMXtHrLy67pMa0AHcBmtI4Fm7ZYUIoFyT6wrigOrqUSHafSsJZNlRC+KljPlhN2x3W/vIRpqmQG34tbi7qpXhEFK+w82AzNJ1N5PrzQ8/dFHotf/DXxgxuT8Um/+65KxBg1EBGOaSmQ=
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do
+  #  支付宝异步通知路径
+  notifyUrl: http://hy-web.cz19.tk:8080/alipay/notify
+  #  支付宝跳转通知页面路径
+  returnUrl: https://www.baidu.com
+wechatpay:
+  # 西太湖公众号AppId
+  appId: wx54597cedfc1589d3
+  #  商户API私钥
+  privateKey: MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCe3nhQPeNYnVuQreGHvl/82X9o7YMNtYtlCvTBIYSOMd/TPQJoNKZgjPOwefi2Bk5GNGK4+9pwOAHWjMozwQDooSMt0A6OipO+aiYARHaKY/f+hvOPS7OdDb1OTkpII8ryv0xhQTZBX6uG0c5tQ+/3wdpsp69zwCpwvTA4GF2q8g34CDD6orgcC6OTxJ06Agqp2TVCD3csmmOj0xQDGvtSbEGTmSqcMv6Zb5hIq0XKpjx1KHlnQMoLet2bqhS3XzYZRqeDU/Q6v3cHM6d/on+KHr7fWWmrHHa290FPOqdxr5EAdfBv/q5lNk+subAw8eCVgHJ9XcNTfQqXwxvq7DCHAgMBAAECggEBAJI6Lv+clz+fRwJ6KZYqEmvHPdC0nOXnbfCJDxMc6MeA/IWQKEEGBQXldv++pL/WOgHAggXGOx8DTh3O5OaSBWYZuymV0XA9+RNQ3L1uRrXGoiLy0AfbI+2xEcebpB+WYlzg20rBHVE638RuJNTJrXycP5G3HnUqMWYnnNRlCQIn6pfJsnfzBCi/WI+IXWZWcwJZUZWy0zQg9wPM8SeaxIATbxSJLnmOPgv837lY7a58/Tf1P3uFijkysf9lcOUfFxySMfe8xlRTLjDZa6OTIQGV/Js1mjUcsxoezKXr8bAUa4hv0F9XiDqmi7wkiGQcPhfyxptRk/whMmp8JNh+9yECgYEAyeLuzZTeIskCmALjFvJtPyU/40D4YutpMpLT2D0GxciZPLYj09UNKznkiHEvoSejOUln7G4GSXRBTf8xGWcHn3t1EbR3jwYvpqL1uLw2aqb0BL+KqVxAp+WIi2mxmUUZoHZyfi+gM6QKTBZMDrtOS/QPjYI9o2fBshcDGejGJj8CgYEAyXPDHguc5Nsa5d4zYp6U5k1RDBGwxaUvndeyOEQWwUk/4N5XCIajN6WbHzqo8k+Zd9Kt7CB2lHUd9k30WbISDjGcY9UP9VTpKahOnhmJNY3Gja1ZV5mHwKGsEMFZdSGADR9Q+o9xD6NTWm6CUleZGOlymSAQQ5RJIb25UFbkM7kCgYEAoC+Pi08zciZMCJFB3lM8m33S014Zt2NSdO5LaKgDV6ty6tkaVFoXuNSWoCwuvo/U0v+Lle02z9GOf3ScYKt/QOuUWBf5RWKDLJTgo1OzWaxeseXI/9hS9OULEpMqd5J8YvWYosbnNhJSmUyXzJiR53IfZQiSH7WT2tqne0dW8cECgYBl6HK/Az7mItTTjflOnUxTyK8EPPrAsRSKc7ALeJ5OPwDaf39lp75viw4S2TjYA15uWBx1g+KYrTpv+/VtXoB1v7EOa5z8DW06DpNetSpM9iCIUTYN83PSBbcmbrkTYNQHT11Gs0ONlqC28YppnziqeoXnYmn31c69C93v/1THuQKBgQCcz7QUQD0T2jwNvT7qMlFwDoJ8/5+SUbVCpat9cJRLigpk7xOcALTzyf/iqny4++bdZ7HlpDxEtkWj6pCJQQ4PEl7rOCUDHftLSHiXeputFdMvY0A9ZaxRteuPupzdHZ2jc3OOYZbwm91tss6qtnX05dMMyx48gJjTQA+cttV+sw==
+  #  商户号
+  mchId: 1640347399
+  #  商户API证书的证书序列号
+  merchantSerialNumber: 55EA789BE10DDCD04C30B53651D8951DFED420BA
+  #  商户APIV3密钥
+  apiV3key: 6AC468551a2024f60e4682209c73DFBN
+  #  异步接收微信支付结果通知的回调地址
+  notifyUrl: http://hy-web.cz19.tk:8080/wechat/notify

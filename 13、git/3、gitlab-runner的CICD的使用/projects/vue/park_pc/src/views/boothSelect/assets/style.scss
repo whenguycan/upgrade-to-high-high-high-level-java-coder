@@ -1,0 +1,218 @@
+.container {
+  width: 100%;
+  height: 100%;
+  color: #fff;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 70px;
+    font-size: 16px;
+
+    img {
+      transform: scale(1.3);
+    }
+
+    .title {
+      width: 358px;
+      height: 29px;
+      font-size: 24px;
+      font-family: AlimamaShuHeiTi;
+      line-height: 34px;
+      letter-spacing: 3px;
+      margin-left: 20px;
+      font-weight: 600;
+    }
+  }
+
+  .divider {
+    margin-top: 0;
+  }
+
+  .content-row {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 27px 14px;
+
+    ::v-deep .el-divider--vertical {
+      height: 100%;
+      margin: 0 36px;
+    }
+
+    .row-content {
+      height: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+
+      .row-title {
+        width: 75px;
+        height: 30px;
+        font-size: 22px;
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        color: #FFFFFF;
+        line-height: 30px;
+        margin-bottom: 25px;
+
+        &::before {
+          content: "";
+          width: 7px;
+          height: 7px;
+          background: #FFF800;
+          border-radius: 4px;
+          box-shadow: 0px 0px 8px 0px #FFF800;
+          display: inline-block;
+          margin: 0 12px 4px 0;
+        }
+      }
+
+      ::v-deep .el-checkbox{
+        width: 228px;
+        height: 93px;
+        line-height: 93px;
+        margin-bottom: 14px;
+        display: inline-flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0;
+        border-radius: 8px;
+        border: 2px solid #fff;
+        background: rgba(255,255,255,0.3);
+        .el-checkbox__input {
+          transform: scale(1.8);
+          margin: 14px 0 0 10px;
+        }
+
+        .el-checkbox__label {
+          height: 28px;
+          font-size: 20px;
+          font-family: PingFangSC-Semibold, PingFang SC;
+          font-weight: 600;
+          color: #FFFFFF;
+          line-height: 28px;
+        }
+
+        .el-checkbox__input.is-checked+.el-checkbox__label {
+          color: #F5AC28;
+        }
+
+        .is-checked .el-checkbox__inner {
+          border-color: #F5AC28;
+          background-color: #F5AC28;
+        }
+      }
+
+      .is-checked {
+        border-color: #F5AC28;
+      }
+    }
+
+    .row-content-button {
+      width: 182px;
+      height: 120px;
+      box-shadow: 0px 0px 6px 0px #081E98;
+      border-radius: 12px;
+      border: 3px solid #FFFFFF;
+      font-size: 30px;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+      line-height: 42px;
+      background-color: transparent;
+      &:hover {
+        background: rgba(255,255,255,0.3);
+      }
+
+      span {
+        display: block;
+      }
+    }
+  }
+
+  .content-col {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 27px 14px;
+
+    .column-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .top-text {
+        width: 59px;
+        height: 30px;
+        font-size: 22px;
+        font-family: PingFangSC-Semibold, PingFang SC;
+        font-weight: 600;
+        line-height: 30px;
+        margin-bottom: 18px;
+      }
+
+      ::v-deep .el-checkbox{
+        width: 365px;
+        height: 76px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        align-items: center;
+        margin-left: 0;
+        background: rgba(255,255,255,0.3);
+        border-radius: 8px;
+        border: 2px solid #fff;
+        .el-checkbox__input {
+          transform: scale(2.0);
+          margin: 5px 0 0 30px;
+        }
+
+        .el-checkbox__label {
+          width: 175px;
+          height: 30px;
+          font-size: 22px;
+          font-family: PingFangSC-Semibold, PingFang SC;
+          font-weight: 600;
+          color: #FFFFFF;
+          line-height: 30px;
+        }
+
+        .el-checkbox__input.is-checked+.el-checkbox__label {
+          color: #F5AC28;
+        }
+
+        .is-checked .el-checkbox__inner {
+          border-color: #F5AC28;
+          background-color: #F5AC28;
+        }
+      }
+      .el-checkbox:last-of-type {
+        margin-right: 30px;
+      }
+      .is-checked {
+        border-color: #F5AC28;
+      }
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .enter-button {
+      width: 524px;
+      height: 82px;
+      background-color: transparent;
+      font-size: 30px;
+      padding: 20px 200px;
+      border: 3px solid #fff;
+      border-radius: 41px;
+    }
+  }
+}

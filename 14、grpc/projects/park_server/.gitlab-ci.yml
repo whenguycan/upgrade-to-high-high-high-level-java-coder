@@ -1,0 +1,64 @@
+variables:
+  BUILD_SHELL: 'mvn clean package -Dmaven.test.skip=true -gs ./mvn-setting.xml -Dmaven.repo.local=/home/cache/maven'
+  CACHE_DIR: 'artifact/'
+  DOCKER_FILE_PATH: "./Dockerfile"
+  PROJECT_NAME: 'order'
+  VERSION: '${CI_COMMIT_SHA}'
+  IMAGE_NAME:  "$PROJECT_NAME:$VERSION"
+  DOCKER_REGISTRY: 'reg.czsdc.com:5000/cicd/'
+  PUSH_IMG_TAG: '$DOCKER_REGISTRY$IMAGE_NAME'
+
+
+stages:
+  - build
+  - buildimage
+  - deploy
+
+deploy:
+  variables:
+    GIT_CHECKOUT: "false"
+  image: lucj/kubectl:1.20.4
+  cache:
+    paths:
+      - ${CACHE_DIR}
+  stage: deploy
+  tags:
+    - deploy
+  script:
+    - sh ${CACHE_DIR}deploy.sh $VERSION
+    - kubectl --kubeconfig=./artifact/dev-config get pods -A
+
+
+
+build_docker_image:
+  variables:
+    GIT_CHECKOUT: "false"
+  before_script:
+    - docker info
+  image: docker:19.03.12
+  cache:
+    paths:
+      - ${CACHE_DIR}
+  stage: buildimage
+  tags:
+    - buildimage
+  script:
+    - ls
+    - sh ${CACHE_DIR}buildimage.sh $DOCKER_REGISTRY_USER $DOCKER_REGISRTY_PASSWD $VERSION
+
+
+build:
+  image: maven:3.6.3-openjdk-17
+  variables:
+    HTTP_PROXY: http://10.10.210.19:8888
+    HTTPS_PROXY: http://10.10.210.19:8888
+  cache:
+    paths:
+      - ${CACHE_DIR}
+  stage: build
+  tags:
+    - build
+  script:
+    - curl https://maven.aliyun.com
+    - mvn clean install -Dmaven.test.skip=true -gs ./mvn-setting.xml  -Dmaven.repo.local=/home/cache/maven
+    - bash build.sh

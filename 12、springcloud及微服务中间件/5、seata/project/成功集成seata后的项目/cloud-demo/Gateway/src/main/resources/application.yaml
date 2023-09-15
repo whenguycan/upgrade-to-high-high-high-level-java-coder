@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        password: nacos
+        username: nacos
+        server-addr: 172.16.4.144:8808
+    gateway:
+      routes:
+        - id: User
+          uri: lb://User
+          predicates:
+            - CheckToken=/user/**
+          filters:
+            - RewritePath=/user(?<segment>/?.*), $\{segment}
+server:
+  port: 80
+
+debug: true

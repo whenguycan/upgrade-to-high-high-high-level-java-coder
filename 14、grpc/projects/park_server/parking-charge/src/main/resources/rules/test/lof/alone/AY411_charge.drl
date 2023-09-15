@@ -1,0 +1,69 @@
+package rules.test.lof.alone
+
+import com.czdx.parkingcharge.domain.pr.ParkingRecord
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+
+// 超出最高限价时间
+rule "AY411-divide-maxcharge"
+    activation-group "charge-rule"
+    salience 200
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration >= 2880)
+    then
+        System.out.println("触发规则：超出最高限价时间分割");
+        BigDecimal fee = ParkingFeeUtil.divideCP2ChargeFee($pRecord, 2880, BigDecimal.valueOf(100), "1", "1");
+        $pRecord.setParkingFee(fee);
+end
+
+// 期间强制分割
+rule "AY411-divide-duration"
+    activation-group "charge-rule"
+    salience 120
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 1440)
+    then
+        // 按期间时长分割，计算费用
+        System.out.println("触发规则：期间强制分割");
+        // 分割后，需要根据两者分割情况做可用/不可用处理
+        BigDecimal fee = ParkingFeeUtil.divideDuration2ChargeFee($pRecord, 1440, "1", "1", BigDecimal.valueOf(100));
+        $pRecord.setParkingFee(fee);
+end
+
+// 超过时长后，隐藏的分割，不会考虑免费时长次数、首时段计费方式
+rule "AY411-hide-1"
+    activation-group "charge-rule"
+    salience 110
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 1440)
+    then
+        // 该分割，不允许使用免费时长、首时段
+        BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFee($pRecord, 1440, "Y", BigDecimal.valueOf(100));
+        $pRecord.setParkingFee(fee);
+end
+
+// 免费时间段 18 分钟
+rule "AY411-1"
+    activation-group "charge-rule"
+    salience 100
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration <= 18, useFreeTime)
+    then
+        System.out.println("触发规则：AY411-1");
+        $pRecord.setParkingFee(BigDecimal.ZERO);
+end
+
+// 一个期间，时长1440分钟，5元每60分钟
+rule "AY411-2"
+    activation-group "charge-rule"
+    salience 90
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0)
+    then
+        System.out.println("触发规则：AY411-2");
+        long remainingMins = $duration;
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee(remainingMins, 60, BigDecimal.valueOf(5),
+        "1", BigDecimal.valueOf(50));
+        $pRecord.setParkingFee(fee);
+end

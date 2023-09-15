@@ -1,0 +1,207 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+import "order/ParkingOrder.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.lot;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.lot";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "LotParking";
+
+service LotParkingService {
+  // 创建停车订单
+  rpc createParkingOrder(CreateLotOrderRequest) returns (ParkingOrderReponse) {};
+  // 查询订单信息
+  rpc queryParkingOrderByOrderNo(com.czdx.grpc.lib.order.OrderDetailRequest) returns (ParkingOrderReponse) {};
+  // 查询历史停车订单
+  rpc queryHistoryParkingOrder(HistoryParkingOrderRequest) returns (HistoryParkingOrderReponse){};
+  // 查询会员停车订单历史车牌号
+  rpc queryHistoryCarNumber(QueryHistoryCarNumberRequest) returns (QueryHistoryCarNumberReponse){};
+}
+
+/**
+创建停车订单 请求
+ */
+message CreateLotOrderRequest {
+  // 会员id
+  string memberId = 1;
+  // 停车场编号
+  string parkNo = 2;
+  // 车牌号
+  string carNumber = 3 ;
+  // 岗亭编号
+  string passageNo = 4 ;
+  // 优惠券信息
+  repeated com.czdx.grpc.lib.order.CouponInfo couponList = 5;
+  // 订单号 无则创建 有则优惠券切换更新金额
+  string orderNo = 6;
+}
+
+/**
+停车订单 响应体
+ */
+message ParkingOrderReponse {
+  // 状态码
+  string status = 1;
+  // 成功/错误消息
+  string mess = 2;
+  // 订单数据
+  LotParkingOrder orderData = 3;
+  // 优惠券数据
+  repeated com.czdx.grpc.lib.order.CouponInfo couponlist = 4;
+}
+
+/**
+停车订单
+ */
+message LotParkingOrder {
+  // 订单号
+  string orderNo = 1;
+  // 车场编号
+  string parkNo = 2;
+  // 岗亭编号
+  string passageNo = 3;
+  // 车牌号
+  string carNumber = 4;
+  // 车型编码
+  string carTypeCode = 5;
+  // 入场时间
+  string entryTime = 6;
+  // 应付金额（元）
+  double payableAmount = 7;
+  // 优惠金额（元）
+  double discountAmount = 8;
+  // 已付金额（元）
+  double paidAmount = 9;
+  // 实付金额（元）
+  double payAmount = 10;
+  //  支付方式
+  string payMethod = 11;
+  // 支付时间
+  string payTime = 12;
+  // 支付状态
+  string payStatus = 13;
+  // 支付流水号
+  string payNumber = 14;
+  // 过期时间
+  string expireTime = 15;
+  // 备注
+  string remark = 16;
+  // 创建时间
+  string createTime = 17;
+  // 更新时间
+  string updateTime = 18;
+  // 订单明细
+  repeated OrderItem itemList = 19;
+
+  // 在场记录id
+  int32 parkLiveId = 20;
+  // 停车场名称
+  string parkName = 21;
+  // 停留时间
+  string durationTime = 22;
+  // 进场图片url
+  string carImgUrlFrom = 23;
+}
+
+/**
+订单项
+ */
+message OrderItem {
+  // 场地ID
+  int32 parkFieldId = 1;
+  // 入场时间
+  string entryTime = 2;
+  // 出场时间
+  string exitTime = 3;
+
+  // 金额
+  double payedAmount = 4;
+  // 场区名
+  string fieldName = 5;
+}
+
+/**
+历史停车订单 请求
+ */
+message HistoryParkingOrderRequest {
+  // 会员id
+  string memberId = 1;
+  // 车牌号
+  string carNumber = 2 ;
+  // 页码
+  int32 pageNum = 3;
+  // 页数据条数
+  int32 pageSize = 4;
+}
+
+
+/**
+历史停车订单 响应
+ */
+message HistoryParkingOrderReponse {
+  // 状态码
+  string status = 1;
+  // 成功/错误消息
+  string mess = 2;
+  // 记录总数
+  int32 total = 3;
+  // 数据
+  repeated HistoryParkingOrder rows = 4;
+}
+
+/**
+历史停车订单
+ */
+message HistoryParkingOrder{
+
+  // 订单编号
+  string orderNo = 1;
+
+  // 车牌号
+  string carNumber = 2;
+
+  // 停车场编号
+  string parkNo = 3;
+
+  // 停车场名称
+  string parkName = 4;
+
+  // 车型码
+  string carType = 5;
+
+  // 车型名
+  string carTypeName = 6;
+
+  // 入场时间 2023-03-01 12:00:00
+  string entryTime = 7;
+
+  //出场时间 2023-03-01 12:00:00
+  string exitTime = 8;
+
+  // 停车时长 1天2小时3分钟
+  string durationTime = 9;
+
+  // 支付金额
+  double payAmount = 10;
+
+}
+
+message QueryHistoryCarNumberRequest {
+  // 会员id
+  string memberId = 1;
+}
+
+message QueryHistoryCarNumberReponse {
+  // 状态码
+  string status = 1;
+  // 成功/错误消息
+  string mess = 2;
+  // 数据
+  repeated string data = 3;
+}

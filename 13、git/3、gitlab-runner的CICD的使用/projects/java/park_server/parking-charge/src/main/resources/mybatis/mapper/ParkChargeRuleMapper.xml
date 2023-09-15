@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingcharge.mapper.ParkChargeRuleMapper">
+
+    <resultMap id="BaseResultMap" type="com.czdx.parkingcharge.domain.ParkChargeRule">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="parkNo" column="park_no" jdbcType="VARCHAR"/>
+            <result property="ruleName" column="rule_name" jdbcType="VARCHAR"/>
+            <result property="durationCreateWay" column="duration_create_way" jdbcType="VARCHAR"/>
+            <result property="durationNum" column="duration_num" jdbcType="INTEGER"/>
+            <result property="ceilingPriceFlag" column="ceiling_price_flag" jdbcType="VARCHAR"/>
+            <result property="ceilingPriceMinute" column="ceiling_price_minute" jdbcType="INTEGER"/>
+            <result property="ceilingPrice" column="ceiling_price" jdbcType="DECIMAL"/>
+            <result property="chargeContainFreeTime" column="charge_contain_free_time" jdbcType="VARCHAR"/>
+            <result property="freeMinuteNumber" column="free_minute_number" jdbcType="VARCHAR"/>
+            <result property="timeDivisionWay" column="time_division_way" jdbcType="VARCHAR"/>
+            <result property="firstDurationChargeWay" column="first_duration_charge_way" jdbcType="VARCHAR"/>
+            <result property="timeRoundWay" column="time_round_way" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,park_no,rule_name,
+        duration_create_way,duration_num,ceiling_price_flag,
+        ceiling_price_minute,ceiling_price,charge_contain_free_time,
+        free_minute_number,time_division_way,first_duration_charge_way,
+        time_round_way,create_by,create_time,
+        update_by,update_time
+    </sql>
+
+    <!-- 计费规则扩展map -->
+    <resultMap id="ChargeRuleCustomMap" type="com.czdx.parkingcharge.domain.custom.ParkChargeRuleCustom">
+        <id column="id" property="id" />
+        <result column="park_no" property="parkNo" />
+        <result column="rule_name" property="ruleName" />
+        <result column="duration_create_way" property="durationCreateWay" />
+        <result column="duration_num" property="durationNum" />
+        <result column="ceiling_price_flag" property="ceilingPriceFlag" />
+        <result column="ceiling_price_minute" property="ceilingPriceMinute" />
+        <result column="ceiling_price" property="ceilingPrice" />
+        <result column="charge_contain_free_time" property="chargeContainFreeTime" />
+        <result column="free_minute_number" property="freeMinuteNumber" />
+        <result column="time_division_way" property="timeDivisionWay" />
+        <result column="first_duration_charge_way" property="firstDurationChargeWay" />
+        <result column="time_round_way" property="timeRoundWay" />
+        <collection property="chargeDurations" ofType="com.czdx.parkingcharge.domain.custom.ParkChargeDurationCustom">
+            <id column="duration_id" property="id" />
+            <result column="rule_id" property="ruleId" />
+            <result column="start_time" property="startTime" />
+            <result column="durationLengthOfTime" property="durationLengthOfTime" />
+            <result column="free_minute" property="freeMinute" />
+            <result column="maximum_charge" property="maximumCharge" />
+            <collection property="durationPeriods"  ofType="com.czdx.parkingcharge.domain.ParkChargeDurationPeriod" >
+                <id column="period_id" property="id" />
+                <result column="duration_id" property="durationId" />
+                <result column="length_of_time" property="lengthOfTime" />
+                <result column="min_lenght_of_time" property="minLenghtOfTime" />
+                <result column="rate" property="rate" />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!-- 查询计费规则扩展类 -->
+    <select id="queryParkChargeRuleCustomList" resultMap="ChargeRuleCustomMap" >
+        SELECT
+            a.id,
+            a.park_no,
+            a.rule_name,
+            a.duration_create_way,
+            a.duration_num,
+            a.ceiling_price_flag,
+            a.ceiling_price_minute,
+            a.ceiling_price,
+            a.charge_contain_free_time,
+            a.free_minute_number,
+            a.time_division_way,
+            a.first_duration_charge_way,
+            a.time_round_way,
+            b.id duration_id,
+            b.rule_id,
+            b.start_time,
+            b.length_of_time durationLengthOfTime,
+            b.free_minute,
+            b.maximum_charge,
+            c.id period_id,
+            c.duration_id,
+            c.length_of_time,
+            c.min_lenght_of_time,
+            c.rate
+        FROM
+            b_park_charge_rule a
+                LEFT JOIN b_park_charge_duration b ON b.rule_id = a.id
+                LEFT JOIN b_park_charge_duration_period c ON c.duration_id = b.id
+        <where>
+            <if test="parkNo != null and parkNo != ''" >
+                and a.park_no = #{parkNo}
+            </if>
+            <if test="ruleId != null and ruleId != 0" >
+                and a.id = #{ruleId}
+            </if>
+        </where>
+        ORDER BY b.sort, c.sort
+    </select>
+
+</mapper>

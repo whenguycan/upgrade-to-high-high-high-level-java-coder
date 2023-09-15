@@ -1,0 +1,3 @@
+## springboot事件驱动概述
+
+在springboot生命周期部分，我们探讨过了关于springboot生命周期中的ApplicationListener。ApplicationListener监听器，定义在META-INF/spring.factories中、使用Bean注解、使用@EventListener注解都可以，感知系统中的event，执行对应的方法的。注意，这儿所说的系统中的event也可以包括我们自定义的event！

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.ParkLiveRecordsMapper">
+
+
+    <resultMap type="com.ruoyi.project.parking.domain.vo.parkingorder.VehicleParkOrderVO" id="OrderNoResult">
+        <result property="orderNo"             column="order_no"         />
+        <result property="parkLiveId"          column="park_live_id"         />
+        <result property="payableAmount"       column="payable_amount"   />
+        <result property="payAmount"           column="pay_amount"       />
+        <result property="discountAmount"      column="discount_amount"  />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.project.parking.domain.vo.ParkLiveRecordsVO" id="ParkLiveRecordsVOResult">
+        <result property="id"             column="id"               />
+        <result property="carNumber"      column="car_number"       />
+        <result property="carStatus"      column="car_status"       />
+        <result property="parkNo"         column="park_no"          />
+        <result property="carType"        column="car_type"         />
+        <result property="entryTime"      column="entry_time"       />
+        <result property="exitTime"       column="exit_time"        />
+        <result property="payTime"        column="pay_time"         />
+        <result property="createTime"     column="create_time"      />
+        <result property="createBy"       column="create_by"        />
+        <result property="updateTime"     column="update_time"      />
+        <result property="updateBy"       column="updateBy"         />
+        <result property="remark"         column="remark"           />
+        <result property="carTypeName"    column="car_type_name"    />
+        <result property="passageId"      column="passage_id"       />
+        <result property="passageName"    column="passage_name"     />
+        <result property="fieldNameFrom"  column="field_name_from"  />
+        <result property="fieldNameTo"    column="field_name_to"    />
+        <result property="carImgUrlFrom"  column="car_img_url_from" />
+        <result property="carImgUrlTo"    column="car_img_url_to"   />
+        <result property="memberId"       column="member_id"        />
+        <collection property="orderNoList"  javaType="java.util.List" select="selectOrderNoByParkLiveId" column="id"/>
+    </resultMap>
+
+    <resultMap type="com.ruoyi.project.parking.domain.vo.parkingorder.HistoryParkingOrderVO" id="HistoryParkingOrderVOResult">
+        <result property="orderNo"        column="order_no"        />
+        <result property="carNumber"      column="car_number"      />
+        <result property="parkNo"         column="park_no"         />
+        <result property="parkName"       column="park_name"       />
+        <result property="carType"        column="car_type"        />
+        <result property="carTypeName"    column="car_type_name"   />
+        <result property="entryTime"      column="entry_time"      />
+        <result property="exitTime"       column="exit_time"       />
+        <result property="payAmount"      column="pay_amount"      />
+        <result property="effectFlag"     column="effect_flag"     />
+    </resultMap>
+
+    <select id="selectOrderNoByParkLiveId" parameterType="Integer" resultMap="OrderNoResult">
+        SELECT t.order_no,t.payable_amount,t.payable_amount,t.discount_amount
+        FROM t_park_live_records_parking_order t
+        WHERE t.park_live_id = #{id}
+    </select>
+
+    <select id="selectParkLiveRecordsVOList" parameterType="com.ruoyi.project.parking.domain.param.ParkLiveRecordsParam" resultMap="ParkLiveRecordsVOResult">
+        SELECT t5.id, t5.car_number, t5.car_status, t5.park_no, t5.car_type, t5.entry_time, t5.exit_time, t5.pay_time, t5.remark,t5.create_by,t5.create_time,t5.update_by,t5.update_time,
+        t7.passage_name, t7.field_name_from, t7.field_name_to,t7.car_img_url AS car_img_url_from,
+        (SELECT car_img_url FROM t_exit_records WHERE park_no= #{parkNo} AND park_live_id = t5.id ORDER BY create_time DESC LIMIT 1 ) AS car_img_url_to, t6.name AS car_type_name
+        FROM t_park_live_records t5
+        LEFT JOIN b_setting_car_type t6 ON t6.park_no=#{parkNo} AND t6.code = t5.car_type
+        LEFT JOIN (
+            SELECT t1.park_live_id,t2.passage_name,t3.field_name AS field_name_from, t4.field_name AS field_name_to,
+            t1.car_img_url,t1.create_time
+            FROM (SELECT *,
+            row_number() over(partition BY park_live_id order BY create_time) AS row_num
+            from t_entry_records t0) t1
+            LEFT JOIN b_passage t2 ON t2.park_no = #{parkNo} AND t1.passage_id = t2.id
+            LEFT JOIN b_field t3 ON t3.park_no = #{parkNo} AND t2.from_field_id = t3.id
+            LEFT JOIN b_field t4 ON t4.park_no = #{parkNo} AND t2.to_field_id = t4.id
+            WHERE t1.park_no= #{parkNo} AND t1.row_num = 1
+            <if test="passageId != null and passageId != ''"> AND t2.id = #{passageId} </if>
+            <if test="fieldId != null and fieldId != ''"> AND (t3.id = #{fieldId} OR t4.id = #{fieldId}) </if>
+            ORDER BY t1.create_time
+        ) t7
+        ON t7.park_live_id = t5.id
+        WHERE t5.park_no = #{parkNo} AND t5.del_flag=0
+        <if test="carNumber != null and carNumber != ''"> AND t5.car_number like concat('%', #{carNumber}, '%')</if>
+        <if test="carType != null and carType != ''"> AND t5.car_type = #{carType} </if>
+        <if test="carStatus != null and carStatus != ''"> AND t5.car_status = #{carStatus} </if>
+        <if test="memberId != null and memberId != ''"> AND t5.member_id = #{memberId} </if>
+        <if test="entryTime != null ">
+            AND date_format(t5.entry_time,'%Y-%m-%d %H:%i:%s') &gt;= #{entryTime}
+        </if>
+        <if test="exitTime != null ">
+            AND date_format(t5.exit_time,'%Y-%m-%d %H:%i:%s') &lt;= #{exitTime}
+        </if>
+        <!-- 在场记录 = 进场时间 倒序-->
+        <if test="orderByType != null and orderByType == '1'.toString() ">
+            ORDER BY t5.entry_time DESC
+        </if>
+        <!-- 离场记录 = 离场时间 倒序-->
+        <if test="orderByType != null and orderByType == '2'.toString() ">
+            ORDER BY t5.exit_time DESC
+        </if>
+    </select>
+
+    <select id="selectHistoryParkingOrderVO" parameterType="com.ruoyi.project.parking.domain.param.ParkLiveRecordsParam" resultMap="HistoryParkingOrderVOResult" >
+        SELECT t2.order_no,t1.car_number,t1.park_no,t3.dept_name AS park_name,
+        t1.car_type,t4.name AS car_type_name,
+        t1.entry_time,t1.exit_time,SUM(t2.pay_amount) OVER(partition BY t1.id) AS payAmount, t2.effect_flag
+        FROM
+        t_park_live_records t1
+        LEFT JOIN t_park_live_records_parking_order t2 ON t2.effect_flag = 1 and t2.park_live_id = t1.id
+        LEFT JOIN sys_dept t3 ON t3.park_no = t1.park_no
+        LEFT JOIN b_setting_car_type t4 ON t4.park_no = t1.park_no AND t4.code = t1.car_type
+        WHERE t1.del_flag = 0 AND t1.car_status='2' AND t1.member_id = #{memberId}
+        <if test="carNumber != null and carNumber != ''"> AND t1.car_number = #{carNumber} </if>
+        ORDER BY t1.create_time DESC
+    </select>
+
+    <insert id="insertOrderNoWithLiveId">
+        INSERT t_park_live_records_parking_order
+        (park_live_id,order_no,payable_amount,pay_amount,discount_amount) VALUES
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.parkLiveId},#{item.orderNo},#{item.payableAmount},#{item.payAmount},#{item.discountAmount})
+        </foreach>
+    </insert>
+
+</mapper>

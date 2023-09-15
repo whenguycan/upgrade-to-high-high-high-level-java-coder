@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  park-pc:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 127.0.0.1:8085:80
+    restart: always
+    container_name: park-pc

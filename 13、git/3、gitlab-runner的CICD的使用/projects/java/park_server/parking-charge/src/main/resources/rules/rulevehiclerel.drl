@@ -1,0 +1,384 @@
+package rules.parking
+import com.czdx.parkingcharge.domain.pr.ParkRuleModel
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_81_1"
+    activation-group "car_charge-rule"
+    salience 999
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_81_1");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_65_2"
+    activation-group "car_charge-rule"
+    salience 998
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_65_2");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_84_3"
+    activation-group "car_charge-rule"
+    salience 997
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "10")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_84_3");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_68_4"
+    activation-group "car_charge-rule"
+    salience 996
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "10")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_68_4");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_66_5"
+    activation-group "car_charge-rule"
+    salience 995
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_66_5");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_82_6"
+    activation-group "car_charge-rule"
+    salience 994
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_82_6");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_67_7"
+    activation-group "car_charge-rule"
+    salience 993
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "3")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_67_7");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_83_8"
+    activation-group "car_charge-rule"
+    salience 992
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "1", vehicleType == "3")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_83_8");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_69_9"
+    activation-group "car_charge-rule"
+    salience 991
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_69_9");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_85_10"
+    activation-group "car_charge-rule"
+    salience 990
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_85_10");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_88_11"
+    activation-group "car_charge-rule"
+    salience 989
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "10")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_88_11");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_72_12"
+    activation-group "car_charge-rule"
+    salience 988
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "10")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_72_12");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_70_13"
+    activation-group "car_charge-rule"
+    salience 987
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_70_13");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_86_14"
+    activation-group "car_charge-rule"
+    salience 986
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_86_14");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_87_15"
+    activation-group "car_charge-rule"
+    salience 985
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "3")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_87_15");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_71_16"
+    activation-group "car_charge-rule"
+    salience 984
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", regularCategoryId == "10", vehicleType == "3")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_71_16");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_105_17"
+    activation-group "car_charge-rule"
+    salience 983
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", vehicleCategory == "GD", vehicleType == "ALL")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_105_17");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_104_18"
+    activation-group "car_charge-rule"
+    salience 982
+    when
+        $prModel:ParkRuleModel(parkLotSign == "0", vehicleCategory == "GD", vehicleType == "ALL")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_104_18");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_73_19"
+    activation-group "car_charge-rule"
+    salience 981
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "1", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_73_19");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_89_20"
+    activation-group "car_charge-rule"
+    salience 980
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "1", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_89_20");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_92_21"
+    activation-group "car_charge-rule"
+    salience 979
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "1", vehicleType == "10")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_92_21");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_74_22"
+    activation-group "car_charge-rule"
+    salience 978
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "1", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_74_22");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_90_23"
+    activation-group "car_charge-rule"
+    salience 977
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "1", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_90_23");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_75_24"
+    activation-group "car_charge-rule"
+    salience 976
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "1", vehicleType == "3")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_75_24");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_91_25"
+    activation-group "car_charge-rule"
+    salience 975
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "1", vehicleType == "3")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_91_25");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_93_26"
+    activation-group "car_charge-rule"
+    salience 974
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "10", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_93_26");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_94_27"
+    activation-group "car_charge-rule"
+    salience 973
+    when
+        $prModel:ParkRuleModel(parkLotSign == "10", regularCategoryId == "10", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_94_27");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_58_28"
+    activation-group "car_charge-rule"
+    salience 972
+    when
+        $prModel:ParkRuleModel(regularCategoryId == "1", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_58_28");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_59_29"
+    activation-group "car_charge-rule"
+    salience 971
+    when
+        $prModel:ParkRuleModel(regularCategoryId == "10", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_59_29");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_60_30"
+    activation-group "car_charge-rule"
+    salience 970
+    when
+        $prModel:ParkRuleModel(regularCategoryId == "10", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_60_30");
+        $prModel.setChargeRuleId(16);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_103_31"
+    activation-group "car_charge-rule"
+    salience 969
+    when
+        $prModel:ParkRuleModel(regularCategoryId == "23", vehicleType == "ALL")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_103_31");
+        $prModel.setChargeRuleId(6);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_17_32"
+    activation-group "car_charge-rule"
+    salience 968
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "GD", vehicleType == "ALL")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_17_32");
+        $prModel.setChargeRuleId(9);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_100_33"
+    activation-group "car_charge-rule"
+    salience 967
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "LS", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_100_33");
+        $prModel.setChargeRuleId(15);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_101_34"
+    activation-group "car_charge-rule"
+    salience 966
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "LS", vehicleType == "2")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_101_34");
+        $prModel.setChargeRuleId(15);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_102_35"
+    activation-group "car_charge-rule"
+    salience 965
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "LS", vehicleType == "3")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_102_35");
+        $prModel.setChargeRuleId(15);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_97_36"
+    activation-group "car_charge-rule"
+    salience 964
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "LS", vehicleType == "ALL")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_97_36");
+        $prModel.setChargeRuleId(14);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_16_37"
+    activation-group "car_charge-rule"
+    salience 963
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "LS", vehicleType == "ALL")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_16_37");
+        $prModel.setChargeRuleId(8);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P20230222150046_106_38"
+    activation-group "car_charge-rule"
+    salience 962
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "LS", vehicleType == "ALL")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P20230222150046_106_38");
+        $prModel.setChargeRuleId(45);
+end

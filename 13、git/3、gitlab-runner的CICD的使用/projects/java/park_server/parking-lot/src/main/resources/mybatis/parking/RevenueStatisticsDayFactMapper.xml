@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.RevenueStatisticsDayFactMapper">
+
+    <resultMap type="com.ruoyi.project.parking.domain.RevenueStatisticsDayFact" id="RevenueStatisticsDayFactResult">
+        <result property="id" column="id"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="day" column="day"/>
+        <result property="onlinePayableAmount" column="online_payable_amount"/>
+        <result property="onlinePayAmount" column="online_pay_amount"/>
+        <result property="cashPayableAmount" column="cash_payable_amount"/>
+        <result property="cashPayAmount" column="cash_pay_amount"/>
+        <result property="freePayableAmount" column="free_payable_amount"/>
+        <result property="freePayAmount" column="free_pay_amount"/>
+        <result property="concession" column="concession"/>
+        <result property="merchantVoucher" column="merchant_voucher"/>
+        <result property="transactionNumber" column="transaction_number"/>
+        <result property="onlineIncome" column="online_income" jdbcType="DECIMAL"/>
+        <result property="onlineOutgo" column="online_outgo" jdbcType="DECIMAL"/>
+        <result property="onlineAmount" column="online_amount" jdbcType="DECIMAL"/>
+        <result property="cashIncome" column="cash_income" jdbcType="DECIMAL"/>
+        <result property="deductionAmount" column="deduction_amount" jdbcType="DECIMAL"/>
+        <result property="dayAmount" column="day_amount" jdbcType="DECIMAL"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectRevenueStatisticsDayFactVo">
+        select id,
+               park_no, day, online_payable_amount, online_pay_amount,
+            cash_payable_amount, cash_pay_amount, free_payable_amount, free_pay_amount,
+            concession, merchant_voucher, transaction_number,
+            online_income, online_outgo, online_amount,
+            cash_income, deduction_amount, day_amount,
+            create_by, create_time, update_by, update_time
+        from revenue_statistics_day_fact
+    </sql>
+
+    <select id="selectRevenueStatisticsDayFactList"
+            parameterType="com.ruoyi.project.parking.domain.RevenueStatisticsDayFact"
+            resultMap="RevenueStatisticsDayFactResult">
+        <include refid="selectRevenueStatisticsDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''">and day = #{day}</if>
+            <if test="onlinePayableAmount != null ">and online_payable_amount = #{onlinePayableAmount}</if>
+            <if test="onlinePayAmount != null ">and online_pay_amount = #{onlinePayAmount}</if>
+            <if test="cashPayableAmount != null ">and cash_payable_amount = #{cashPayableAmount}</if>
+            <if test="cashPayAmount != null ">and cash_pay_amount = #{cashPayAmount}</if>
+            <if test="freePayableAmount != null ">and free_payable_amount = #{freePayableAmount}</if>
+            <if test="freePayAmount != null ">and free_pay_amount = #{freePayAmount}</if>
+            <if test="concession != null ">and concession = #{concession}</if>
+            <if test="merchantVoucher != null ">and merchant_voucher = #{merchantVoucher}</if>
+            <if test="transactionNumber != null ">and transaction_number = #{transactionNumber}</if>
+        </where>
+    </select>
+
+    <select id="selectRevenueStatisticsDayFactById" parameterType="Integer" resultMap="RevenueStatisticsDayFactResult">
+        <include refid="selectRevenueStatisticsDayFactVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertRevenueStatisticsDayFact"
+            parameterType="com.ruoyi.project.parking.domain.RevenueStatisticsDayFact" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into revenue_statistics_day_fact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="day != null">day,</if>
+            <if test="onlinePayableAmount != null">online_payable_amount,</if>
+            <if test="onlinePayAmount != null">online_pay_amount,</if>
+            <if test="cashPayableAmount != null ">cash_payable_amount,</if>
+            <if test="cashPayAmount != null ">cash_pay_amount,</if>
+            <if test="freePayableAmount != null ">free_payable_amount,</if>
+            <if test="freePayAmount != null ">free_pay_amount,</if>
+            <if test="concession != null">concession,</if>
+            <if test="merchantVoucher != null">merchant_voucher,</if>
+            <if test="transactionNumber != null">transaction_number,</if>
+            <if test="onlineIncome != null">online_income,</if>
+            <if test="onlineOutgo != null">online_outgo,</if>
+            <if test="onlineAmount != null">online_amount,</if>
+            <if test="cashIncome != null">cash_income,</if>
+            <if test="deductionAmount != null">deduction_amount,</if>
+            <if test="dayAmount != null">day_amount,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="day != null">#{day},</if>
+            <if test="onlinePayableAmount != null">#{onlinePayableAmount},</if>
+            <if test="onlinePayAmount != null">#{onlinePayAmount},</if>
+            <if test="cashPayableAmount != null ">#{cashPayableAmount},</if>
+            <if test="cashPayAmount != null ">#{cashPayAmount},</if>
+            <if test="freePayableAmount != null ">#{freePayableAmount},</if>
+            <if test="freePayAmount != null ">#{freePayAmount},</if>
+            <if test="concession != null">#{concession},</if>
+            <if test="merchantVoucher != null">#{merchantVoucher},</if>
+            <if test="transactionNumber != null">#{transactionNumber},</if>
+            <if test="onlineIncome != null">#{onlineIncome},</if>
+            <if test="onlineOutgo != null">#{onlineOutgo},</if>
+            <if test="onlineAmount != null">#{onlineAmount},</if>
+            <if test="cashIncome != null">#{cashIncome},</if>
+            <if test="deductionAmount != null">#{deductionAmount},</if>
+            <if test="dayAmount != null">#{dayAmount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateRevenueStatisticsDayFact"
+            parameterType="com.ruoyi.project.parking.domain.RevenueStatisticsDayFact">
+        update revenue_statistics_day_fact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="onlinePayableAmount != null">online_payable_amount = #{onlinePayableAmount},</if>
+            <if test="onlinePayAmount != null">online_pay_amount = #{onlinePayAmount},</if>
+            <if test="cashPayableAmount != null ">cash_payable_amount = #{cashPayableAmount},</if>
+            <if test="cashPayAmount != null ">cash_pay_amount = #{cashPayAmount},</if>
+            <if test="freePayableAmount != null ">free_payable_amount = #{freePayableAmount},</if>
+            <if test="freePayAmount != null ">free_pay_amount = #{freePayAmount},</if>
+            <if test="concession != null">concession = #{concession},</if>
+            <if test="merchantVoucher != null">merchant_voucher = #{merchantVoucher},</if>
+            <if test="transactionNumber != null">transaction_number = #{transactionNumber},</if>
+            <if test="onlineIncome != null">online_income = #{onlineIncome},</if>
+            <if test="onlineOutgo != null">online_outgo = #{onlineOutgo},</if>
+            <if test="onlineAmount != null">online_amount = #{onlineAmount},</if>
+            <if test="cashIncome != null">cash_income = #{cashIncome},</if>
+            <if test="deductionAmount != null">deduction_amount = #{deductionAmount},</if>
+            <if test="dayAmount != null">day_amount = #{dayAmount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRevenueStatisticsDayFactById" parameterType="Integer">
+        delete
+        from revenue_statistics_day_fact
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteRevenueStatisticsDayFactByIds" parameterType="String">
+        delete from revenue_statistics_day_fact where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectRevenueStatisticsDayFact"
+            parameterType="com.ruoyi.project.parking.domain.RevenueStatisticsDayFact"
+            resultMap="RevenueStatisticsDayFactResult">
+        <include refid="selectRevenueStatisticsDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''">and day = #{day}</if>
+        </where>
+    </select>
+
+    <select id="getRevenueStatisticsFirst" resultType="com.ruoyi.project.parking.domain.vo.RevenueStatisticsVO">
+        select coalesce((select coalesce(online_pay_amount, 0) + coalesce(cash_pay_amount, 0) +
+                                coalesce(free_pay_amount, 0)
+                         from revenue_statistics_day_fact
+                         where park_no = #{parkNo} and day = #{today}), 0) as todayIncome,
+               (select coalesce(sum(coalesce(online_pay_amount, 0)), 0) +
+                       coalesce(sum(coalesce(cash_pay_amount, 0)), 0) + coalesce(sum(coalesce(free_pay_amount, 0)), 0)
+                from revenue_statistics_day_fact
+                where park_no = #{parkNo} and year (date_format(day, '%Y-%m-%d')) = #{year} and month(date_format(day, '%Y-%m-%d')) =
+               #{month}) as monthIncome,
+            coalesce ((select coalesce (online_pay_amount, 0) + coalesce (cash_pay_amount, 0) + coalesce (free_pay_amount, 0) from revenue_statistics_day_fact where park_no =
+               #{parkNo} and day = #{yesterday}), 0) as yesterdayIncome
+        from dual
+    </select>
+
+    <select id="getRevenueStatisticsSecond" resultType="com.ruoyi.project.parking.domain.vo.RevenueStatisticsDayFactVO">
+        select
+        <if test="year != null and year != ''">
+            (coalesce(sum(coalesce(online_payable_amount, 0)), 0)
+            + coalesce(sum(coalesce(cash_payable_amount, 0)), 0)
+            + coalesce(sum(coalesce(free_payable_amount, 0)), 0)) as payable_amount,
+            coalesce(sum(coalesce(online_pay_amount, 0)), 0) as online_pay_amount,
+            coalesce(sum(coalesce(cash_pay_amount, 0)), 0) as cash_pay_amount,
+            coalesce(sum(coalesce(concession, 0)), 0) as concession,
+            coalesce(sum(coalesce(transaction_number, 0)), 0) as transaction_number
+        </if>
+        <if test="year == null or year == ''">
+            (coalesce(online_payable_amount, 0)
+            + coalesce(cash_payable_amount, 0)
+            + coalesce(free_payable_amount, 0)) as payable_amount,
+            online_pay_amount,
+            cash_pay_amount,
+            concession,
+            transaction_number
+        </if>
+        from revenue_statistics_day_fact
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="year != null  and year != ''">and year(date_format(day, '%Y-%m-%d')) = #{year}</if>
+            <if test="month != null  and month != ''">and month(date_format(day, '%Y-%m-%d')) = #{month}</if>
+            <if test="week != null  and week != ''">and week(date_format(day, '%Y-%m-%d')) = #{week}</if>
+            <if test="day != null  and day != ''">and day = #{day}</if>
+        </where>
+    </select>
+
+    <select id="sumAmountOfYear" resultType="java.math.BigDecimal">
+        select coalesce(sum(day_amount),0)
+        from revenue_statistics_day_fact
+        where date_format(day, '%Y-%m-%d') &gt;= #{startOfYear}
+        and date_format(day, '%Y-%m-%d') &lt; #{endOfYear}
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+    <select id="sumAmountOfDay" resultType="java.math.BigDecimal">
+        select coalesce(sum(day_amount),0)
+        from revenue_statistics_day_fact
+        where date_format(day, '%Y-%m-%d') = #{now}
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+
+    <select id="sumDisConsumptionAmountOfDay" resultMap="RevenueStatisticsDayFactResult">
+        select online_payable_amount, cash_payable_amount
+        from revenue_statistics_day_fact
+        where date_format(day, '%Y-%m-%d') = #{now}
+          and park_no = #{parkNo}
+    </select>
+</mapper>

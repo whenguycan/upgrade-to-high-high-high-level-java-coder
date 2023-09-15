@@ -1,0 +1,76 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: lot
+  namespace: parking
+  labels:
+    app: lot
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30292
+    - name: http2
+      protocol: TCP
+      port: 9115
+      targetPort: 9115
+      nodePort: 32516
+  selector:
+    app: lot
+  type: NodePort
+  sessionAffinity: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lot
+  namespace: parking
+  labels:
+    app: lot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lot
+  template:
+    metadata:
+      labels:
+        app: lot
+    spec:
+      nodeSelector:
+        node-network: internet
+      containers:
+        - name: lot
+          image: __image__
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 9115
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 500Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsConfig:
+        nameservers:
+          - 114.114.114.114
+          - 8.8.8.8
+      imagePullSecrets:
+        - name: parking-secret
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

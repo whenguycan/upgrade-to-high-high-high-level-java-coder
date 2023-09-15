@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+import public "google/protobuf/timestamp.proto";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.charge;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.charge";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "ParkingCharge";
+
+
+service ParkingChargeService {
+  // 计算停车费用
+  rpc chargeParkingFee(ChargeParkingFeeRequest) returns (ChargeParkingFeeResponse) {};
+
+  // 测试停车计费规则
+  rpc testChargeParkingRule(TestChargeParkingRuleRequest) returns (TestChargeParkingRuleResponse) {};
+
+}
+
+// 停车明细(请求)
+message ParkingItem {
+  int32 parkFieldId = 1;
+  string entryTime = 2;
+  string exitTime = 3;
+}
+
+// 优惠券Msg(请求)
+message CouponInfo {
+  int32 couponType = 1;
+  int32 couponMold = 2;
+  int32 couponValue = 3;
+  string couponCode = 4;
+  bool canUse = 5;
+  bool selected = 6;
+}
+
+// 计算停车费请求
+message ChargeParkingFeeRequest {
+  string parkNo = 1;
+  string carNumber = 2;
+  string carTypeCode = 3;
+  repeated ParkingItem parkingItem = 4;
+  repeated CouponInfo couponItem = 5;
+}
+
+// 停车费明细(返回)
+message ParkingFeeItem {
+  int32 parkFieldId = 1;
+  string entryTime = 2;
+  string exitTime = 3;
+  int32 parkingTime = 4;
+  double payableAmount = 5;
+}
+
+// 优惠券Msg(返回)
+message ChargeCouponInfo {
+  int32 couponType = 1;
+  int32 couponMold = 2;
+  int32 couponValue = 3;
+  string couponCode = 4;
+  bool canUse = 5;
+  bool selected = 6;
+}
+
+// 计算停车费回复
+message ChargeParkingFeeResponse {
+  string parkNo = 1;
+  string carNumber = 2;
+  double payableAmount = 3;
+  double discountAmount = 4;
+  double payAmount = 5;
+  repeated ParkingFeeItem feeItems = 6;
+  repeated ChargeCouponInfo couponItems = 7;
+}
+
+// 测试停车收费规则请求
+message TestChargeParkingRuleRequest {
+  int32 ruleId = 1;
+  string entryTime = 2;
+  string exitTime = 3;
+}
+
+// 计算停车收费规则返回
+message TestChargeParkingRuleResponse {
+  double payableAmount = 3;
+}

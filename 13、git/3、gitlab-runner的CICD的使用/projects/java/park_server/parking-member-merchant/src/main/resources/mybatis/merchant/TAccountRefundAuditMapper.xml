@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.TAccountRefundAuditMapper">
+
+    <resultMap type="TAccountRefundAudit" id="TAccountRefundAuditResult">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="refund_order_no"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="applyUserId" column="apply_user_id"/>
+        <result property="applyUserName" column="apply_user_name"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="refundAmount" column="refund_amount"/>
+        <result property="applyTime" column="apply_time"/>
+        <result property="refundStatus" column="refund_status"/>
+        <result property="applyRemark" column="apply_remark"/>
+        <result property="auditUserId" column="audit_user_id"/>
+        <result property="auditUserName" column="audit_user_name"/>
+        <result property="auditTime" column="audit_time"/>
+        <result property="auditRemark" column="audit_remark"/>
+        <result property="giveAmount" column="give_amount"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectTAccountRefundAuditVo">
+        select id,
+               order_no,
+               park_no,
+               apply_user_id,
+               apply_user_name,
+               refund_amount,
+               apply_time,
+               refund_status,
+               apply_remark,
+               audit_user_id,
+               audit_user_name,
+               audit_time,
+               audit_remark,
+               give_amount,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        from t_account_refund_audit    </sql>
+
+    <select id="selectTAccountRefundAuditList" parameterType="TAccountRefundAudit"
+            resultMap="TAccountRefundAuditResult">
+        <include refid="selectTAccountRefundAuditVo"/>
+        <where>
+            <if test="orderNo != null  and orderNo != ''">and order_no = #{orderNo}</if>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="applyUserId != null ">and apply_user_id = #{applyUserId}</if>
+            <if test="refundAmount != null ">and refund_amount = #{refundAmount}</if>
+            <if test="applyTime != null ">and apply_time = #{applyTime}</if>
+            <if test="refundStatus != null  and refundStatus != ''">and refund_status = #{refundStatus}</if>
+            <if test="applyRemark != null  and applyRemark != ''">and apply_remark = #{applyRemark}</if>
+            <if test="auditUserId != null ">and audit_user_id = #{auditUserId}</if>
+            <if test="auditUserName != null  and auditUserName != ''">and audit_user_name like concat('%',
+                #{auditUserName}, '%')
+            </if>
+            <if test="auditTime != null ">and audit_time = #{auditTime}</if>
+            <if test="auditRemark != null  and auditRemark != ''">and audit_remark = #{auditRemark}</if>
+            <if test="giveAmount != null ">and give_amount = #{giveAmount}</if>
+        </where>
+    </select>
+
+    <select id="selectTAccountRefundAuditById" parameterType="Long" resultMap="TAccountRefundAuditResult">
+        <include refid="selectTAccountRefundAuditVo"/>
+        where id = #{id}
+    </select>
+
+
+    <delete id="deleteTAccountRefundAuditById" parameterType="Long">
+        delete
+        from t_account_refund_audit
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTAccountRefundAuditByIds" parameterType="String">
+        delete from t_account_refund_audit where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingnotification.mapper.HomePageMapper">
+
+    <select id="getAllParkIds" resultType="com.czdx.parkingnotification.system.domain.SysDept">
+        select dept_id,park_no from sys_dept where status = '0' and del_flag = '0'
+    </select>
+</mapper>

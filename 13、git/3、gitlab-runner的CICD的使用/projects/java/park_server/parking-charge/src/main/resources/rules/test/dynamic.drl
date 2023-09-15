@@ -1,0 +1,199 @@
+package rules.parking
+import com.czdx.parkingcharge.domain.pr.ParkingRecord
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+rule "PARKING_CHARGE_P20230000000001_58_TD_666"
+    activation-group "charge-rule"
+    salience 666
+    when
+        $pRecord:ParkingRecord(needMTDivide)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_TD_666");
+        BigDecimal fee = ParkingFeeUtil.divideTime2ChargeFee($pRecord, BigDecimal.valueOf(0), "1", "1", "09:00", "18:00");
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_IHD_444"
+    activation-group "charge-rule"
+    salience 444
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 540, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_IHD_444");
+        BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFee($pRecord, 540, BigDecimal.valueOf(0));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_IHD_443"
+    activation-group "charge-rule"
+    salience 443
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 480, !useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_IHD_443");
+        BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFee($pRecord, 480, BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_I_555"
+    activation-group "charge-rule"
+    salience 555
+    when
+        $pRecord:ParkingRecord(useFreeTime)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_I_555");
+        BigDecimal fee = ParkingFeeUtil.substractFreeTime($pRecord, 15, BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_I_1"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 60, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_I_1");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 0, 60, BigDecimal.valueOf(1), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(0));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_I_2"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 60, parkingDuration <= 120, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_I_2");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 60, 60, BigDecimal.valueOf(2), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(1));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_I_3"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 60)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_I_3");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 0, 60, BigDecimal.valueOf(2), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_I_4"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 120, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_I_4");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 120, 60, BigDecimal.valueOf(3), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(3));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_I_5"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 60)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_I_5");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 60, 60, BigDecimal.valueOf(3), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(2));
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_IIHD_444"
+    activation-group "charge-rule"
+    salience 444
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 900, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_IIHD_444");
+        BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFee($pRecord, 900, BigDecimal.valueOf(0));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_IIHD_443"
+    activation-group "charge-rule"
+    salience 443
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 840, !useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_IIHD_443");
+        BigDecimal fee = ParkingFeeUtil.divideHideDuration2ChargeFee($pRecord, 840, BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_II_555"
+    activation-group "charge-rule"
+    salience 555
+    when
+        $pRecord:ParkingRecord(useFreeTime)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_II_555");
+        BigDecimal fee = ParkingFeeUtil.substractFreeTime($pRecord, 20, BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_II_1"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 60, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_II_1");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 0, 60, BigDecimal.valueOf(4), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(0));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_II_2"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 60, parkingDuration <= 120, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_II_2");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 60, 60, BigDecimal.valueOf(5), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(4));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_II_3"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 0, parkingDuration <= 60)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_II_3");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 0, 60, BigDecimal.valueOf(5), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(0));
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_II_4"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 120, useFirstPeriod)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_II_4");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 120, 60, BigDecimal.valueOf(6), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(9));
+        $pRecord.setUseFirstPeriod(false);
+        $pRecord.setParkingFee(fee);
+end
+
+rule "PARKING_CHARGE_P20230000000001_58_II_5"
+    activation-group "charge-rule"
+    salience 0
+    when
+        $pRecord:ParkingRecord($duration: parkingDuration > 60)
+    then
+        System.out.println("触发规则：PARKING_CHARGE_P20230000000001_58_II_5");
+        BigDecimal fee = ParkingFeeUtil.chargeParkingFee($duration - 60, 60, BigDecimal.valueOf(6), "1", BigDecimal.valueOf(0), BigDecimal.valueOf(5));
+        $pRecord.setParkingFee(fee);
+end

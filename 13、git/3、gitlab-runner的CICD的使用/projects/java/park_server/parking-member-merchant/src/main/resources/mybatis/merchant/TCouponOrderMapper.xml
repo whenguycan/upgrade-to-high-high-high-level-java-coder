@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.TCouponOrderMapper">
+
+    <resultMap type="TCouponOrder" id="TCouponOrderResult">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="orderType" column="order_type"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="payNum" column="pay_num"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="payableAmount" column="payable_amount"/>
+        <result property="discountAmount" column="discount_amount"/>
+        <result property="paidAmount" column="paid_amount"/>
+        <result property="payAmount" column="pay_amount"/>
+        <result property="payTime" column="pay_time"/>
+        <result property="payStatus" column="pay_status"/>
+        <result property="couponName" column="coupon_name"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectTCouponOrderVo">
+        select id,
+               order_no,
+               order_type,
+               order_status,
+               park_no,
+               user_id,
+               pay_num,
+               coupon_id,
+               payable_amount,
+               discount_amount,
+               paid_amount,
+               pay_amount,
+               pay_time,
+               pay_status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               unit_price,
+               coupon_type,
+               coupon_name,
+               remark
+        from t_coupon_order
+    </sql>
+
+    <select id="selectTCouponOrderList" parameterType="TCouponOrder" resultMap="TCouponOrderResult">
+        <include refid="selectTCouponOrderVo"/>
+        <where>
+            <if test="orderNo != null  and orderNo != ''">and order_no = #{orderNo}</if>
+            <if test="orderType != null  and orderType != ''">and order_type = #{orderType}</if>
+            <if test="orderStatus != null  and orderStatus != ''">and order_status = #{orderStatus}</if>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="payNum != null ">and pay_num = #{payNum}</if>
+            <if test="couponId != null ">and coupon_id = #{couponId}</if>
+            <if test="payableAmount != null ">and payable_amount = #{payableAmount}</if>
+            <if test="discountAmount != null ">and discount_amount = #{discountAmount}</if>
+            <if test="paidAmount != null ">and paid_amount = #{paidAmount}</if>
+            <if test="payAmount != null ">and pay_amount = #{payAmount}</if>
+            <if test="payTime != null ">and pay_time = #{payTime}</if>
+            <if test="payStatus != null  and payStatus != ''">and pay_status = #{payStatus}</if>
+            <if test="remark != null  and remark != ''">and remark = #{remark}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectTCouponOrderById" parameterType="Long" resultMap="TCouponOrderResult">
+        <include refid="selectTCouponOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTCouponOrder" parameterType="TCouponOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into t_coupon_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no,</if>
+            <if test="orderType != null">order_type,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="parkNo != null and parkNo != ''">park_no,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="payNum != null">pay_num,</if>
+            <if test="couponId != null">coupon_id,</if>
+            <if test="payableAmount != null">payable_amount,</if>
+            <if test="discountAmount != null">discount_amount,</if>
+            <if test="paidAmount != null">paid_amount,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="payTime != null">pay_time,</if>
+            <if test="payStatus != null">pay_status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="couponName != null">coupon_name,</if>
+            <if test="couponType != null">coupon_type,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">#{orderNo},</if>
+            <if test="orderType != null">#{orderType},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="parkNo != null and parkNo != ''">#{parkNo},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="payNum != null">#{payNum},</if>
+            <if test="couponId != null">#{couponId},</if>
+            <if test="payableAmount != null">#{payableAmount},</if>
+            <if test="discountAmount != null">#{discountAmount},</if>
+            <if test="paidAmount != null">#{paidAmount},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="payTime != null">#{payTime},</if>
+            <if test="payStatus != null">#{payStatus},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="couponName != null">#{couponName},</if>
+            <if test="couponType != null">#{couponType},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTCouponOrder" parameterType="TCouponOrder">
+        update t_coupon_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="parkNo != null and parkNo != ''">park_no = #{parkNo},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="payNum != null">pay_num = #{payNum},</if>
+            <if test="couponId != null">coupon_id = #{couponId},</if>
+            <if test="payableAmount != null">payable_amount = #{payableAmount},</if>
+            <if test="discountAmount != null">discount_amount = #{discountAmount},</if>
+            <if test="paidAmount != null">paid_amount = #{paidAmount},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="payStatus != null">pay_status = #{payStatus},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+
+            <if test="unitPrice != null">unit_price=#{unitPrice},</if>
+            <if test="couponName != null">coupon_name=#{couponName},</if>
+            <if test="couponType != null">coupon_type=#{couponType},</if>
+            <if test="remark != null">remark=#{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTCouponOrderById" parameterType="Long">
+        delete
+        from t_coupon_order
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTCouponOrderByIds" parameterType="String">
+        delete from t_coupon_order where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

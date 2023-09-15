@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/auth/auth.iml" filepath="$PROJECT_DIR$/app/auth/auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo1/demo1.iml" filepath="$PROJECT_DIR$/demo1/demo1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo2/demo2.iml" filepath="$PROJECT_DIR$/demo2/demo2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo3/demo3.iml" filepath="$PROJECT_DIR$/demo3/demo3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/gateway/gateway.iml" filepath="$PROJECT_DIR$/app/gateway/gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/maven-kj.iml" filepath="$PROJECT_DIR$/.idea/maven-kj.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/sys/sys.iml" filepath="$PROJECT_DIR$/app/sys/sys.iml" />
+    </modules>
+  </component>
+</project>

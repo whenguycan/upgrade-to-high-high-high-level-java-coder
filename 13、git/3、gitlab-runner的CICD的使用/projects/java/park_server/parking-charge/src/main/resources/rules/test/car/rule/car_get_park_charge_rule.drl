@@ -1,0 +1,25 @@
+package rules.parking
+
+import com.czdx.parkingcharge.domain.pr.ParkRuleModel
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+rule "CAR_GET_PARKING_CHARGE_P000001_1"
+    activation-group "car_charge-rule"
+    salience 100
+    when
+        $prModel:ParkRuleModel(parkLotSign == "1", regularCategoryId == "1", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P000001_1");
+        $prModel.setChargeRuleId(65);
+end
+
+rule "CAR_GET_PARKING_CHARGE_P000001_2"
+    activation-group "car_charge-rule"
+    salience 100
+    when
+        $prModel:ParkRuleModel(vehicleCategory == "1", vehicleCategory == "GD", vehicleType == "1")
+    then
+        System.out.println("触发规则：CAR_GET_PARKING_CHARGE_P000001_1");
+        $prModel.setChargeRuleId(65);
+end

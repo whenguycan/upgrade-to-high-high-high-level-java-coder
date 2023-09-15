@@ -1,0 +1,5 @@
+## 什么是DSL语句
+
+DSL语句:领域专用语言,由叶子查询子句和复合查询子句两种子句组成。 Elasticsearch提供了基于JSON的DSL来定义查询。
+
+就是说DSL语句在Elasticsearch中就是一段符合Elasticsearch规范的json字符串！

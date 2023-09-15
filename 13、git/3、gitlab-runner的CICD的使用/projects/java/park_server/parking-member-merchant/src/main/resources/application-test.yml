@@ -1,0 +1,63 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://${DB_HOST:10.10.210.19}:${DB_PORT:3306}/${DB_NAME:fast-parking-member-merchant-test}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: ${DB_USERNAME:root}
+        password: ${DB_PASSWORD:root}
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  # redis 配置
+  redis:
+    # 地址
+    host: ${REDIS_HOST:10.10.210.21}
+    # 端口，默认为6379
+    port: ${REDIS_PORT:32114}
+    # 数据库索引
+    database: 0
+    # 密码
+    password:
+  # MQ
+  rabbitmq:
+    host: ${RMQ_HOST:10.10.210.20}
+    port: ${RMQ_PORT:30801}
+    username: ${RMQ_USERNAME:acnftest}
+    password: ${RMQ_PASSWORD:acnf@admin}
+    virtualHost: /
+
+# grpc 配置
+grpc:
+  client:
+    # 服务端地址
+    parking-device-server:
+      address: 'static://${DEVICE_SERVER:device}:9085'
+    parking-order-server:
+      address: 'static://${ORDER_SERVER:order}:9088'
+    parking-charge-server:
+      address: 'static://${CHARGE_SERVER:charge}:9095'
+    parking-payment-server:
+      address: 'static://${PAYMENT_SERVER:payment}:9100'
+    parking-notification-server:
+      address: 'static://${NOTIFICATION_SERVER:notification}:9105'
+    parking-member-merchant-server:
+      address: 'static://${MEMBER_SERVER:10.10.210.22}:31850'
+    parking-lot-server:
+      address: 'static://${MEMBER_SERVER:10.10.210.22}:32516'
+
+wx:
+  # 崔晶测试号
+  #  appId: wxf4c3f854ce48364b
+  #  appSecret: b59fd5a0d313bb88e672de958228abf1
+  # 西太湖
+  appId: wx54597cedfc1589d3
+  appSecret: 1520f7493017dcf31850c140d8e778c3
+  token: 123456
+  checkToken: false

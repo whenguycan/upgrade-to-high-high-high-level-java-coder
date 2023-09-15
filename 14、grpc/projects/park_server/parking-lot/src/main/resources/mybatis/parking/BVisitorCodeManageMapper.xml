@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BVisitorCodeManageMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BVisitorCodeManage" id="BVisitorCodeManageResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="codeName"    column="code_name"    />
+        <result property="codeUseNumber"    column="code_use_number"    />
+        <result property="codeUsedNumber"    column="code_used_number"    />
+        <result property="codeFreeDay"    column="code_free_day"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="timeLimit"    column="time_limit"    />
+        <result property="remark"    column="remark"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="status"    column="status"    />
+        <result property="code"    column="code"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBVisitorCodeManageVo">
+        select id, park_no, code_name, code_use_number, code_used_number, code_free_day, start_time, end_time, time_limit, remark, apply_time, status, code, create_by, create_time, update_by, update_time from b_visitor_code_manage
+    </sql>
+
+    <select id="selectBVisitorCodeManageList" parameterType="com.ruoyi.project.parking.domain.param.BVisitorCodeManageQueryParam" resultMap="BVisitorCodeManageResult">
+        <include refid="selectBVisitorCodeManageVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="codeName != null  and codeName != ''"> and code_name like concat('%', #{codeName}, '%')</if>
+            <if test="applyStartTime != null "> and date_format(create_time, '%Y-%m-%d') &gt;= date_format(#{applyStartTime}, '%Y-%m-%d')</if>
+            <if test="applyEndTime != null "> and date_format(create_time, '%Y-%m-%d') &lt;= date_format(#{applyEndTime}, '%Y-%m-%d')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectBVisitorCodeManageById" parameterType="Integer" resultMap="BVisitorCodeManageResult">
+        <include refid="selectBVisitorCodeManageVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBVisitorCodeManage" parameterType="com.ruoyi.project.parking.domain.BVisitorCodeManage" useGeneratedKeys="true" keyProperty="id">
+        insert into b_visitor_code_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="codeName != null">code_name,</if>
+            <if test="codeUseNumber != null">code_use_number,</if>
+            <if test="codeUsedNumber != null">code_used_number,</if>
+            <if test="codeFreeDay != null">code_free_day,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="timeLimit != null">time_limit,</if>
+            <if test="remark != null">remark,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="status != null">status,</if>
+            <if test="code != null">code,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="codeName != null">#{codeName},</if>
+            <if test="codeUseNumber != null">#{codeUseNumber},</if>
+            <if test="codeUsedNumber != null">#{codeUsedNumber},</if>
+            <if test="codeFreeDay != null">#{codeFreeDay},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="timeLimit != null">#{timeLimit},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="code != null">#{code},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBVisitorCodeManage" parameterType="com.ruoyi.project.parking.domain.BVisitorCodeManage">
+        update b_visitor_code_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="codeName != null">code_name = #{codeName},</if>
+            <if test="codeUseNumber != null">code_use_number = #{codeUseNumber},</if>
+            <if test="codeUsedNumber != null">code_used_number = #{codeUsedNumber},</if>
+            <if test="codeFreeDay != null">code_free_day = #{codeFreeDay},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="timeLimit != null">time_limit = #{timeLimit},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateNumber" parameterType="com.ruoyi.project.parking.domain.BVisitorCodeManage">
+        update b_visitor_code_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="codeUsedNumber != null">code_used_number = #{codeUsedNumber},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBVisitorCodeManageById" parameterType="Integer">
+        delete from b_visitor_code_manage where id = #{id}
+    </delete>
+
+    <delete id="deleteBVisitorCodeManageByIds" parameterType="String">
+        delete from b_visitor_code_manage where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="checkUnique" parameterType="String" resultType="int">
+        select count(id) from b_visitor_code_manage where code_name = #{codeName}
+    </select>
+
+    <select id="getCodeInfo" parameterType="String" resultType="com.ruoyi.project.parking.domain.vo.BVisitorCodeManageVO">
+        select bvcm.id, bvcm.park_no, sd.dept_name as park_name, bvcm.code_name, bvcm.code_use_number, bvcm.code_used_number, bvcm.code_free_day,
+               bvcm.start_time, bvcm.end_time, bvcm.time_limit, bvcm.remark, bvcm.apply_time, bvcm.status, bvcm.code,
+               bvcm.create_by, bvcm.create_time, bvcm.update_by, bvcm.update_time
+        from b_visitor_code_manage bvcm
+        left join sys_dept sd on sd.park_no = bvcm.park_no
+        where bvcm.code = #{code}
+    </select>
+</mapper>

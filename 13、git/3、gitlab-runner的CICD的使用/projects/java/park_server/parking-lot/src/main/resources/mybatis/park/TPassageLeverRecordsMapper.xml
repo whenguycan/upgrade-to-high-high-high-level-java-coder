@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.TPassageLeverRecordsMapper">
+
+    <resultMap type="TPassageLeverRecordsVo" id="TPassageLeverRecordsResult">
+        <result property="id" column="id"/>
+        <result property="operateType" column="operate_type"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="passageNo" column="passage_no"/>
+        <result property="remark" column="remark"/>
+        <result property="passageName" column="passage_name"/>
+        <result property="parkName" column="park_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectTPassageLeverRecordsVo">
+        select a.id,
+               a.operate_type,
+               a.park_no,
+               a.passage_no,
+               a.remark,
+               a.create_time,
+               a.update_time,
+               (select passage_name from b_passage b where b.passage_no = a.passage_no) as passage_name,
+               (select dept_name from sys_dept b where b.park_no = a.park_no)           as park_name
+        from t_passage_lever_records a
+    </sql>
+
+    <select id="selectTPassageLeverRecordsList" parameterType="TPassageLeverRecords"
+            resultMap="TPassageLeverRecordsResult">
+        <include refid="selectTPassageLeverRecordsVo"/>
+        <where>
+            <if test="operateType != null  and operateType != ''">and a.operate_type = #{operateType}</if>
+            <if test="parkNo != null ">and a.park_no = #{parkNo}</if>
+            <if test="passageNo != null  and passageNo != ''">and a.passage_no = #{passageNo}</if>
+        </where>
+    </select>
+
+    <select id="selectTPassageLeverRecordsById" parameterType="Long" resultMap="TPassageLeverRecordsResult">
+        <include refid="selectTPassageLeverRecordsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTPassageLeverRecords" parameterType="TPassageLeverRecords" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_passage_lever_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="operateType != null">operate_type,</if>
+            <if test="parkNo != null">park_no,</if>
+            <if test="passageNo != null">passage_no,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="operateType != null">#{operateType},</if>
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="passageNo != null">#{passageNo},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTPassageLeverRecords" parameterType="TPassageLeverRecords">
+        update t_passage_lever_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operateType != null">operate_type = #{operateType},</if>
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="passageNo != null">passage_no = #{passageNo},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTPassageLeverRecordsById" parameterType="Long">
+        delete
+        from t_passage_lever_records
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTPassageLeverRecordsByIds" parameterType="String">
+        delete from t_passage_lever_records where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

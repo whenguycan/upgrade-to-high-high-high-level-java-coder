@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czdx.parkingorder.project.dao.ParkingOrderDao">
+
+    <select id="statisticIncome" resultType="com.czdx.parkingorder.project.vo.StatisticIncomeVo">
+        select
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_parking_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) +
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_merchant_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) +
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_monthly_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as todayIncome,
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_parking_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>) +
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_merchant_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>) +
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_monthly_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>) as totalIncome
+    </select>
+
+    <select id="analysePayTypeDayFact" resultType="com.czdx.parkingorder.project.vo.PayTypeDayFactVO">
+        select
+        sdd.dict_value as payType,
+        (select coalesce(sum(coalesce(tpo.pay_amount, 0)), 0) from t_parking_order tpo
+        where tpo.order_type = sdd.dict_value
+        and tpo.order_status = '03'
+        and tpo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(tpo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as amount,
+        (select count(id) from t_parking_order tpo
+        where tpo.order_type = sdd.dict_value
+        and tpo.order_status = '03'
+        and tpo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(tpo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as number
+        from (select '1' as dict_value from dual union
+        select '2' as dict_value from dual) sdd
+        group by sdd.dict_value
+    </select>
+
+    <select id="analysePayMethodDayFact" resultType="com.czdx.parkingorder.project.vo.PayMethodDayFactVO">
+        select
+        sdd.dict_value as payMethod,
+        (select coalesce(sum(coalesce(tpo.pay_amount, 0)), 0) from t_parking_order tpo
+        where tpo.pay_method = sdd.dict_value
+        and tpo.order_status = '03'
+        and tpo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(tpo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) +
+        (select coalesce(sum(coalesce(tpo.pay_amount, 0)), 0) from t_merchant_order tpo
+        where tpo.pay_method = sdd.dict_value
+        and tpo.order_status = '03'
+        and tpo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(tpo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) +
+        (select coalesce(sum(coalesce(tpo.pay_amount, 0)), 0) from t_monthly_order tpo
+        where tpo.pay_method = sdd.dict_value
+        and tpo.order_status = '03'
+        and tpo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(tpo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as amount
+        from (select '1' as dict_value from dual union
+        select '2' as dict_value from dual union
+        select '3' as dict_value from dual) sdd
+        group by sdd.dict_value
+    </select>
+
+    <select id="analyseOrderSituationDayFact" resultType="com.czdx.parkingorder.project.vo.OrderSituationDayFactVO">
+        select
+        t.day,
+        (select count(id) from t_parking_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(t.day, '%Y-%m-%d')) +
+        (select count(id) from t_merchant_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(t.day, '%Y-%m-%d')) +
+        (select count(id) from t_monthly_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(t.day, '%Y-%m-%d')) as count
+        from (SELECT
+        date_sub( #{day}, INTERVAL 7 DAY ) AS day UNION
+        SELECT
+        date_sub( #{day}, INTERVAL 6 DAY ) AS day UNION
+        SELECT
+        date_sub( #{day}, INTERVAL 5 DAY ) AS day UNION
+        SELECT
+        date_sub( #{day}, INTERVAL 4 DAY ) AS day UNION
+        SELECT
+        date_sub( #{day}, INTERVAL 3 DAY ) AS day UNION
+        SELECT
+        date_sub( #{day}, INTERVAL 2 DAY ) AS day UNION
+        SELECT
+        date_sub( #{day}, INTERVAL 1 DAY ) AS day
+        FROM DUAL) t
+        group by t.day
+    </select>
+
+    <select id="sumOnlineIncome" resultType="java.math.BigDecimal">
+        select coalesce(sum(pay_amount), 0)
+        from t_parking_order
+        where date_format(pay_time, '%Y-%m-%d') = #{day}
+        and order_status = '03'
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+
+    <select id="sumOnlineDeduction" resultType="java.math.BigDecimal">
+        select coalesce(sum(discount_amount), 0)
+        from t_parking_order
+        where date_format(pay_time, '%Y-%m-%d') = #{day}
+        and order_status = '03'
+        and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+    </select>
+
+    <select id="analyseRevenueStatisticsParking"
+            resultType="com.czdx.parkingorder.project.vo.RevenueStatisticsDayFactVO">
+        select
+        coalesce(sum(coalesce(tpo.payable_amount, 0)), 0) as online_payable_amount,
+        coalesce(sum(coalesce(tpo.pay_amount, 0)), 0) as online_pay_amount,
+        (select coalesce(sum(coalesce(payable_amount, 0)), 0) from t_parking_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and pay_method = '4'
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as cash_payable_amount,
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_parking_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and pay_method = '4'
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as cash_pay_amount,
+        (select count(id) from t_parking_order
+        where discount_amount > 0 and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as concession,
+        (select count(id) from t_parking_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as transaction_number
+        from t_parking_order tpo
+        where tpo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and tpo.pay_method != '4'
+        and date_format(tpo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+    </select>
+
+    <select id="analyseRevenueStatisticsMerchant"
+            resultType="com.czdx.parkingorder.project.vo.RevenueStatisticsDayFactVO">
+        select
+        coalesce(sum(coalesce(tmeo.payable_amount, 0)), 0) as online_payable_amount,
+        coalesce(sum(coalesce(tmeo.pay_amount, 0)), 0) as online_pay_amount,
+        (select coalesce(sum(coalesce(payable_amount, 0)), 0) from t_merchant_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and pay_method = '4'
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as cash_payable_amount,
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_merchant_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and pay_method = '4'
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as cash_pay_amount,
+        (select count(id) from t_merchant_order
+        where discount_amount > 0 and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as concession,
+        (select count(id) from t_merchant_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as transaction_number
+        from t_merchant_order tmeo
+        where tmeo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and tmeo.pay_method = '4'
+        and date_format(tmeo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+    </select>
+
+    <select id="analyseRevenueStatisticsMonthly"
+            resultType="com.czdx.parkingorder.project.vo.RevenueStatisticsDayFactVO">
+        select
+        coalesce(sum(coalesce(tmoo.payable_amount, 0)), 0) as online_payable_amount,
+        coalesce(sum(coalesce(tmoo.pay_amount, 0)), 0) as online_pay_amount,
+        (select coalesce(sum(coalesce(payable_amount, 0)), 0) from t_monthly_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and pay_method = '4'
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as cash_payable_amount,
+        (select coalesce(sum(coalesce(pay_amount, 0)), 0) from t_monthly_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and pay_method = '4'
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as cash_pay_amount,
+        (select count(id) from t_monthly_order
+        where discount_amount > 0 and park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as concession,
+        (select count(id) from t_monthly_order
+        where park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and date_format(pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')) as transaction_number
+        from t_monthly_order tmoo
+        where tmoo.park_no in
+        <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+            #{parkNo}
+        </foreach>
+        and tmoo.pay_method = '4'
+        and date_format(tmoo.pay_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+    </select>
+    <select id="sumPayAmount" resultType="java.math.BigDecimal">
+        select coalesce(sum(coalesce(pay_amount, 0)), 0)
+        from t_parking_order
+        where date_format(create_time, '%Y-%m-%d') &gt;= #{startTime}
+          and date_format(create_time, '%Y-%m-%d') &lt;= #{endTime}
+          and order_status = '03'
+          and park_no = #{parkNo}
+    </select>
+    <select id="sumDiscountAmount" resultType="java.math.BigDecimal">
+        select coalesce(sum(coalesce(discount_amount, 0)), 0)
+        from t_parking_order
+        where date_format(create_time, '%Y-%m-%d') &gt;= #{startTime}
+          and date_format(create_time, '%Y-%m-%d') &lt;= #{endTime}
+          and order_status = '03'
+          and park_no = #{parkNo}
+    </select>
+</mapper>

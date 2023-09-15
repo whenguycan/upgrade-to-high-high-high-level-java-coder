@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.merchant;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.merchant";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "CouponTask";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+// led大屏显示进出场信息API列表
+service CouponTaskService {
+  rpc refeshCoupon(google.protobuf.Empty) returns (google.protobuf.Empty) {};
+}

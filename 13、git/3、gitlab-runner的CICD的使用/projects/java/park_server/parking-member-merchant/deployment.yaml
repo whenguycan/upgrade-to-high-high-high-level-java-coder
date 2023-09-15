@@ -1,0 +1,76 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: member
+  namespace: parking
+  labels:
+    app: member
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8110
+      targetPort: 8110
+      nodePort: 32520
+    - name: http2
+      protocol: TCP
+      port: 9110
+      targetPort: 9110
+      nodePort: 32146
+  selector:
+    app: member
+  type: NodePort
+  sessionAffinity: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: member
+  namespace: parking
+  labels:
+    app: member
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: member
+  template:
+    metadata:
+      labels:
+        app: member
+    spec:
+      nodeSelector:
+        node-network: internet
+      containers:
+        - name: member
+          image: __image__
+          ports:
+            - containerPort: 8110
+              protocol: TCP
+            - containerPort: 9110
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 500Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsConfig:
+        nameservers:
+          - 114.114.114.114
+          - 8.8.8.8
+      imagePullSecrets:
+        - name: parking-secret
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

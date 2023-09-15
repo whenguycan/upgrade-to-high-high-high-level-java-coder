@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BParkChargeRelationHolidayMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BParkChargeRelationHoliday" id="BParkChargeRelationHolidayResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="ruleId"    column="rule_id"    />
+        <result property="holidayType"    column="holiday_type"    />
+        <result property="parkLotSign"    column="park_lot_sign"    />
+        <result property="vehicleCategorySign"    column="vehicle_category_sign"    />
+        <result property="vehicleTypeSign"    column="vehicle_type_sign"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBParkChargeRelationHolidayVo">
+        select bpcrh.id, bpcrh.park_no, bpcrh.rule_id, bpcr.rule_name,
+            bpcrh.holiday_type, (case when bpcrh.holiday_type = '1' then '假期' else '调休' end) as holiday_type_name,
+            bpcrh.park_lot_sign,
+            (case when bpcrh.park_lot_sign = 'ALL' then '全部(除专门设定的停车场外)' else bf.field_name end) as park_lot_name,
+            bpcrh.vehicle_category_sign,
+            (case when bpcrh.vehicle_category_sign = 'LS' then '临时车' when bpcrh.vehicle_category_sign = 'GD' then '全部固定车(除专门设定的固定车外)'
+                  else bsrcc.name end) as vehicle_category_name,
+            bpcrh.vehicle_type_sign,
+            (case when bpcrh.vehicle_type_sign = 'ALL' then '全部(除专门设定的车型外)' else bsct.name end) as vehicle_type_name,
+            bpcrh.create_by, bpcrh.create_time, bpcrh.update_by, bpcrh.update_time
+        from b_park_charge_relation_holiday bpcrh
+        left join b_park_charge_rule bpcr on bpcr.park_no = bpcrh.park_no and bpcr.id = bpcrh.rule_id
+        left join b_field bf on bf.park_no = bpcrh.park_no and bf.id = bpcrh.park_lot_sign
+        left join b_setting_car_type bsct on bsct.park_no = bpcrh.park_no and bsct.id = bpcrh.vehicle_type_sign
+        left join b_setting_regular_car_category bsrcc on bsrcc.park_no = bpcrh.park_no and bsrcc.id = bpcrh.vehicle_category_sign
+    </sql>
+
+    <select id="selectBParkChargeRelationHolidayList" parameterType="com.ruoyi.project.parking.domain.BParkChargeRelationHoliday"
+            resultType="com.ruoyi.project.parking.domain.vo.BParkChargeRelationHolidayVO">
+        <include refid="selectBParkChargeRelationHolidayVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and bpcrh.park_no = #{parkNo}</if>
+            <if test="ruleId != null "> and bpcrh.rule_id = #{ruleId}</if>
+            <if test="holidayType != null "> and bpcrh.holiday_type = #{holidayType}</if>
+            <if test="parkLotSign != null  and parkLotSign != ''"> and bpcrh.park_lot_sign = #{parkLotSign}</if>
+            <if test="vehicleCategorySign != null  and vehicleCategorySign != ''"> and bpcrh.vehicle_category_sign = #{vehicleCategorySign}</if>
+            <if test="vehicleTypeSign != null  and vehicleTypeSign != ''"> and bpcrh.vehicle_type_sign = #{vehicleTypeSign}</if>
+        </where>
+    </select>
+    
+    <select id="selectBParkChargeRelationHolidayById" parameterType="Integer"
+            resultType="com.ruoyi.project.parking.domain.vo.BParkChargeRelationHolidayVO">
+        <include refid="selectBParkChargeRelationHolidayVo"/>
+        where bpcrh.id = #{id}
+    </select>
+        
+    <insert id="insertBParkChargeRelationHoliday" parameterType="com.ruoyi.project.parking.domain.BParkChargeRelationHoliday" useGeneratedKeys="true" keyProperty="id">
+        insert into b_park_charge_relation_holiday
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="ruleId != null">rule_id,</if>
+            <if test="holidayType != null ">holiday_type,</if>
+            <if test="parkLotSign != null">park_lot_sign,</if>
+            <if test="vehicleCategorySign != null">vehicle_category_sign,</if>
+            <if test="vehicleTypeSign != null">vehicle_type_sign,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="ruleId != null">#{ruleId},</if>
+            <if test="holidayType != null ">#{holidayType},</if>
+            <if test="parkLotSign != null">#{parkLotSign},</if>
+            <if test="vehicleCategorySign != null">#{vehicleCategorySign},</if>
+            <if test="vehicleTypeSign != null">#{vehicleTypeSign},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <delete id="deleteBParkChargeRelationHolidayById" parameterType="Integer">
+        delete from b_park_charge_relation_holiday where id = #{id}
+    </delete>
+
+    <delete id="deleteBParkChargeRelationHolidayByIds" parameterType="String">
+        delete from b_park_charge_relation_holiday where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="checkRelationExist" parameterType="com.ruoyi.project.parking.domain.BParkChargeRelationHoliday" resultType="int">
+        select count(id) from b_park_charge_relation_holiday
+        where park_no = #{parkNo} and rule_id = #{ruleId}
+        and holiday_type = #{holidayType}
+        and park_lot_sign = #{parkLotSign}
+        and vehicle_category_sign = #{vehicleCategorySign}
+        and vehicle_type_sign = #{vehicleTypeSign}
+    </select>
+</mapper>

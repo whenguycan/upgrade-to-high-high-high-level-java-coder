@@ -1,0 +1,11 @@
+com/example/controller/IndexController.class
+com/example/agent/LoadTimeAgent.class
+com/example/Application.class
+com/example/agent/VMAttach.class
+com/example/modifyClass.class
+com/example/FileUtils.class
+com/example/Object.class
+com/example/Hello.class
+com/example/agent/DynamicAgent.class
+com/example/agent/InfoTransformer.class
+com/example/IHhh.class

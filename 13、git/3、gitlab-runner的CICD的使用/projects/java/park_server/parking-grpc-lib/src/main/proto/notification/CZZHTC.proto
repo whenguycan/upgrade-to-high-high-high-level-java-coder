@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+// 如果是两个文件中消息类型一样，则会报错，就好比java中类名一摸一样，会报错道理是一样的，因此为了区分可以给每个.proto文件增加包
+package com.czdx.grpc.lib.Wechat;
+
+// 是否如果是true，那么每一个message文件都会有一个单独的class文件 否则，message全部定义在outerclass文件里
+option java_multiple_files = true;
+// 生成java代码的包名
+option java_package = "com.czdx.grpc.lib.czzhtc";
+// 是用一个class文件来定义所有的message对应的java类
+option java_outer_classname = "CZZHTC";
+
+// 这里面定义了一个gRPC服务，里面含有一个接口，并且还有这个接口的入参和返回结果的定义
+service CZZHTCService {
+  // RPC方法定义
+  // 车场信息同步
+  rpc syncParkInfo(SyncParkInfoRequestProto) returns (CZZHTCResponseProto){}
+  // 进出记录上传
+  rpc turnoverRecord(TurnoverRecordRequestProto) returns (CZZHTCResponseProto){}
+  // 收费记录上传
+  rpc billRecord(BillRecordRequestProto) returns (CZZHTCResponseProto){}
+}
+
+//在消息定义中，每个字段都有唯一的一个标识符。
+//这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。
+
+// 车场信息同步请求参数定义
+message SyncParkInfoRequestProto{
+  //--------- 必填参数  开始 ---------
+  //车场名称
+  string parkName = 1;
+  //收费标准
+  string rateInfo = 2;
+  //城市代码。参照中华人民共和国国家统计局网站发布的行政区划代码
+  //常州市：320400000000
+  string cityCode = 3;
+  //--------- 必填参数  结束 ---------
+  //地址
+  string address = 4;
+  //经度
+  double coordinateX = 5;
+  //纬度
+  double coordinateY = 6;
+}
+
+// 车场信息同步请求参数定义
+message TurnoverRecordRequestProto{
+  //--------- 必填参数  开始 ---------
+  //进出记录标识。主键。入场和出场必须是不同的recordid
+  int32 recordID = 1;
+  //通行时间。格式：yyyy-MM-dd HH:mm:ss
+  string recordTime = 2;
+  //车牌号
+  string plate = 3;
+  //车牌颜色
+  int32 color = 4;
+  //记录类型。0入场，1出场
+  int32 recordType = 5;
+  //通道编号。场库出入口通道的编号（数字不能为 0或者1），可从2 开始
+  string DevNum = 6;
+  //--------- 必填参数  结束 ---------
+  //是否人工确认过车牌。0-否；1-是
+  int32 confirmFlag = 7;
+  //对应收费记录标识。多次收费记录的，上传最后一次收费记录的标识
+  int32 billID = 8;
+}
+
+// 车场信息同步请求参数定义
+message BillRecordRequestProto{
+  //--------- 必填参数  开始 ---------
+  //region 必填参数
+  //收费记录。主键。一次停车分多次支付，每次支付的billid不得重复，并且与临停计费查询接口返回的billid一致
+  int32 billID = 1;
+  //收费时间。格式：yyyy-MM-dd HH:mm:ss
+  string billTime = 2;
+  //车牌号
+  string plate = 3;
+  //车牌颜色。-1-未知；1-蓝色；2-白色；3-黑色；4-黄色；5-绿色
+  int32 color = 4;
+  //开始时间。格式：yyyy-MM-dd HH:mm:ss
+  string startTime = 5;
+  //结束时间。格式：yyyy-MM-dd HH:mm:ss
+  string endTime = 6;
+  //收费方式。
+  // 0-出口收费；
+  // 1-中央收费；
+  // 2-提前收费（出入口拥堵时，使用手持机、pad等移动设备提前收费）；
+  // 3-APP缴费（使用常州智慧停车微信公众号或APP进行线上支付）；
+  // 6-自助缴费机
+  int32 billType = 7;
+  //支付方式。
+  // 0-现金支付；
+  // 1-支付宝支付；
+  // 2-微信支付；
+  // 3-银联支付
+  int32 payType = 8;
+  //线上支付渠道
+  //0:现金支付
+  //1:第三方线上支付收费（即车场自有渠道线上支付）
+  //2:常州智慧停车线上收费（即云平台线上支付）
+  int32 payChannel = 9;
+  //应收。单位（元）
+  double should = 10;
+  //实收。单位（元）
+  double paid = 11;
+  //endregion
+  //--------- 必填参数  结束 ---------
+  //车辆类型
+  //1-小型车；
+  //2-中型车；
+  //3-大型车；
+  //5-军警车辆；
+  int32 carType = 12;
+  //优惠金额。单位（元）
+  double freeMoney = 13;
+  //使用充值金额。单位（元）
+  double prePaid = 14;
+  //提前收费金额。单位（元）。提前收费金额指出场前本次进出记录已经收费的金额
+  double advPaid = 15;
+  //会员卡优惠金额
+  double memberFreeMoney = 16;
+  //固定用户按临停计算的优惠金额。如果按临停计费，账单的优惠金额
+  double regularFreeMoney = 17;
+  //账单编号。如果使用App或者其他非现金支付方式，需要保留第三方支付账单编号
+  string orderCode = 18;
+  //电子优惠券编号。同时使用到多张电子优惠券时，将编号以英文半角逗号形式连接
+  string discountCodes = 19;
+  //备注信息
+  string remark = 20;
+}
+
+// 常州智慧停车云平台通用响应结果定义
+message CZZHTCResponseProto{
+  //返回结果
+  bool success = 1;
+  //返回信息
+  string message = 2;
+}

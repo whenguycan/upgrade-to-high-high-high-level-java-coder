@@ -1,0 +1,48 @@
+# Spring配置
+spring:
+  # 数据库配置
+  datasource:
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:ry-vue}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: ${DB_USERNAME:root}
+        password: ${DB_PASSWORD:root}
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+  # redis 配置
+  redis:
+    # 地址
+    host: ${REDIS_HOST:localhost}
+    # 端口，默认为6379
+    port: ${REDIS_PORT:6379}
+    # 数据库索引
+    database: 0
+    # 密码
+    password:
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefgHIJKLmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+  refreshExpireTime: 10080
+
+# Swagger配置，生产环境关闭
+swagger:
+  # 是否开启swagger
+  enabled: false
+
+alipay:
+  #  支付宝正式参数
+  appId: 2021003179699861
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAg4goEMyyi3HaBpN9sNa8kd905eICaT7ofBqW8RXvz/yHTYm5Y8epHcaYtJ5Mwh/4xK55DlJL5ZNECloa2M37fclADvR3U57N0J/CRMysnE8qrhTlx01szLMBhsJut8SIIKN4EJrI6w9k6mzKK7uJ1/BrEtzCdh6zn2qGPztrcK3zv8k0qyMNnozi+76aI1dQgcTcc3Xewa6v0zYbVJNZ+Eg2YrFtK86sOIFdA1fUQf8e9jWzyHMQjf8bmLiZxHK3XwXDyFRDkPJ7Wpxz3Ne+zpyKVYdzLWiTdH15vYb6kWM0WA8x2VYZnq/4uYa2jRi/xffXc0z5HzgEwZBIbtfytQIDAQAB
+  RSA_PRIVATE_KEY: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCQuNHy/bGPi7x58UzZFoQ096LlSWWjOxeZ6RlbfApcZ7Y3yunP11068ik6KsvQ6Lpt9ONmMyyjPorRsLxPvYa1aXm6bxGf0go3tJTLATqVzKEbXHy5x9LjFpWZkg+WT06KmOt8SZaOgda1CndHg5mv23tIicYls8mW6yR4tlaKUscZt04DqZtDrYjB+4lF53nK8J2pZcf5bHkBnRDC0P2zZNEwEVQXIEqLijRWXD2XzzE0RUA2oCL6veAoKPp5PA3v28OEAYEHaqvTK7MCYqGAIQrXXoBer5KQZ4tE2IAv6VKbLopj7KMFN1GXBEmJgPnlFNeBm/WV9lp2GdlWGJ9fAgMBAAECggEAdMUbabN25Dq8favL9NFtJQu2XMjHAFi6p03kTuObvIlWBlhsJW5A5EHmL++9+jb9zaCtJpYd6y2Ydq7iknh6y79qH5pknw6rfdzvvYilS58LUvdiD8iCiQZ8+KdYelBNMBlI0ETT/PIYWoUyTvqJM9Kk+5dm0J7rBiF+kQOWeg4vLJKGT5ykRK1EB6br07Pj/VPle5SHd12FRiax0p1MEqVT3MjBDDmB9auLEzjIuufqZ/bYhCxmvNXPx7ZRboIPHkG+XTXNnm/uQnD4ufm7lMm08mZ9vEY9du3yCFY4Uwcn4erQqDnMgc5YpaQPy4Z8jjDmtnC2ie1B9Sv3MJmOYQKBgQDM7IH6a7n8sdlziDOfVUHebc3rjMS6gRJ9u4EDNCKG7aJShTlwHUStU+trzYEzRZz2UP3veKC0ZFXwy5Zuu/Lls/ZfYOcdKp59i2KqWUNLc/D3daX5AaOnfatw5Ad4+DM9AaDVWm5sdfZlteuTCXg0wqkquY/fZNBI7IisgkdkDwKBgQC0ywjDcyDXRMrClgunrgXqSh1mfUUZDQas2ijkXdesktA8kv4MzWNssVEiyn5td2NqYEmzJmZI2o7u3YI9Z3P5k9BMuaBLeJ14F8/zfrc7coLI5hGMgYj89zDjc/PlfgmjyWanqlYSItC6cMpzvc1jEmOYaaVSXs/xgXGguVd/sQKBgQCjxLNPhT4604tbyFKxGDqu3wP9Jh+miTZU4z+EZurc+BaMaknv7oQPHQz8t1x0tEJvm2SFN9r+r1z7Nki/sFa6+iqAKPoqlf/Zh0ZPq0ybhUnjCdOdf5Dhbw5PBv1t0LVqIN3/A+lRpqhGuq9Mb/nv+E2nhmqTdob6cIX9j5QsQwKBgH0v6c2MtrzZAZ1j0IY3Vhk5YMpLC8Gg53JhTddzs5fnwRFwp0GuJp5o2cnBdXHPLaPHMMFAYasoy7hS4ZArRn8W/zFhh8E6r68sre3pXG9ph24dASHNwFGJyOx2qffLIlmrZ83JgPfl66pt14H1d3aWkShEXxl+VXbhLxEfxZrBAoGALDxGk7fwNJ86GL0LRDgPDVcdmCsLS4vrD/T555Xqxciwps3TVywiyHu7AEFU/jG8QAygNIJW3qfagNIOGNg9LTnvdagLhXLgbTVNBcxREZolLnoZjuvhMh5jGEe/87DLYFaOqaBVy3WjqU7VFHoXwGmVGCnh4BNvoiyO/iiqw+4=

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.DurationStatisticDayFactMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.DurationStatisticDayFact" id="DurationStatisticDayFactResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="day"    column="day"    />
+        <result property="durationType"    column="duration_type"    />
+        <result property="count"    column="count"    />
+        <result property="ratio"    column="ratio"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDurationStatisticDayFactVo">
+        select id, park_no, day, duration_type, count, ratio, create_by, create_time, update_by, update_time from duration_statistic_day_fact
+    </sql>
+
+    <select id="selectDurationStatisticDayFactList" parameterType="com.ruoyi.project.parking.domain.DurationStatisticDayFact" resultMap="DurationStatisticDayFactResult">
+        <include refid="selectDurationStatisticDayFactVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="durationType != null  and durationType != ''"> and duration_type = #{durationType}</if>
+            <if test="count != null "> and count = #{count}</if>
+            <if test="ratio != null "> and ratio = #{ratio}</if>
+        </where>
+    </select>
+    
+    <select id="selectDurationStatisticDayFactById" parameterType="Integer" resultMap="DurationStatisticDayFactResult">
+        <include refid="selectDurationStatisticDayFactVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDurationStatisticDayFact" parameterType="com.ruoyi.project.parking.domain.DurationStatisticDayFact">
+        insert into duration_statistic_day_fact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="parkNo != null">park_no,</if>
+            <if test="day != null">day,</if>
+            <if test="durationType != null">duration_type,</if>
+            <if test="count != null">count,</if>
+            <if test="ratio != null">ratio,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="day != null">#{day},</if>
+            <if test="durationType != null">#{durationType},</if>
+            <if test="count != null">#{count},</if>
+            <if test="ratio != null">#{ratio},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDurationStatisticDayFact" parameterType="com.ruoyi.project.parking.domain.DurationStatisticDayFact">
+        update duration_statistic_day_fact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="durationType != null">duration_type = #{durationType},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="ratio != null">ratio = #{ratio},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDurationStatisticDayFactById" parameterType="Integer">
+        delete from duration_statistic_day_fact where id = #{id}
+    </delete>
+
+    <delete id="deleteDurationStatisticDayFactByIds" parameterType="String">
+        delete from duration_statistic_day_fact where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="analyseDurationStatisticDayFact" resultType="com.ruoyi.project.parking.domain.DurationStatisticDayFact">
+        SELECT
+            '1' as duration_type,
+            count(id) as count
+        FROM t_park_live_records
+        where date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and TimeStampDiff( MINUTE, entry_time, exit_time ) &lt; 30
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+        union
+        SELECT
+            '2' as duration_type,
+            count(id) as count
+        FROM t_park_live_records
+        where date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and TimeStampDiff( MINUTE, entry_time, exit_time ) &gt;= 30 and TimeStampDiff( MINUTE, entry_time, exit_time ) &lt; 60
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+        union
+        SELECT
+            '3' as duration_type,
+            count(id) as count
+        FROM t_park_live_records
+        where date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and TimeStampDiff( MINUTE, entry_time, exit_time ) &gt;= 60 and TimeStampDiff( MINUTE, entry_time, exit_time ) &lt; 120
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+        union
+        SELECT
+            '4' as duration_type,
+            count(id) as count
+        FROM t_park_live_records
+        where date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and TimeStampDiff( MINUTE, entry_time, exit_time ) &gt;= 120 and TimeStampDiff( MINUTE, entry_time, exit_time ) &lt; 240
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+        union
+        SELECT
+            '5' as duration_type,
+            count(id) as count
+        FROM t_park_live_records
+        where date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and TimeStampDiff( MINUTE, entry_time, exit_time ) &gt;= 240 and TimeStampDiff( MINUTE, entry_time, exit_time ) &lt; 480
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+        union
+        SELECT
+            '6' as duration_type,
+            count(id) as count
+        FROM t_park_live_records
+        where date_format(exit_time, '%Y-%m-%d') = date_format(#{day}, '%Y-%m-%d')
+            and TimeStampDiff( MINUTE, entry_time, exit_time ) &gt;= 480
+            and car_status = '2'
+            and del_flag = 0
+            and park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+    </select>
+
+    <select id="selectDurationStatisticDayFact"  parameterType="com.ruoyi.project.parking.domain.DurationStatisticDayFact" resultMap="DurationStatisticDayFactResult">
+        <include refid="selectDurationStatisticDayFactVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and day = #{day}</if>
+            <if test="durationType != null  and durationType != ''"> and duration_type = #{durationType}</if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="getDurationStatisticDayFact" parameterType="com.ruoyi.project.parking.domain.DurationStatisticDayFact"
+        resultType="com.ruoyi.project.parking.domain.vo.DurationStatisticFactVO">
+        select sdd.dict_label as name, pmdf.count as value, pmdf.ratio
+        from duration_statistic_day_fact pmdf
+        left join sys_dict_data sdd on sdd.dict_value = pmdf.duration_type and sdd.dict_type = 'duration_type'
+        <where>
+            <if test="parkNo != null  and parkNo != ''"> and pmdf.park_no = #{parkNo}</if>
+            <if test="day != null  and day != ''"> and pmdf.day = #{day}</if>
+        </where>
+        order by sdd.dict_sort
+    </select>
+
+    <select id="getScreenDurationStatisticDayFact" resultType="com.ruoyi.project.parking.domain.vo.DurationStatisticVO">
+        select
+            sdd.dict_label as name,
+            (select
+                <if test="year != null and year != ''">coalesce(sum(coalesce(pmdf.count, 0)), 0)</if>
+                <if test="year == null or year == ''">pmdf.count</if>
+            from duration_statistic_day_fact pmdf
+            where sdd.dict_value = pmdf.duration_type
+            <if test="parkNo != null  and parkNo != ''"> and pmdf.park_no = #{parkNo}</if>
+            <if test="year != null  and year != ''"> and year(date_format(pmdf.day, '%Y-%m-%d')) = #{year}</if>
+            <if test="month != null  and month != ''"> and month(date_format(pmdf.day, '%Y-%m-%d')) = #{month}</if>
+            <if test="week != null  and week != ''"> and week(date_format(pmdf.day, '%Y-%m-%d')) = #{week}</if>
+            <if test="day != null  and day != ''"> and pmdf.day = #{day}</if>) as value
+        from sys_dict_data sdd where sdd.dict_type = 'duration_type' and sdd.status = '0'
+        order by sdd.dict_sort
+    </select>
+
+    <select id="getParkingLotNumStatistics" resultType="com.ruoyi.project.parking.domain.vo.ParkingLotNumStatisticsVO">
+        select
+            (select coalesce(sum(coalesce(space_count, 0)), 0) from b_field
+            where park_no in
+            <foreach collection="parkNos" item="parkNo" open="(" close=")" separator=",">
+                #{parkNo}
+            </foreach>
+            and field_status = '1') as parkingSpaceNum
+    </select>
+</mapper>

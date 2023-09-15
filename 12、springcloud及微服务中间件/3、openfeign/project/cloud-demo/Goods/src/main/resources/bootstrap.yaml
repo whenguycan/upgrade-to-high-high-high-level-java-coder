@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: goods
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.16.4.144:8808 #指定nacos 配置中心的地址
+        prefix: goods #需要监听的配置文件的名称，在nacos中叫dataId,如果不写这个，默认会使用spring.application.name取代
+        file-extension: yaml #需要监听的配置文件的文件类型。
+        username: nacos
+        password: nacos
+        extension-configs:
+          - data-id: kk.yaml
+            refresh: true

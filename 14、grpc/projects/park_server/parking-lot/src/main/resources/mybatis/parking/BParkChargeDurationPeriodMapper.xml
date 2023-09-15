@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BParkChargeDurationPeriodMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BParkChargeDurationPeriod" id="BParkChargeDurationPeriodResult">
+        <result property="id"    column="id"    />
+        <result property="durationId"    column="duration_id"    />
+        <result property="lengthOfTime"    column="length_of_time"    />
+        <result property="minLenghtOfTime"    column="min_lenght_of_time"    />
+        <result property="rate"    column="rate"    />
+        <result property="sort"    column="sort"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBParkChargeDurationPeriodVo">
+        select id, duration_id, length_of_time, min_lenght_of_time, rate, sort, create_by, create_time, update_by, update_time from b_park_charge_duration_period
+    </sql>
+
+    <select id="selectBParkChargeDurationPeriodList" parameterType="com.ruoyi.project.parking.domain.BParkChargeDurationPeriod" resultMap="BParkChargeDurationPeriodResult">
+        <include refid="selectBParkChargeDurationPeriodVo"/>
+        <where>  
+            <if test="durationId != null "> and duration_id = #{durationId}</if>
+            <if test="lengthOfTime != null "> and length_of_time = #{lengthOfTime}</if>
+            <if test="minLenghtOfTime != null "> and min_lenght_of_time = #{minLenghtOfTime}</if>
+            <if test="rate != null "> and rate = #{rate}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+        order by sort
+    </select>
+    
+    <select id="selectBParkChargeDurationPeriodById" parameterType="Integer" resultMap="BParkChargeDurationPeriodResult">
+        <include refid="selectBParkChargeDurationPeriodVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBParkChargeDurationPeriod" parameterType="com.ruoyi.project.parking.domain.BParkChargeDurationPeriod" useGeneratedKeys="true" keyProperty="id">
+        insert into b_park_charge_duration_period
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="durationId != null">duration_id,</if>
+            <if test="lengthOfTime != null">length_of_time,</if>
+            <if test="minLenghtOfTime != null">min_lenght_of_time,</if>
+            <if test="rate != null">rate,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="durationId != null">#{durationId},</if>
+            <if test="lengthOfTime != null">#{lengthOfTime},</if>
+            <if test="minLenghtOfTime != null">#{minLenghtOfTime},</if>
+            <if test="rate != null">#{rate},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBParkChargeDurationPeriod" parameterType="com.ruoyi.project.parking.domain.BParkChargeDurationPeriod">
+        update b_park_charge_duration_period
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="durationId != null">duration_id = #{durationId},</if>
+            <if test="lengthOfTime != null">length_of_time = #{lengthOfTime},</if>
+            <if test="minLenghtOfTime != null">min_lenght_of_time = #{minLenghtOfTime},</if>
+            <if test="rate != null">rate = #{rate},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBParkChargeDurationPeriodById" parameterType="Integer">
+        delete from b_park_charge_duration_period where id = #{id}
+    </delete>
+
+    <delete id="deleteBParkChargeDurationPeriodByIds" parameterType="String">
+        delete from b_park_charge_duration_period where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByRuleId" parameterType="Integer">
+        delete from b_park_charge_duration_period
+        where duration_id in
+        (select distinct id from b_park_charge_duration where rule_id = #{ruleId})
+    </delete>
+
+    <delete id="deleteByRuleIds" parameterType="String">
+        delete from b_park_charge_duration_period
+        where duration_id in
+        (select distinct id from b_park_charge_duration where rule_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>)
+    </delete>
+</mapper>

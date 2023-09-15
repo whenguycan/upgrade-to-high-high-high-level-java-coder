@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.TExitRecordsMapper">
+
+    <resultMap type="TExitRecords" id="TExitRecordsResult">
+        <result property="id" column="id"/>
+        <result property="exitTime" column="exit_time"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="passageId" column="passage_id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="carNumber" column="car_number"/>
+        <result property="carImgUrl" column="car_img_url"/>
+        <result property="carColor" column="car_color"/>
+        <result property="carType" column="car_type"/>
+        <result property="platformCode" column="platform_code"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="carNumberEdit" column="car_number_edit"/>
+    </resultMap>
+
+    <sql id="selectTExitRecordsVo">
+        select id,
+               exit_time,
+               park_no,
+               passage_id,
+               device_id,
+               car_number,
+               car_img_url,
+               car_color,
+               car_type,
+               platform_code,
+               remark,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               car_Number_Edit,
+               park_live_id
+        from t_exit_records
+    </sql>
+
+    <select id="selectTExitRecordsList" parameterType="TExitRecords" resultMap="TExitRecordsResult">
+        <include refid="selectTExitRecordsVo"/>
+        <where>
+            <if test="exitTime != null ">and exit_time = #{exitTime}</if>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="passageId != null ">and passage_id = #{passageId}</if>
+            <if test="deviceId != null  and deviceId != ''">and device_id = #{deviceId}</if>
+            <if test="carNumber != null  and carNumber != ''">and car_number = #{carNumber}</if>
+            <if test="carImgUrl != null  and carImgUrl != ''">and car_img_url = #{carImgUrl}</if>
+            <if test="carColor != null  and carColor != ''">and car_color = #{carColor}</if>
+            <if test="carType != null  and carType != ''">and car_type = #{carType}</if>
+            <if test="platformCode != null  and platformCode != ''">and platform_code = #{platformCode}</if>
+            <if test="carNumberEdit != null  and carNumberEdit != ''">and car_number_edit = #{carNumberEdit}</if>
+            <if test="parkLiveId != null  and parkLiveId != ''">and park_live_id = #{parkLiveId}</if>
+        </where>
+    </select>
+
+    <select id="selectTExitRecordsById" parameterType="Long" resultMap="TExitRecordsResult">
+        <include refid="selectTExitRecordsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTExitRecords" parameterType="TExitRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into t_exit_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="exitTime != null">exit_time,</if>
+            <if test="parkNo != null">park_no,</if>
+            <if test="passageId != null">passage_id,</if>
+            <if test="deviceId != null">device_id,</if>
+            <if test="carNumber != null and carNumber != ''">car_number,</if>
+            <if test="carImgUrl != null">car_img_url,</if>
+            <if test="carColor != null">car_color,</if>
+            <if test="carType != null">car_type,</if>
+            <if test="platformCode != null">platform_code,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="carNumberEdit != null">car_number_edit,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="exitTime != null">#{exitTime},</if>
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="passageId != null">#{passageId},</if>
+            <if test="deviceId != null">#{deviceId},</if>
+            <if test="carNumber != null and carNumber != ''">#{carNumber},</if>
+            <if test="carImgUrl != null">#{carImgUrl},</if>
+            <if test="carColor != null">#{carColor},</if>
+            <if test="carType != null">#{carType},</if>
+            <if test="platformCode != null">#{platformCode},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="carNumberEdit != null">#{carNumberEdit},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTExitRecords" parameterType="TExitRecords">
+        update t_exit_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="exitTime != null">exit_time = #{exitTime},</if>
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="passageId != null">passage_id = #{passageId},</if>
+            <if test="deviceId != null">device_id = #{deviceId},</if>
+            <if test="carNumber != null and carNumber != ''">car_number = #{carNumber},</if>
+            <if test="carImgUrl != null">car_img_url = #{carImgUrl},</if>
+            <if test="carColor != null">car_color = #{carColor},</if>
+            <if test="carType != null">car_type = #{carType},</if>
+            <if test="platformCode != null">platform_code = #{platformCode},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="carNumberEdit != null">car_number_edit = #{carNumberEdit},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTExitRecordsById" parameterType="Long">
+        delete
+        from t_exit_records
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTExitRecordsByIds" parameterType="String">
+        delete from t_exit_records where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

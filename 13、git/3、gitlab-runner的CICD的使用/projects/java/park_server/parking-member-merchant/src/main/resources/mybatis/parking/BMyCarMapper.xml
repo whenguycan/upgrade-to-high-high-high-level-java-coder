@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BMyCarMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BMyCar" id="BMyCarResult">
+        <result property="id"    column="id"    />
+        <result property="carNo"    column="car_no"    />
+        <result property="validTime"    column="valid_time"    />
+        <result property="defaultFlag"    column="default_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBMyCarVo">
+        select id, car_no, valid_time, default_flag, create_by, create_time, update_by, update_time from b_my_car
+    </sql>
+
+    <select id="selectBMyCarList" parameterType="com.ruoyi.project.parking.domain.BMyCar" resultMap="BMyCarResult">
+        <include refid="selectBMyCarVo"/>
+        <where>  
+            <if test="carNo != null  and carNo != ''"> and car_no = #{carNo}</if>
+            <if test="validTime != null "> and valid_time = #{validTime}</if>
+            <if test="defaultFlag != null  and defaultFlag != ''"> and default_flag = #{defaultFlag}</if>
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectBMyCarById" parameterType="Integer" resultMap="BMyCarResult">
+        <include refid="selectBMyCarVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBMyCar" parameterType="com.ruoyi.project.parking.domain.BMyCar" useGeneratedKeys="true" keyProperty="id">
+        insert into b_my_car
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carNo != null">car_no,</if>
+            <if test="validTime != null">valid_time,</if>
+            <if test="defaultFlag != null">default_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carNo != null">#{carNo},</if>
+            <if test="validTime != null">#{validTime},</if>
+            <if test="defaultFlag != null">#{defaultFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBMyCar" parameterType="com.ruoyi.project.parking.domain.BMyCar">
+        update b_my_car
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carNo != null">car_no = #{carNo},</if>
+            <if test="validTime != null">valid_time = #{validTime},</if>
+            <if test="defaultFlag != null">default_flag = #{defaultFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="setAllNotDefault" parameterType="String">
+        update b_my_car set default_flag = #{defaultFlag} where create_by = #{userId}
+    </update>
+
+    <delete id="deleteBMyCarById" parameterType="Integer">
+        delete from b_my_car where id = #{id}
+    </delete>
+
+    <delete id="deleteBMyCarByIds" parameterType="String">
+        delete from b_my_car where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getMemberByCar" parameterType="string" resultType="com.ruoyi.project.system.domain.vo.SysUserVO">
+        select u.user_id, u.dept_id, u.user_name, u.nick_name, u.email, u.avatar,
+               u.phonenumber, u.password, u.sex,
+               u.status, u.del_flag, u.login_ip, u.login_date, u.member_type,
+               u.open_id,u.account_value,u.give_value,u.account_total
+        from sys_user u
+        where u.user_id = (select create_by from b_my_car where car_no = #{carNo} limit 1)
+    </select>
+</mapper>

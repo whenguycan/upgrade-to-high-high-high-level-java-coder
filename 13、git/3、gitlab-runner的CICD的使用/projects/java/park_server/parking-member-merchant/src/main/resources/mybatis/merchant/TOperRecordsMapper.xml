@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.merchant.mapper.TOperRecordsMapper">
+
+    <resultMap type="TOperRecords" id="TOperRecordsResult">
+        <result property="id" column="id"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="operatorType" column="operator_type"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="amount" column="amount"/>
+        <result property="operId" column="oper_id"/>
+        <result property="operName" column="oper_name"/>
+        <result property="operParam" column="oper_param"/>
+        <result property="jsonResult" column="json_result"/>
+        <result property="status" column="status"/>
+        <result property="errorMsg" column="error_msg"/>
+        <result property="operTime" column="oper_time"/>
+    </resultMap>
+
+    <resultMap type="RecordReportResultVo" id="RecordReportResult">
+        <result property="num" column="num"/>
+        <result property="parkNo" column="park_no"/>
+        <result property="operatorType" column="operator_type"/>
+        <result property="amount" column="amount"/>
+    </resultMap>
+
+    <sql id="selectTOperRecordsVo">
+        select id,
+               park_no,
+               operator_type,
+               order_no,
+               amount,
+               oper_id,
+               oper_name,
+               oper_param,
+               json_result,
+               status,
+               error_msg,
+               oper_time,
+               give_amount
+        from t_oper_records    </sql>
+
+    <select id="selectTOperRecordsList" parameterType="TOperRecordsVo" resultMap="TOperRecordsResult">
+        <include refid="selectTOperRecordsVo"/>
+        <where>
+            <if test="parkNo != null  and parkNo != ''">and park_no = #{parkNo}</if>
+            <if test="operatorType != null ">and operator_type = #{operatorType}</if>
+            <if test="orderNo != null  and orderNo != ''">and order_no = #{orderNo}</if>
+            <if test="amount != null ">and amount = #{amount}</if>
+            <if test="operId != null ">and oper_id = #{operId}</if>
+            <if test="operName != null  and operName != ''">and oper_name like concat('%', #{operName}, '%')</if>
+            <if test="operParam != null  and operParam != ''">and oper_param = #{operParam}</if>
+            <if test="jsonResult != null  and jsonResult != ''">and json_result = #{jsonResult}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="errorMsg != null  and errorMsg != ''">and error_msg = #{errorMsg}</if>
+            <!--            <if test="operTime != null "> and oper_time = #{operTime}</if>-->
+            <if test="beginTime != null and beginTime != '' ">
+                AND date_format(oper_time,'%Y-%m-%d %H:%i:%S') &gt;= date_format(#{beginTime},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND date_format(oper_time,'%Y-%m-%d %H:%i:%S') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test="monthTime != null and monthTime != ''">
+                AND date_format(oper_time,'%Y-%m') =#{monthTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectTOperRecordsById" parameterType="Long" resultMap="TOperRecordsResult">
+        <include refid="selectTOperRecordsVo"/>
+        where id = #{id}
+    </select>
+
+    <delete id="deleteTOperRecordsById" parameterType="Long">
+        delete
+        from t_oper_records
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTOperRecordsByIds" parameterType="String">
+        delete from t_oper_records where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectRecordReportList" parameterType="CouponReportParam" resultMap="RecordReportResult">
+        SELECT count(1) num,t.operator_type,sum(t.amount) amount
+        FROM `t_oper_records` t
+        where t.status = 0 and t.oper_time >=#{startDate} and t.oper_time &lt;=#{endDate}
+        group by t.operator_type
+        order by t.operator_type
+    </select>
+</mapper>

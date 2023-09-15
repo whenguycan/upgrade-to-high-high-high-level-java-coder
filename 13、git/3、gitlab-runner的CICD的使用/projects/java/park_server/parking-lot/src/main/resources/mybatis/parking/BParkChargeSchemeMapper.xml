@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.parking.mapper.BParkChargeSchemeMapper">
+    
+    <resultMap type="com.ruoyi.project.parking.domain.BParkChargeScheme" id="BParkChargeSchemeResult">
+        <result property="id"    column="id"    />
+        <result property="parkNo"    column="park_no"    />
+        <result property="roundWay"    column="round_way"    />
+        <result property="maximumCharge"    column="maximum_charge"    />
+        <result property="minimumChargeAccurary"    column="minimum_charge_accurary"    />
+        <result property="tcFreeTimeFlag"    column="tc_free_time_flag"    />
+        <result property="tcUseWay"    column="tc_use_way"    />
+        <result property="secondCarry"    column="second_carry"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBParkChargeSchemeVo">
+        select id, park_no, round_way, maximum_charge, minimum_charge_accurary, tc_free_time_flag, tc_use_way, second_carry, create_by, create_time, update_by, update_time from b_park_charge_scheme
+    </sql>
+
+    <select id="selectBParkChargeSchemeList" parameterType="com.ruoyi.project.parking.domain.BParkChargeScheme" resultMap="BParkChargeSchemeResult">
+        <include refid="selectBParkChargeSchemeVo"/>
+        <where>  
+            <if test="parkNo != null  and parkNo != ''"> and park_no = #{parkNo}</if>
+            <if test="roundWay != null  and roundWay != ''"> and round_way = #{roundWay}</if>
+            <if test="maximumCharge != null "> and maximum_charge = #{maximumCharge}</if>
+            <if test="minimumChargeAccurary != null "> and minimum_charge_accurary = #{minimumChargeAccurary}</if>
+            <if test="tcFreeTimeFlag != null  and tcFreeTimeFlag != ''"> and tc_free_time_flag = #{tcFreeTimeFlag}</if>
+            <if test="tcUseWay != null  and tcUseWay != ''"> and tc_use_way = #{tcUseWay}</if>
+            <if test="secondCarry != null  and secondCarry != ''"> and second_carry = #{secondCarry}</if>
+        </where>
+    </select>
+    
+    <select id="selectBParkChargeSchemeById" parameterType="String" resultMap="BParkChargeSchemeResult">
+        <include refid="selectBParkChargeSchemeVo"/>
+        where park_no = #{parkNo}
+        order by id desc limit 1
+    </select>
+        
+    <insert id="insertBParkChargeScheme" parameterType="com.ruoyi.project.parking.domain.BParkChargeScheme" useGeneratedKeys="true" keyProperty="id">
+        insert into b_park_charge_scheme
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">park_no,</if>
+            <if test="roundWay != null">round_way,</if>
+            <if test="maximumCharge != ''">maximum_charge,</if>
+            <if test="minimumChargeAccurary != null">minimum_charge_accurary,</if>
+            <if test="tcFreeTimeFlag != null">tc_free_time_flag,</if>
+            <if test="tcUseWay != null">tc_use_way,</if>
+            <if test="secondCarry != null">second_carry,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkNo != null">#{parkNo},</if>
+            <if test="roundWay != null">#{roundWay},</if>
+            <if test="maximumCharge != ''">#{maximumCharge},</if>
+            <if test="minimumChargeAccurary != null">#{minimumChargeAccurary},</if>
+            <if test="tcFreeTimeFlag != null">#{tcFreeTimeFlag},</if>
+            <if test="tcUseWay != null">#{tcUseWay},</if>
+            <if test="secondCarry != null">#{secondCarry},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBParkChargeScheme" parameterType="com.ruoyi.project.parking.domain.BParkChargeScheme">
+        update b_park_charge_scheme
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkNo != null">park_no = #{parkNo},</if>
+            <if test="roundWay != null">round_way = #{roundWay},</if>
+            <if test="maximumCharge != ''">maximum_charge = #{maximumCharge},</if>
+            <if test="minimumChargeAccurary != null">minimum_charge_accurary = #{minimumChargeAccurary},</if>
+            <if test="tcFreeTimeFlag != null">tc_free_time_flag = #{tcFreeTimeFlag},</if>
+            <if test="tcUseWay != null">tc_use_way = #{tcUseWay},</if>
+            <if test="secondCarry != null">second_carry = #{secondCarry},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBParkChargeSchemeById" parameterType="Integer">
+        delete from b_park_charge_scheme where id = #{id}
+    </delete>
+
+    <delete id="deleteBParkChargeSchemeByIds" parameterType="String">
+        delete from b_park_charge_scheme where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

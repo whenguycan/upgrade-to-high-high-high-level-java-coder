@@ -1,0 +1,28 @@
+template header
+
+parkNo
+ruleId
+sRuleId
+nodeId
+ruleSalience
+ruleCondition
+ruleResult
+
+package rules.parking
+import com.czdx.parkingcharge.domain.pr.ParkingRecord
+import com.czdx.parkingcharge.utils.ParkingFeeUtil
+import java.math.BigDecimal
+
+template "parking_fee_rule_template"
+
+rule "PARKING_CHARGE_@{parkNo}_@{ruleId}_@{sRuleId}_@{nodeId}"
+    activation-group "charge-rule"
+    salience @{ruleSalience}
+    when
+        $pRecord:ParkingRecord(@{ruleCondition})
+    then
+        System.out.println("触发规则：PARKING_CHARGE_@{parkNo}_@{ruleId}_@{sRuleId}_@{nodeId}");
+        @{ruleResult}
+end
+
+end template
