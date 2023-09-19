@@ -4,7 +4,7 @@
 
 图示：
 
-![avatar](../images/791.webp)
+![avatar](../../images/791.webp)
 
 - 客户端打算关闭连接，此时会发送一个 TCP 的 `FIN` 报文，之后客户端进入 `FIN_WAIT_1` 状态。
 - 服务端收到该报文后，就向客户端发送 `ACK` 应答报文，接着服务端进入 `CLOSE_WAIT` 状态。

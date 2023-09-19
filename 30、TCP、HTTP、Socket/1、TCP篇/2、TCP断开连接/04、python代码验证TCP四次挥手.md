@@ -92,4 +92,4 @@ python3.8 client.py
 
 启动wireshark，因为我们上面将ip绑定在了回环网卡上，所以我们在wireshark中选择回环网卡，输入过滤条件(tcp.port == 8889)，当客户端关闭的时候，是不是四次挥手
 
-![avatar](../images/WechatIMG772.png)
+![avatar](../../images/WechatIMG772.png)
