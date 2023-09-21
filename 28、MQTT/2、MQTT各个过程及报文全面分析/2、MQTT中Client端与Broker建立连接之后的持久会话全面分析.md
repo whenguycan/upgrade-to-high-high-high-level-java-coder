@@ -1,10 +1,10 @@
-## MQTT连接建立之后的会话全面分析
+## MQTT中Client端与Broker建立连接之后的持久会话全面分析
 
 
 
 #### 什么是会话
 
-客户端跟Broker端建立了连接，就会创建一个会话，后续的消息收发都会在这个会话上进行，Broker端会根据客户端的Client ID将会话（session）保存起来，以便客户端断开连接后重新连接，不会重新创建会话，而是根据Client ID 复用之前的会话(session)。
+Client端跟Broker端建立了连接，就会创建一个会话，后续的消息收发都会在这个会话上进行，Broker端会根据客户端的Client ID将会话（session）保存起来，以便客户端断开连接后重新连接，不会重新创建会话，而是根据Client ID 复用之前的会话(session)。
 
 ![avatar](../images/WechatIMG741.png)
 

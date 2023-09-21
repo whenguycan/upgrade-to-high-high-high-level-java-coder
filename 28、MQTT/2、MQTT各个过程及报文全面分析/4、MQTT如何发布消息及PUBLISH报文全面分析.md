@@ -1,4 +1,4 @@
-## MQTT如何发布消息及报文全面分析
+## MQTT如何发布消息及PUBLISH报文全面分析
 
 客户端向Broker发送消息，Broker向订阅端发送消息，都需要使用PUBLIS报文。
 
