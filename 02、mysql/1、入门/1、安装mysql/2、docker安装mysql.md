@@ -70,7 +70,7 @@ replicate-ignore-db=performance_schema
 
 
 
-#### 3、如果在mysql部署的过程中，初始化一个数据库并导入数据
+#### 3、如需在mysql部署的过程中，初始化一个数据库并导入数据
 
 -  把要导入的数据准备成.sql文件
 
