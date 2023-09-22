@@ -63,11 +63,11 @@ svg图标相对于img图片，页面加载的性能非常高。且svg图标比im
 - 在需要的组件中使用，如下代码
 
   ```vue
-  <!--使用scg图标，必须在外层用svg包裹，在内部一定要使用use标签-->
+  <!--使用svg图标，必须在外层用svg包裹，在内部一定要使用use标签-->
   <svg>
   
     <!-- 具体使用哪个svg图标，使用xlink:href指定图标的路径 -->
-    <use xlink:href="#icon-xxx"></use> <!-- xlink:href内部使用svg图标，一定是#icon开头，然后后面跟着svg图标的明后才能-->
+    <use xlink:href="#icon-xxx"></use> <!-- xlink:href内部使用svg图标，一定是#icon开头，然后后面跟着svg图标的名称->
   
   </svg>
   ```
@@ -132,13 +132,10 @@ svg图标相对于img图片，页面加载的性能非常高。且svg图标比im
   
   
   
-  
-  
-  
   </style>
   
   ```
-
+  
   
 
 使用方式三：定义方式二的组件为全局组件，只要在入口文件中引入一次，不需要再在各个需要使用的组件中重复import

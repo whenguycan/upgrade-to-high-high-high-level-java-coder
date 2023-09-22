@@ -22,7 +22,7 @@
 
 
 
-```javascript
+```vue
 <script>
 
 import {reactive} from 'vue'

@@ -9,7 +9,7 @@
 v-model的写法，其实等价于下面
 
 ```vue
-<input type="text" :value="age" :input="changeValue" />
+<input type="text" :value="age" @input="changeValue" />
 ```
 
 v-model实际上是给当前输入框，设置value值为age，绑定input事件为changeValue。

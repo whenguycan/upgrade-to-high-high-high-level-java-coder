@@ -58,6 +58,8 @@
 
   - computed属性
 
+    在监听一个data中的一个对象属性有没有变化的时候使用，我们之前是使用computed将对象属性放到一个计算属性中，然后去监听计算属性的
+    
     ```html
     <!DOCTYPE html>
     <html lang="en">
@@ -112,7 +114,7 @@
     </html>
     
     ```
-
+    
     
 
 - watch深度监听

@@ -63,7 +63,7 @@ npm安装依赖流程图：
 
 ![avatar](../images/91101acf_tpl.webp)
 
-执行npm install之后，检查并获取npm配置，优先级为：
+执行npm install之后，检查并获取npm的config配置，优先级为：
 
 - 项目级.npmrc文件 > 用户级.npmrc文件 > 全局级.npmrc文件 > npm内置.npmrc文件
 

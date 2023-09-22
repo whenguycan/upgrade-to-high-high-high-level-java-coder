@@ -2,7 +2,7 @@
 
 
 
-因为axios的get、post等方法都是异步执行的方法会返回Promise对象，所以actions中的方法只有是异步的才能把axios的get、post方法执行的返回值的promise对象进行传递
+因为axios的get、post等方法都是异步执行的方法会返回Promise对象，所以pinia中的actions中的方法只有是异步的才能把axios的get、post方法执行的返回值的promise对象进行传递
 
 
 
