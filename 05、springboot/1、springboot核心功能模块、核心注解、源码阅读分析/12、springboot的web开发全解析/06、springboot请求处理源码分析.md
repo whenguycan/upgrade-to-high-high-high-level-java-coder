@@ -1,5 +1,7 @@
 ## springboot请求处理源码分析
 
+> 看完这篇，就会知道，请求到了springboot是如何定位到哪个controller的哪个方法，并且参数如何绑定到指定controller的指定方法上的！
+
 我们已经知道了DispatcherServletAutoConfiguration已经被自动装配进行了加载。
 
 
@@ -232,27 +234,7 @@ protected void doDispatch(HttpServletRequest request, HttpServletResponse respon
 
 ```
 
-其中有个`getHandler()`方法
-
-```java
-@Nullable
-protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
-  if (this.handlerMappings != null) {
-    for (HandlerMapping mapping : this.handlerMappings) {
-      HandlerExecutionChain handler = mapping.getHandler(request);
-      if (handler != null) {
-        return handler;
-      }
-    }
-  }
-  return null;
-}
-
-```
-
-在方法的执行过程中我们注意到，有这样一个方法，叫handlerMapping 方法，这个方法的作用就是根据请求找到对应的映射，得到相应的 Handler（Controller）来处理这个请求
-
-**寻找请求对应的handlerMappings的方法**
+其中有个`getHandler()`方法，这个方法的作用就是根据请求找到对应的映射，得到相应的 Handler（Controller）来处理这个请求
 
 ```java
 @Nullable
@@ -379,7 +361,7 @@ getHandler()方法已经得到了需要哪个HandlerMapping去处理对应的请
 
 ![avatar](../../images/4a56a87f88.png)
 
-- RequestMappingHandlerAdapter 支持方法上标注 @RequestMapping
+- RequestMappingHandlerAdapter 支持类或者方法上标注 @RequestMapping
 - HandlerFunctionAdapter 支持函数式编程
 
 随后调用`ha.handle(......)`执行目标方法

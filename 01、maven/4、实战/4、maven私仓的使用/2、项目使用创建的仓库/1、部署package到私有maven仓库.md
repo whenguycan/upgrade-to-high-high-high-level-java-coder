@@ -9,7 +9,7 @@
 ```xml
 <distributionManagement>
   <repository>
-    <id>xxxx</id>
+    <id>xxxx</id><!-- 此处id和settings.xml的id保持一致 -->
     <name>xxxx</name>
     <url>xxxx</url><!-- 如果是上传到release仓库，项目的version一定要带RELASE，比如：0.0.5.RELEASE -->
   </repository>
