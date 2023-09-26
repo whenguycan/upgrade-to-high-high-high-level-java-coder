@@ -28,7 +28,7 @@
 
   ```shell
   sh run.sh -e canal.auto.scan=true \
-  			-e canal.port=11111 \ #指定canal启动的端口
+  			-e canal.port=11111 \ #指定canal启动的端口，端口的映射是在run.sh文件里面配置的，这儿只是指定canal-server启动占用的跟客户端通讯的端口。
   			-e canal.serverMode=tcp \
   		  -e canal.destinations=test \ #配置一个实例，名称为test，容器运行后会在conf目录中生成对应实例的文件夹，文件夹内部存放该实例的配置文件instance.properties，注意这儿只能配置一个，因为docker模式下，单docker实例只能运行一个instance，主要为配置问题。如果需要运行多instance时，可以自行制作一份docker镜像即可
   		  -e canal.instance.master.address=127.0.0.1:3306  \ #需要被同步的mysql地址
