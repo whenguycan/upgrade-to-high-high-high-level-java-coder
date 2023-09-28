@@ -51,4 +51,16 @@ namespace是kubernetes系统中的一种非常重要的资源，namespace的主�
   kubectl delete namespace dev
   ```
 
+- 给namespace打上label标签
+
+  ```shell
+  kubectl label ns namespace名称 xxxx=yyyy
+  ```
+
+- 查看一个namespace下的label标签
+
+  ```shell
+  kubectl get ns namespace名称 --show-labels
+  ```
+
   

@@ -1,6 +1,8 @@
 ## 使用istioctl安装istio到k8s
 
 > 官方文档参考：https://istio.io/latest/zh/docs/setup/install/istioctl/
+>
+> 目前使用k8s的1.23.5的版本，istio使用1.16.7的版本，正常部署。
 
 
 
@@ -41,7 +43,7 @@ kubectl get all -n istio-system
 #### 6、安装好了之后，发现istio-ingressgateway的暴露方式为LoadBalancer，我们需要改成NodePort
 
 ```shell
-kubectl patch svc istio-ingressgateway -n istio-system -p ‘{“spec”:{“type": “NodePort"}}'
+kubectl patch svc istio-ingressgateway -n istio-system -p '{"spec":{"type": "NodePort"}}'
 ```
 
 
