@@ -46,6 +46,16 @@ systemctl start cri-docker.service && systemctl enable cri-docker.service
   swapoff -a  # 临时
   sed -ri 's/.*swap.*/#&/' /etc/fstab    # 永久 
   ```
+  
+- 修改`/etc/sysctl.conf`文件，添加如下内容
+
+  ```shell
+  net.ipv4.ip_forward = 1
+  ```
+  
+  
+
+
 
 
 
@@ -144,12 +154,12 @@ docker tag registry.aliyuncs.com/google_containers/pause:3.6 registry.k8s.io/pau
 #### 8、启动k8s
 
 ```shell
-minikube start --kubernetes-version v1.25.3 --driver=none --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers --image-mirror-country=cn --cri-socket=/var/run/cri-dockerd.sock --extra-config=kubelet.cgroup-driver=systemd --cni=bridge
+minikube start --kubernetes-version v1.25.3 --driver=none --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers --image-mirror-country=cn --cri-socket=/var/run/cri-dockerd.sock --extra-config=kubelet.cgroup-driver=systemd --cni=flannel
 ```
 
 注意：v1.25.3与上面安装kubectl的版本必须一致
 
-`--cni=`是指定使用的网络插件，如果指定为calico、flannel就需要后续下载很多墙外的镜像文件（即便是--image-repository指定了阿里云的镜像仓库，但是因为是新版本的k8s，阿里云仓库中没有），太麻烦！所以这儿直接指定bridge就拉到了！
+`--cni=`是指定使用的网络插件，可以指定为calico、flannel、bridge
 
 
 

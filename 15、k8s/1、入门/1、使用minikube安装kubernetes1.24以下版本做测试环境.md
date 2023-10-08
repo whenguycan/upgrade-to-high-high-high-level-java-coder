@@ -30,8 +30,14 @@
   swapoff -a  # 临时
   sed -ri 's/.*swap.*/#&/' /etc/fstab    # 永久
   ```
+  
+- 修改`/etc/sysctl.conf`文件，添加如下内容
 
-
+  ```shell
+  net.ipv4.ip_forward = 1
+  ```
+  
+  
 
 #### 4、安装kubectl工具
 
