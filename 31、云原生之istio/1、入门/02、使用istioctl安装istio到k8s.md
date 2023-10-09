@@ -2,7 +2,10 @@
 
 > 官方文档参考：https://istio.io/latest/zh/docs/setup/install/istioctl/
 >
-> 目前使用k8s的1.23.5的版本，istio使用1.16.7的版本，正常部署。
+> 目前使用:
+>
+> 1. k8s的1.23.5的版本，istio使用1.16.7的版本，正常部署。
+> 2. k8s的1.25.3的版本，istio使用1.19.0的版本，正常部署。
 
 
 
@@ -20,7 +23,7 @@
 
 
 
-#### 4、安装istion
+#### 4、安装istio
 
 我们这儿选择demo这个profile，具体什么是profile，在下一个课件中详细讲述。
 
